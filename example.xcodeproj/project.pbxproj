@@ -38,6 +38,9 @@
 		0BBD87531E5C831000DEE299 /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD87481E5C831000DEE299 /* ofxSlider.cpp */; };
 		0BBD87541E5C831000DEE299 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD874A1E5C831000DEE299 /* ofxSliderGroup.cpp */; };
 		0BBD87551E5C831000DEE299 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD874C1E5C831000DEE299 /* ofxToggle.cpp */; };
+		0BF5E90C1F30E26E003523A6 /* morph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF5E90A1F30E26E003523A6 /* morph.cpp */; };
+		0BF5E9131F311C73003523A6 /* ofxCsv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF5E90F1F311C73003523A6 /* ofxCsv.cpp */; };
+		0BF5E9141F311C73003523A6 /* ofxCsvRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF5E9111F311C73003523A6 /* ofxCsvRow.cpp */; };
 		C9DC019415D847EB51DAA13F /* ofxLeapMotion2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E52372269152201A84E1731 /* ofxLeapMotion2.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -299,6 +302,12 @@
 		0BBD874B1E5C831000DEE299 /* ofxSliderGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSliderGroup.h; sourceTree = "<group>"; };
 		0BBD874C1E5C831000DEE299 /* ofxToggle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxToggle.cpp; sourceTree = "<group>"; };
 		0BBD874D1E5C831000DEE299 /* ofxToggle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxToggle.h; sourceTree = "<group>"; };
+		0BF5E90A1F30E26E003523A6 /* morph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = morph.cpp; sourceTree = "<group>"; };
+		0BF5E90B1F30E26E003523A6 /* morph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = morph.h; sourceTree = "<group>"; };
+		0BF5E90F1F311C73003523A6 /* ofxCsv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCsv.cpp; sourceTree = "<group>"; };
+		0BF5E9101F311C73003523A6 /* ofxCsv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCsv.h; sourceTree = "<group>"; };
+		0BF5E9111F311C73003523A6 /* ofxCsvRow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCsvRow.cpp; sourceTree = "<group>"; };
+		0BF5E9121F311C73003523A6 /* ofxCsvRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCsvRow.h; sourceTree = "<group>"; };
 		3FF9A5F0C37B2FE4F0C919D4 /* ofxLeapMotion2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxLeapMotion2.h; path = ../../../addons/ofxLeapMotion2/src/ofxLeapMotion2.h; sourceTree = SOURCE_ROOT; };
 		9E52372269152201A84E1731 /* ofxLeapMotion2.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxLeapMotion2.cpp; path = ../../../addons/ofxLeapMotion2/src/ofxLeapMotion2.cpp; sourceTree = SOURCE_ROOT; };
 		C2D0E563DD28B9867A44D774 /* Leap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Leap.h; path = ../../../addons/ofxLeapMotion2/libs/include/Leap.h; sourceTree = SOURCE_ROOT; };
@@ -861,6 +870,26 @@
 			path = ../../../addons/ofxGui/src;
 			sourceTree = "<group>";
 		};
+		0BF5E90D1F311C73003523A6 /* ofxCsv */ = {
+			isa = PBXGroup;
+			children = (
+				0BF5E90E1F311C73003523A6 /* src */,
+			);
+			name = ofxCsv;
+			sourceTree = "<group>";
+		};
+		0BF5E90E1F311C73003523A6 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0BF5E90F1F311C73003523A6 /* ofxCsv.cpp */,
+				0BF5E9101F311C73003523A6 /* ofxCsv.h */,
+				0BF5E9111F311C73003523A6 /* ofxCsvRow.cpp */,
+				0BF5E9121F311C73003523A6 /* ofxCsvRow.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxCsv/src;
+			sourceTree = "<group>";
+		};
 		1E69E56363BB709D30E47967 /* ofxLeapMotion2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -903,6 +932,7 @@
 				0B5A88001E5253B600E5E569 /* ofxTween */,
 				0B5A882B1E5253BC00E5E569 /* ofxPolylineMerger */,
 				0BBD873B1E5C831000DEE299 /* ofxGui */,
+				0BF5E90D1F311C73003523A6 /* ofxCsv */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -932,8 +962,10 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				0B5A88301E52547800E5E569 /* ofApp.cpp */,
 				0B5A88311E52547800E5E569 /* ofApp.h */,
+				0B5A88301E52547800E5E569 /* ofApp.cpp */,
+				0BF5E90B1F30E26E003523A6 /* morph.h */,
+				0BF5E90A1F30E26E003523A6 /* morph.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1036,6 +1068,7 @@
 			files = (
 				0B5A88271E5253B600E5E569 /* ofxEasingQuart.cpp in Sources */,
 				0B5A882F1E5253BC00E5E569 /* ofxPolylineMerger.cpp in Sources */,
+				0BF5E90C1F30E26E003523A6 /* morph.cpp in Sources */,
 				0B5A87F81E5253B200E5E569 /* ofxCvColorImage.cpp in Sources */,
 				0B5A87FE1E5253B200E5E569 /* ofxCvShortImage.cpp in Sources */,
 				0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */,
@@ -1047,6 +1080,7 @@
 				0B5A87FB1E5253B200E5E569 /* ofxCvGrayscaleImage.cpp in Sources */,
 				0B5A87F91E5253B200E5E569 /* ofxCvContourFinder.cpp in Sources */,
 				0B5A88221E5253B600E5E569 /* ofxEasingCubic.cpp in Sources */,
+				0BF5E9131F311C73003523A6 /* ofxCsv.cpp in Sources */,
 				0BBD87551E5C831000DEE299 /* ofxToggle.cpp in Sources */,
 				0B5A881E1E5253B600E5E569 /* ofxEasing.cpp in Sources */,
 				0B5A882A1E5253B600E5E569 /* ofxTween.cpp in Sources */,
@@ -1064,6 +1098,7 @@
 				0BBD87541E5C831000DEE299 /* ofxSliderGroup.cpp in Sources */,
 				0B5A88261E5253B600E5E569 /* ofxEasingQuad.cpp in Sources */,
 				C9DC019415D847EB51DAA13F /* ofxLeapMotion2.cpp in Sources */,
+				0BF5E9141F311C73003523A6 /* ofxCsvRow.cpp in Sources */,
 				0BBD874F1E5C831000DEE299 /* ofxButton.cpp in Sources */,
 				0BBD87521E5C831000DEE299 /* ofxPanel.cpp in Sources */,
 			);

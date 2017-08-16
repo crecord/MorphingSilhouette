@@ -8,4 +8,7 @@
 <color_2>255, 255, 255, 255</color_2>
 <quiver>1.735</quiver>
 <gaus>1.45</gaus>
+<text_color>0, 0, 0, 255</text_color>
+	<under_img_Margin>22</under_img_Margin>
+	<under_title>18</under_title>
 </panel>
