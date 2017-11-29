@@ -30,6 +30,7 @@
 		0B5A882A1E5253B600E5E569 /* ofxTween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A881C1E5253B600E5E569 /* ofxTween.cpp */; };
 		0B5A882F1E5253BC00E5E569 /* ofxPolylineMerger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A882D1E5253BC00E5E569 /* ofxPolylineMerger.cpp */; };
 		0B5A88321E52547800E5E569 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A88301E52547800E5E569 /* ofApp.cpp */; };
+		0B73B4821F79896500E0D3A2 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B73B4801F79896500E0D3A2 /* item.cpp */; };
 		0BBD874E1E5C831000DEE299 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */; };
 		0BBD874F1E5C831000DEE299 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873F1E5C831000DEE299 /* ofxButton.cpp */; };
 		0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD87421E5C831000DEE299 /* ofxGuiGroup.cpp */; };
@@ -285,6 +286,8 @@
 		0B5A882E1E5253BC00E5E569 /* ofxPolylineMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxPolylineMerger.h; sourceTree = "<group>"; };
 		0B5A88301E52547800E5E569 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
 		0B5A88311E52547800E5E569 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
+		0B73B4801F79896500E0D3A2 /* item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = item.cpp; sourceTree = "<group>"; };
+		0B73B4811F79896500E0D3A2 /* item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = item.h; sourceTree = "<group>"; };
 		0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		0BBD873E1E5C831000DEE299 /* ofxBaseGui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		0BBD873F1E5C831000DEE299 /* ofxButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -966,6 +969,8 @@
 				0B5A88301E52547800E5E569 /* ofApp.cpp */,
 				0BF5E90B1F30E26E003523A6 /* morph.h */,
 				0BF5E90A1F30E26E003523A6 /* morph.cpp */,
+				0B73B4811F79896500E0D3A2 /* item.h */,
+				0B73B4801F79896500E0D3A2 /* item.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1086,6 +1091,7 @@
 				0B5A882A1E5253B600E5E569 /* ofxTween.cpp in Sources */,
 				0B5A881F1E5253B600E5E569 /* ofxEasingBack.cpp in Sources */,
 				0B5A88281E5253B600E5E569 /* ofxEasingQuint.cpp in Sources */,
+				0B73B4821F79896500E0D3A2 /* item.cpp in Sources */,
 				0B5A88321E52547800E5E569 /* ofApp.cpp in Sources */,
 				0BBD87511E5C831000DEE299 /* ofxLabel.cpp in Sources */,
 				0BBD874E1E5C831000DEE299 /* ofxBaseGui.cpp in Sources */,

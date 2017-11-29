@@ -1,13 +1,13 @@
 <panel>
-	<amount_trans>0.85</amount_trans>
+	<amount_trans>0.98</amount_trans>
 	<noise>1.65</noise>
-	<speed>496</speed>
-	<color>202, 81, 26, 255</color>
+	<speed>1882</speed>
+	<color>219, 100, 26, 255</color>
 <panel/>
-<speed_ofImg>298</speed_ofImg>
+<speed_ofImg>545</speed_ofImg>
 <color_2>255, 255, 255, 255</color_2>
 <quiver>1.735</quiver>
-<gaus>1.45</gaus>
+<gaus>1.35</gaus>
 <text_color>0, 0, 0, 255</text_color>
 	<under_img_Margin>22</under_img_Margin>
 	<under_title>18</under_title>

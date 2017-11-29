@@ -5,9 +5,12 @@ void ofApp::setup(){
     //ofSetFullscreen(true);
     
     //ofHideCursor();
-    blob1.setup("melissa",ofGetWidth()/2 ,ofGetWidth()/2);
+    blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
     //blob2.setup("pngs",ofGetWidth()/4,ofGetHeight()/4);
-}
+    
+    imageTest.load("IMG_0321.JPG");
+    
+    }
 
 
 
@@ -21,10 +24,16 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofBackground(255,0,0);
     
     blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
-    ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300); 
+    //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);
+    
+    ///imageTest.draw(0,0);
+    //ofSetColor(255,100);
+    //imageTest.draw(0,0);
+
 }
 
 //--------------------------------------------------------------

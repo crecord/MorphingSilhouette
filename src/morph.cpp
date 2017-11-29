@@ -12,7 +12,6 @@ void morph::setup(string pathToImages, int x, int y){
     interpolateCoeff = 0;
     pMerge.setup();
     
-    shade.load("shadersGL3/shader");
     
     dir.allowExt("png");
     dir.listDir(pathToImages);
@@ -22,13 +21,21 @@ void morph::setup(string pathToImages, int x, int y){
     csvDir.listDir(pathToImages);
     csvDir.sort();
     
-    //allocate the vector to have as many ofImages as files
+    // you can now iterate through the files and load them into the ofImage vector
     
-    if( dir.size() ){
-        images.assign(dir.size(), ofImage());
+    shade.load("shadersGL3/shader");
+    //string pathToImages, string pathToCsv, ofImage img, ofPolyline polys
+    for(int i = 0; i < dir.size(); i++){
+        item temp;
+        ofImage imgTemp;
+        imgTemp.load(dir.getPath(i));
+        ofPolyline ply = pngToPolyline(imgTemp);
+        temp.setup(pathToImages, dir.getPath(i), csvDir.getPath(i), imgTemp, ply);
+        items.push_back(temp);
     }
     
-    // you can now iterate through the files and load them into the ofImage vector
+    // Old images
+    /*
     for(int i = 0; i < (int)dir.size(); i++){
         images[i].load(dir.getPath(i));
         polys.push_back(pngToPolyline(images[i]));
@@ -37,10 +44,12 @@ void morph::setup(string pathToImages, int x, int y){
         blurbs.push_back(temp);
         randomIndices.push_back(i);
     }
+     */
     
     transformFrom = 0;
     transformToo = 1;
-    midTrans = polys.at(transformFrom);
+    //midTrans = polys.at(transformFrom);
+    midTrans = items.at(transformFrom).poly;
     easingType = ofxTween::easeInOut;
     
   
@@ -72,6 +81,10 @@ void morph::setup(string pathToImages, int x, int y){
     
     title.load("font/Klavika-Regular.otf", 20);
     body.load("font/franklinGothic.otf", 12);
+    
+    
+    alphaPainting =0;
+    isIntersect = false;
 }
 
 
@@ -79,9 +92,9 @@ void morph::update(){
     
     
     colOfForm = color;
-    ofLog()<< state;
+    //ofLog()<< state;
 
-    if( state == 1){
+    if(state == 1){
         //some one is here - instruct them
         if(isSetupState){
             isSetupState = false;
@@ -149,10 +162,6 @@ void morph::update(){
             
         }
         
-        
-        
-        
-        
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         
         if (timePassed > durOfImgTrans-1){
@@ -175,37 +184,53 @@ void morph::update(){
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         alpha = int( ofMap(timePassed, 0,500,255 ,0));
         alphaText = int( ofMap(timePassed, 0,500,0 ,255));
+        
         if(timePassed > 499){
             state =4;
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
             alpha = 0;
             alphaText = 255;
+            alphaPainting =0;
         }
     }
     else if( state == 4){
         //looking at the solid image (AUTOMATIC)
+        
+        // if it is a painting item initiate the fade in
         if(isSetupState){
             isSetupState = false;
+            startTimeOfState = ofGetElapsedTimeMillis();
+            alphaPainting =0;
+        }
+        int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
+        if((items.at(transformToo).isPainting)){
+            alphaPainting = int(ofClamp(ofMap(timePassed, 0, 1000, 0, 255),0,255));
+            
         }
         alpha = 0;
-        // draw text??
     }
+    
     else if( state == 5){
         //fade out image
         if(isSetupState){
             isSetupState = false;
             alpha = 0;
+            
         }
+        
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         alpha = int( ofMap(timePassed, 0,500,0,255));
         alphaText = int( ofMap(timePassed, 0,500,255,0));
+        alphaPainting = int(ofMap(timePassed,0,500,255,0));
         if(timePassed > 499){
             state =6;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
             alpha = 255;
             alphaText = 0;
+            alphaPainting =0;
+
         }
     }
     else if( state == 6){
@@ -236,23 +261,104 @@ void morph::update(){
         }
     }
     
-    pMerge.mergePolyline(midTrans, polys.at(transformToo), interpolateCoeff,quantityOfNoise, quiv);
+    pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
-    
+    //checkIntersection(pMerge.getPolyline());
+    mergedPoints = pMerge.getPolyline().getVertices();
     
     filled.clear();
-    for( int i = 0; i < pMerge.getPolyline().size(); i++) {
+    for( int i = 0; i < mergedPoints.size(); i++) {
         if(i == 0) {
             filled.newSubPath();
-            filled.moveTo(pMerge.getPolyline().getVertices()[i] );
+            filled.moveTo(mergedPoints.at(i));
         } else {
-            filled.curveTo( pMerge.getPolyline().getVertices()[i] );
+            filled.curveTo(mergedPoints.at(i));
         }
     }
-    
     filled.close();
-
+    filled.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
+    
+    //filled.simplify(.7);
+    
+    //filled.getOutline();
+    //filled = pathToPath(filled);
 }
+
+
+
+//http://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+int morph::orientation(ofVec2f p, ofVec2f q, ofVec2f r)
+{
+    // See http://www.geeksforgeeks.org/orientation-3-ordered-points/
+    // for details of below formula.
+    float val = (q.y - p.y) * (r.x - q.x) -
+    (q.x - p.x) * (r.y - q.y);
+    
+    if (val == 0) return 0;  // colinear
+    
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+// The main function that returns true if line segment 'p1q1'
+// and 'p2q2' intersect.
+bool morph::doIntersect(ofVec2f p1, ofVec2f q1, ofVec2f p2, ofVec2f q2)
+{
+    // Find the four orientations needed for general and
+    // special cases
+    int o1 = orientation(p1, q1, p2);
+    int o2 = orientation(p1, q1, q2);
+    int o3 = orientation(p2, q2, p1);
+    int o4 = orientation(p2, q2, q1);
+    
+    // General case
+    if (o1 != o2 && o3 != o4){
+        return true;
+    }
+    
+    return false; // Doesn't fall in any of the above cases
+}
+
+void morph::lookForInter(){
+    bool toCont = true;
+    for(int i=0; i < mergedPoints.size(); i+=2){
+        if(toCont & (i < mergedPoints.size()-1 )){
+        ofVec2f p1 = mergedPoints.at(i);
+        ofVec2f p2 = mergedPoints.at(i+1);
+        for(int j=0; j < mergedPoints.size(); j+=2){
+            
+            if(j < mergedPoints.size()-1){
+                ofVec2f p3 = mergedPoints.at(j);
+                ofVec2f p4 = mergedPoints.at(j+1);
+                bool isSame = (p3 == p1) & (p2 == p4);
+                if(!isSame){
+                    bool isInter = doIntersect(p1, p2, p3, p4);
+                    if(isInter){
+                        mergedPoints.erase(mergedPoints.begin()+i, mergedPoints.begin()+j+1);
+                        isIntersect = true;
+                        //break;
+                        toCont =false;
+                        lookForInter();
+                    }
+                }
+            }
+        }
+        }
+
+    }
+}
+
+void morph::checkIntersection(ofPolyline ply){
+    isIntersect = false;
+    //method one- seeing if the lines intersect
+    mergedPoints = ply.getVertices();
+    lookForInter();
+    
+    // method two- adding up all the angles
+    //https://www.khanacademy.org/math/geometry/hs-geo-foundations/hs-geo-polygons/v/sum-of-the-exterior-angles-of-convex-polygon
+}
+
+
+
 
 
 void morph::populateVector(){
@@ -274,17 +380,28 @@ void morph::drawMorph(int x,int y){
     
     ofClear(color2);
     if((state  >= 3) & (state  <= 5)){
-        ofVec2f sz = getSz(images.at(transformToo));
+        ofVec2f sz = getSz(items.at(transformToo).img);
         
         ofPushMatrix();
         ofTranslate(x, y);
         //ofRotateZ(90);
         //images.at(transformToo).setAnchorPoint(.5, .5);
-        images.at(transformToo).draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+        
+        if(items.at(transformToo).isPainting){
+            //ofLog()<< alphaPainting;
+            ofSetColor(255,alphaPainting);
+            items.at(transformToo).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+            ofSetColor(255);
+        }
+     
+        
+             items.at(transformToo).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+        
+       
         
             // draw text
-            string titleText = blurbs.at(transformToo).getRow(0).getString(0);
-            string museumName = blurbs.at(transformToo).getRow(0).getString(1) +"\n" + blurbs.at(transformToo).getRow(0).getString(2);
+            string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
+            string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
             ofSetColor(textColor.get().r,textColor.get().g,textColor.get().b,alphaText);
             title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ underImgMargin);
             body.drawString(museumName, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + underTitle + underImgMargin);
@@ -300,8 +417,16 @@ void morph::drawMorph(int x,int y){
 
     ofPushMatrix();
         ofTranslate(x, y);
-        filled.setColor(ofColor(colOfForm.r , colOfForm.g, colOfForm.b, alpha));
+    
+        //check intersections
+        if(isIntersect){
+            filled.setColor(ofColor(0 , 255, 0));
+        }
+        else{
+            filled.setColor(ofColor(colOfForm.r , colOfForm.g, colOfForm.b, alpha));
+        }
         filled.draw();
+    
     ofPopMatrix();
     
     if( !bHide ){
@@ -319,41 +444,87 @@ void morph::triggerNext(){
         }
         startTimeOfState = ofGetElapsedTimeMillis();
         isSetupState = true;
-
 }
 
 
-ofVec2f morph::getSz(ofImage img){
-    float scale = 1.5;
-    int wid;
-    int height;
-    if(img.getWidth() >= img.getHeight() ){
-        height = img.getHeight()*(ofGetWidth()/scale)/img.getWidth();
-        wid =  ofGetWidth()/scale;
-    }
-    else{
-        wid = img.getWidth()*(ofGetHeight()/scale)/img.getHeight();
-        height =  ofGetHeight()/scale;
-    }
-    return ofVec2f(wid, height);
-}
+
 
 int morph::nextSill(int num){
-    int siz = images.size();
+    int siz = items.size();
     return  num = (int) ofRandom(0, siz);
     
 }
 
-ofPolyline morph::pngToPolyline(ofImage img){
-    ofPolyline cur;
+
+ofPath morph::pathToPath(ofPath pth){
+    
+    
+    ofPath cur;
+   // ofPolyline cur;
     cur.clear();
     
-    colorImg.allocate(ofGetWidth(), ofGetHeight());
+    colorImg.allocate(ofGetWidth(), ofGetHeight() );
     grayImg.allocate(ofGetWidth(), ofGetHeight());
     
     drawNoColor.allocate(ofGetWidth(), ofGetHeight(),GL_RGB);
     ofPixels pixels;
-    pixels.allocate(ofGetWidth(), ofGetHeight() ,GL_RGBA);
+    pixels.allocate(ofGetWidth(), ofGetHeight(),GL_RGBA);
+    
+    drawNoColor.begin();
+    ofClear(0,0,0);
+    ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
+    pth.setColor(ofColor(255));
+    pth.draw();
+    
+    drawNoColor.end();
+    
+    
+    drawNoColor.readToPixels(pixels);
+    colorImg.setFromPixels(pixels);
+    grayImg = colorImg;
+    //grayImg.threshold(20);
+    
+    contourFinder.findContours(grayImg, 20, ofGetWidth()*ofGetHeight(), 10, false);
+    //ofLog()<< contourFinder.nBlobs;
+    if(contourFinder.nBlobs > 0){
+        // add all the current vertices to cur polyline
+        //cur.addVertices(contourFinder.blobs[0].pts);
+        for( int i=0; i< contourFinder.blobs[0].pts.size(); i++){
+            ofVec2f pos= contourFinder.blobs[0].pts.at(i);
+            if(i == 0) {
+                cur.newSubPath();
+                cur.moveTo(ofVec2f(pos.x-ofGetWidth()/2,pos.y-ofGetHeight()/2));
+            } else {
+                cur.curveTo(ofVec2f(pos.x-ofGetWidth()/2,pos.y-ofGetHeight()/2));
+            }
+        }
+        
+        //cur.setClosed(true);
+        //cur = cur.getSmoothed(7.);
+    }
+    
+    
+    //ofLog()<< cur.getVertices().size();
+    cur.simplify(.5);
+    return cur;
+}
+
+
+
+
+ofPolyline morph::pngToPolyline(ofImage img){
+    
+    
+    ofPolyline cur;
+    cur.clear();
+    ofLog()<< "image width: " << img.getWidth();
+    ofLog()<< "image width: " << img.getHeight();
+    colorImg.allocate(img.getWidth(), img.getHeight());
+    grayImg.allocate(img.getWidth(), img.getHeight());
+    
+    drawNoColor.allocate(img.getWidth(), img.getHeight(),GL_RGB);
+    ofPixels pixels;
+    pixels.allocate(img.getWidth(), img.getHeight() ,GL_RGBA);
     
     drawNoColor.begin();
     ofClear(0,0,0);
@@ -365,8 +536,8 @@ ofPolyline morph::pngToPolyline(ofImage img){
     ofVec2f sz = getSz(img);
     
     ofPushMatrix();
-    int wid = ofGetWidth()/2;
-    int hi = ofGetHeight()/2;
+    int wid = img.getWidth()/2;
+    int hi = img.getHeight()/2;
     ofLog()<< "halfwidth: " <<wid;
     ofLog()<< "halfHi: " <<hi;
     ofTranslate(wid, hi);
@@ -400,5 +571,22 @@ ofPolyline morph::pngToPolyline(ofImage img){
     }
     //ofLog()<< cur.getVertices().size();
     return cur;
+}
+
+
+ofVec2f morph::getSz(ofImage img){
+    float scale = 1.5;
+    int wid;
+    int height;
+    if(img.getWidth() >= img.getHeight() ){
+        height = img.getHeight()*(ofGetWidth()/scale)/img.getWidth();
+        wid =  ofGetWidth()/scale;
+    }
+    else{
+        wid = img.getWidth()*(ofGetHeight()/scale)/img.getHeight();
+        height =  ofGetHeight()/scale;
+    }
+    return ofVec2f(wid, height);
     
 }
+

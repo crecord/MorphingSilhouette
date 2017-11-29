@@ -11,6 +11,8 @@
 #include "ofxTween.h"
 #include "ofxGui.h"
 #include "ofxCsv.h"
+#include "item.h"
+
 
 class morph{
     
@@ -23,12 +25,16 @@ public:
     void triggerNext();
     void saveGuiSettings();
     bool bHide;
+    void checkIntersection(ofPolyline ply);
 
 private:
+
     
     ofPolyline pngToPolyline(ofImage img);
-    int nextSill(int num);
     ofVec2f getSz(ofImage img);
+    
+    int nextSill(int num);
+    
     void generatePolyline();
     void populateVector();
     
@@ -42,15 +48,17 @@ private:
     ofxCvColorImage	colorImg;
     ofxCvGrayscaleImage grayImg;
     ofxCvContourFinder contourFinder;
-    
-    ofShader shade;
     ofFbo drawNoColor;
+    
     
     ofDirectory dir;
     ofDirectory csvDir;
-    vector<ofImage> images;
-    vector<ofPolyline> polys;
-    vector<ofxCsv> blurbs;
+   // vector<ofImage> images;
+    //vector<ofPolyline> polys;
+    //vector<ofxCsv> blurbs;
+    
+    vector<item> items;
+    
     ofPolyline midTrans;
     
     int transformFrom;
@@ -61,6 +69,7 @@ private:
     
     
     int alpha;
+    int alphaPainting;
     
     // make them all into gui things
     ofParameter<float> percentTrans;
@@ -76,7 +85,6 @@ private:
     ofParameter<int> underImgMargin;
     ofParameter<int> underTitle;
     ofParameter<int> lineSpaceing;
-
     ofxPanel gui;
 
     
@@ -108,5 +116,18 @@ private:
     vector<int> randomIndices;
     
     int startTimeUnused;
-
+    
+    ofShader shade;
+    
+    // check intersection
+    int orientation(ofVec2f p, ofVec2f q, ofVec2f r);
+    bool doIntersect(ofVec2f p1, ofVec2f q1, ofVec2f p2, ofVec2f q2);
+    void lookForInter();
+    
+    bool isIntersect;
+    vector<ofPoint> mergedPoints;
+    
+    //try out contour detecting it. 
+    ofPath pathToPath(ofPath pth);
+    
 };

@@ -22,7 +22,9 @@ class ofApp : public ofBaseApp{
     
         morph blob1;
         morph blob2;
+    
+        ofImage imageTest;
  
-        
+    
     
 };
