@@ -1,14 +1,29 @@
 <panel>
-	<amount_trans>0.98</amount_trans>
-	<noise>1.65</noise>
-	<speed>1882</speed>
-	<color>219, 100, 26, 255</color>
+	<amount_trans>1</amount_trans>
+	<noise>0</noise>
+	<speed>1585</speed>
+	<color>189, 79, 33, 255</color>
 <panel/>
-<speed_ofImg>545</speed_ofImg>
-<color_2>255, 255, 255, 255</color_2>
-<quiver>1.735</quiver>
-<gaus>1.35</gaus>
+<speed_ofImg>1090</speed_ofImg>
+<color_2>226, 223, 226, 184</color_2>
+<quiver>5.9</quiver>
+<gaus>0.4</gaus>
 <text_color>0, 0, 0, 255</text_color>
-	<under_img_Margin>22</under_img_Margin>
-	<under_title>18</under_title>
+	<under_img_Margin>10</under_img_Margin>
+	<under_title>21</under_title>
+<slurp_alpha>28</slurp_alpha>
+<slurp_noise>7.75</slurp_noise>
+	<slurp_quiver>0.36</slurp_quiver>
+<Upper_Mask>0</Upper_Mask>
+	<Lower_Mask>0</Lower_Mask>
+	<Left_Mask>0</Left_Mask>
+	<Right_Mask>0</Right_Mask>
+<scale>1.305</scale>
+	<rotate>0</rotate>
+	<offset>-29.3878, -16.5306</offset>
+	<flip_vertical>0</flip_vertical>
+	<flip_horizontal>0</flip_horizontal>
+<sensor_threshold>115</sensor_threshold>
+<filter_thresh>100</filter_thresh>
+<motion_difference_threshold>10</motion_difference_threshold>
 </panel>

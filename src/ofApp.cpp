@@ -5,12 +5,14 @@ void ofApp::setup(){
     //ofSetFullscreen(true);
     
     //ofHideCursor();
-    blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
+    //blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
+    blob1.setup("Gurman_John",ofGetWidth()/2 ,ofGetWidth()/2);
     //blob2.setup("pngs",ofGetWidth()/4,ofGetHeight()/4);
     
     imageTest.load("IMG_0321.JPG");
     
-    }
+}
+    
 
 
 
@@ -18,13 +20,15 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     blob1.update();
+   
+    
     //blob2.update();
     
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(255,0,0);
+    //ofBackground(255);
     
     blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
@@ -33,6 +37,11 @@ void ofApp::draw(){
     ///imageTest.draw(0,0);
     //ofSetColor(255,100);
     //imageTest.draw(0,0);
+    //ofSetColor(255,255,0);
+    //ofDrawEllipse(mouseX, mouseY, 50, 50);
+    
+    
+    
 
 }
 

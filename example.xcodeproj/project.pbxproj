@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B34CDDD1FD31BDA00A3E4CA /* handleSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B34CDDB1FD31BDA00A3E4CA /* handleSerial.cpp */; };
 		0B5A87F81E5253B200E5E569 /* ofxCvColorImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A87191E5253B200E5E569 /* ofxCvColorImage.cpp */; };
 		0B5A87F91E5253B200E5E569 /* ofxCvContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A871C1E5253B200E5E569 /* ofxCvContourFinder.cpp */; };
 		0B5A87FA1E5253B200E5E569 /* ofxCvFloatImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A871E1E5253B200E5E569 /* ofxCvFloatImage.cpp */; };
@@ -77,6 +78,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B34CDDB1FD31BDA00A3E4CA /* handleSerial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = handleSerial.cpp; sourceTree = "<group>"; };
+		0B34CDDC1FD31BDA00A3E4CA /* handleSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = handleSerial.h; sourceTree = "<group>"; };
 		0B5A87181E5253B200E5E569 /* ofxCvBlob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCvBlob.h; sourceTree = "<group>"; };
 		0B5A87191E5253B200E5E569 /* ofxCvColorImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCvColorImage.cpp; sourceTree = "<group>"; };
 		0B5A871A1E5253B200E5E569 /* ofxCvColorImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCvColorImage.h; sourceTree = "<group>"; };
@@ -971,6 +974,8 @@
 				0BF5E90A1F30E26E003523A6 /* morph.cpp */,
 				0B73B4811F79896500E0D3A2 /* item.h */,
 				0B73B4801F79896500E0D3A2 /* item.cpp */,
+				0B34CDDB1FD31BDA00A3E4CA /* handleSerial.cpp */,
+				0B34CDDC1FD31BDA00A3E4CA /* handleSerial.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1079,6 +1084,7 @@
 				0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */,
 				0B5A88291E5253B600E5E569 /* ofxEasingSine.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				0B34CDDD1FD31BDA00A3E4CA /* handleSerial.cpp in Sources */,
 				0B5A88211E5253B600E5E569 /* ofxEasingCirc.cpp in Sources */,
 				0B5A87FD1E5253B200E5E569 /* ofxCvImage.cpp in Sources */,
 				0B5A88201E5253B600E5E569 /* ofxEasingBounce.cpp in Sources */,

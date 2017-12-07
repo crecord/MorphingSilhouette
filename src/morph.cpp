@@ -9,6 +9,19 @@
 #include "morph.h"
 
 void morph::setup(string pathToImages, int x, int y){
+    
+    
+#ifdef TARGET_OPENGLES
+    blurX.load("gaus/shadersES2/shaderBlurX");
+    blurY.load("gaus/shadersES2/shaderBlurY");
+#else
+    if(ofIsGLProgrammableRenderer()){
+        blurX.load("gaus/shadersGL3/shaderBlurX");
+        blurY.load("gaus/shadersGL3/shaderBlurY");
+        ofLog()<< "3";
+    }
+#endif
+    
     interpolateCoeff = 0;
     pMerge.setup();
     
@@ -24,6 +37,9 @@ void morph::setup(string pathToImages, int x, int y){
     // you can now iterate through the files and load them into the ofImage vector
     
     shade.load("shadersGL3/shader");
+  //   blurX.load("shadersGL3/shaderBlurX");
+    //blurY.load("shadersGL3/shaderBlurY");
+    
     //string pathToImages, string pathToCsv, ofImage img, ofPolyline polys
     for(int i = 0; i < dir.size(); i++){
         item temp;
@@ -50,15 +66,22 @@ void morph::setup(string pathToImages, int x, int y){
     transformToo = 1;
     //midTrans = polys.at(transformFrom);
     midTrans = items.at(transformFrom).poly;
-    easingType = ofxTween::easeInOut;
     
   
     gui.setup("panel");
     gui.add(percentTrans.set("amount trans",.6,0,1));
     gui.add(amountOfNoise.set("noise",10,0,30));
     gui.add(amontOfQuiver.set("quiver",10,1,50));
-    gui.add(amontOfGaus.set("gaus",1,0,10));
+    
     gui.add(durationOfTrans.set("speed",300,100,10000));
+    gui.add(slurpAlpha.set("slurp alpha", 5, 0,255));
+    
+    gui.add(slurpNoise.set("slurp noise",10,0,50));
+    gui.add(slurpQuiver.set("slurp quiver",.5,0,3));
+    
+    gui.add(amontOfGaus.set("gaus",1,0,20));
+    gui.add(filterThresh.set("filter thresh",100,1,255));
+    
     //durOfImgTrans
     gui.add(durOfImgTrans.set("speed ofImg",200,100,10000));
     gui.add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
@@ -66,8 +89,59 @@ void morph::setup(string pathToImages, int x, int y){
     gui.add(textColor.set("text color",ofColor(0),ofColor(0,0),ofColor(255,255)));
     gui.add(underImgMargin.set("under img Margin",0,100,10));
     gui.add(underTitle.set("under title", 0,100,5));
+    
+    
+    gui.add(upperMask.set("Upper Mask", 0, 0, 100));
+    gui.add(lowerMask.set("Lower Mask", 0, 0, 100));
+    gui.add(leftMask.set("Left Mask", 0, 0, 100));
+    gui.add(rightMask.set("Right Mask", 0, 0, 100));
+    
+    
+    gui.add(renderScale.set("scale",1,0,3));
+    gui.add(rotation.set("rotate", 0, 0, 3));
+    gui.add(blobOffset.set("offset", ofVec2f(0,0), ofVec2f(-ofGetWidth()/2,-ofGetHeight()/2), ofVec2f(ofGetWidth()/2,ofGetHeight()/2)));
+    gui.add(flipVert.set("flip vertical", false));
+    gui.add(flipHor.set("flip horizontal", false));
+    
+    gui.add(sensorThresh.set("sensor threshold", 100, 10, 500));
+    gui.add(motionDifference.set("motion difference threshold", 10, 1, 500));
+    
+    
     gui.loadFromFile("settings.xml");
- 
+    
+    guiExcited.setup("excited Blob");
+    guiExcited.add(excitedThresh.set("Excite Threshold", 30, 10, 500));
+    
+    guiExcited.add(durOfTransIntoExcite.set("dur trans to excite",200,100,10000));
+    guiExcited.add(durOfTransOutExcite.set("dur trans out of excite",200,100,10000));
+    
+    guiExcited.add(percentTransExcit.set("amount trans",.6,0,1));
+    guiExcited.add(amountOfNoiseExcit.set("noise",10,0,30));
+    guiExcited.add(amontOfQuiverExcit.set("quiver",10,1,50));
+    
+    guiExcited.add(durationOfTransExcit.set("speed in",300,100,10000));
+   
+    
+    guiExcited.add(slurpAlphaExcit.set("slurp alpha", 5, 0,255));
+    
+    guiExcited.add(slurpNoiseExcit.set("slurp noise",10,0,50));
+    guiExcited.add(slurpQuiverExcit.set("slurp quiver",.5,0,3));
+    
+    guiExcited.add(amontOfGausExcit.set("gaus",1,0,20));
+    guiExcited.add(filterThreshExcit.set("filter thresh",100,1,255));
+    
+    //durOfImgTrans
+    
+    guiExcited.add(colorExcit.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    
+    guiExcited.add(color2Excit.set("back col",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    guiExcited.loadFromFile("settings2.xml");
+    
+    isExcite = false;
+    isTransIntoExcite = false;
+    isTransOutOfExcite = false;
+    
+    
      
     bHide = false;
     state = 1;
@@ -85,13 +159,70 @@ void morph::setup(string pathToImages, int x, int y){
     
     alphaPainting =0;
     isIntersect = false;
+    
+    
+    motionBlur.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA );
+    motionBlur.begin();
+    ofClear(255,255,255,255);
+    ofSetColor(255);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    motionBlur.end();
+    
+    int slurpRes =2;
+    
+    drawTrailingBlurY.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes );
+
+    
+    drawTrailingBlurX.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes);
+    
+    drawTrailing.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes, GL_RGB );
+    
+    drawTrailing.begin();
+    ofClear(0,0,0,255);
+    ofSetColor(0);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    drawTrailing.end();
+    
+    ardTalk.setup();
+    isTriggered = false;
+    
+    grayImg.allocate(ofGetWidth(), ofGetHeight());
+    colorImg.allocate(ofGetWidth(), ofGetHeight() );
+    
+    globalPercentTrans = percentTrans;
+    globalAmountOfNoise = amountOfNoise;
+    globalAmontOfQuiver = amontOfQuiver;
+    
+    globalDurationOfTrans = durationOfTrans;
+    colorOfBlob = color;
+    colorOfBackground = color2;
+    
+    globalSlurpAlpha = slurpAlpha;
+    globalSlurpNoise = slurpNoise;
+    globalSlurpQuiver = slurpQuiver;
+    globalAmontOfGaus = amontOfGaus;
+    globalFilterThresh = filterThresh;
+    
+    leftOverFadeTime = 0;
+    // to ease from excited to non excited state. 
+    easingType = ofxTween::easeIn;
+    
+    
+    colorImgSlurp.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes);
+    grayImgSlurp.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes);
+    pixelsSlurp.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes,GL_RGBA);
+    
+    ofPolyline tempy;
+   // trailingShapes.assign(3, tempy);
+    isSensorAttached = false;
 }
 
 
 void morph::update(){
+    ofEnableAlphaBlending();
     
+
     
-    colOfForm = color;
     //ofLog()<< state;
 
     if(state == 1){
@@ -103,16 +234,16 @@ void morph::update(){
         
         //colOfForm = color2;
         int timePassed = ofGetElapsedTimeMillis() - startMark;
-        if (timePassed > durationOfTrans-1){
+        if (timePassed > globalDurationOfTrans-1){
             startMark = ofGetElapsedTimeMillis();
             transformFrom = nextSill(transformFrom);
             transformToo = nextSill(transformToo);
             timePassed = ofGetElapsedTimeMillis() - startMark;
             midTrans = pMerge.getPolyline();
         }
-        interpolateCoeff = ofMap(timePassed, 0, durationOfTrans, 0, 1*percentTrans);
-        quantityOfNoise = amountOfNoise;
-        quiv = amontOfQuiver;
+        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
+        quantityOfNoise = globalAmountOfNoise;
+        quiv = globalAmontOfQuiver;
         
         // overall time left unattended
         if ((ofGetElapsedTimeMillis() - startTimeUnused) > 90000 ){
@@ -154,12 +285,57 @@ void morph::update(){
             else{
                 randomIndices.erase(randomIndices.begin() + indexToErase);
             }
-            
+        
+        
             transformToo = transformTooControlled;
-            midTrans = pMerge.getPolyline();
+
+            ofFbo drawSnapshot;
+            drawSnapshot.allocate(ofGetWidth(), ofGetHeight());
+            drawSnapshot.begin();
+            
+            
+            
+            ofPushMatrix();
+                ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
+                //ofScale(2,2);
+                pathToPath();
+                ofPopMatrix();
+                /*
+                ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
+                drawWithGL(cur.getVertices(),1);
+                ofPopMatrix();
+                drawWithGL(mergedPoints,1);
+                ofPopMatrix();
+                 */
+            
+            drawSnapshot.end();
+            
+            trailingShapes.clear();
+            
+            
+            colorImg.allocate(ofGetWidth(), ofGetHeight());
+            grayImg.allocate(ofGetWidth(), ofGetHeight());
+            
+            ofPixels pixels;
+            pixels.allocate(ofGetWidth(), ofGetHeight() ,GL_RGBA);
+            
+    
+            drawSnapshot.readToPixels(pixels);
+            colorImg.setFromPixels(pixels);
+            grayImg = colorImg;
+
+            
+            contourFinder.findContours(grayImg, 20, ofGetWidth() * ofGetHeight(), 10, false);
+            midTrans.clear();
+            //slurpedPoints = contourFinder.blobs[0].pts;
+            for(int i =0; i > contourFinder.blobs[0].pts.size(); i++){
+                midTrans.addVertex( contourFinder.blobs[0].pts.at(i).x - ofGetWidth()/2,contourFinder.blobs[0].pts.at(i).y - ofGetHeight()/2 );
+            }
+            
+            //midTrans.addVertices(contourFinder.blobs[0].pts);
             
             countOfTransforms ++;
-            
+            startTimeOfState = ofGetElapsedTimeMillis();
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
@@ -169,9 +345,11 @@ void morph::update(){
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
         }
-        interpolateCoeff = ofMap(timePassed, 0, durOfImgTrans, 0, 1);
-        quantityOfNoise = ofMap(timePassed, 0, durOfImgTrans, amountOfNoise, 0);
-        quiv = ofMap(timePassed, 0, durOfImgTrans, amontOfQuiver, amontOfQuiver*2);
+        else{
+            interpolateCoeff = ofMap(timePassed, 0, durOfImgTrans, 0, 1);
+            quantityOfNoise = ofMap(timePassed, 0, durOfImgTrans, globalAmountOfNoise, 0);
+            quiv = ofMap(timePassed, 0, durOfImgTrans, globalAmontOfQuiver, globalAmontOfQuiver*2);
+        }
         
         
     }
@@ -242,7 +420,7 @@ void morph::update(){
         //return to normal image fade back in noise (AUTOMATIC)
         //colOfForm = color2;
         int timePassed = ofGetElapsedTimeMillis() - startMark;
-        if (timePassed > durationOfTrans-1){
+        if (timePassed > globalDurationOfTrans-1){
             startMark = ofGetElapsedTimeMillis();
             transformFrom = nextSill(transformFrom);
             transformToo = nextSill(transformToo);
@@ -251,9 +429,9 @@ void morph::update(){
         }
         
         int timePassed2 = ofGetElapsedTimeMillis() - startTimeOfState;
-        interpolateCoeff = ofMap(timePassed, 0, durationOfTrans, 0, 1*percentTrans);
-        quantityOfNoise = ofMap(timePassed2, 0, durOfImgTrans, 0, amountOfNoise);
-        quiv = amontOfQuiver;
+        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
+        quantityOfNoise = ofMap(timePassed2, 0, durOfImgTrans, 0, globalAmountOfNoise);
+        quiv = globalAmontOfQuiver;
         if(timePassed2 > durOfImgTrans-1){
             state =1;
             startTimeOfState = ofGetElapsedTimeMillis();
@@ -261,11 +439,15 @@ void morph::update(){
         }
     }
     
-    pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
-    //checkIntersection(pMerge.getPolyline());
-    mergedPoints = pMerge.getPolyline().getVertices();
+    if(state != 4){
+        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
+        //checkIntersection(pMerge.getPolyline());
+        mergedPoints = pMerge.getPolyline().getVertices();
+    }
+    
+    /*
     filled.clear();
     for( int i = 0; i < mergedPoints.size(); i++) {
         if(i == 0) {
@@ -276,12 +458,182 @@ void morph::update(){
         }
     }
     filled.close();
-    filled.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
+     */
+    
+    //filled.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
     
     //filled.simplify(.7);
     
     //filled.getOutline();
     //filled = pathToPath(filled);
+    
+    ardTalk.update();
+    
+    
+    if(isSensorAttached){
+
+    if((ardTalk.averagedOut > sensorThresh) & !isTriggered){
+        //triggerNext();
+        state = 2;
+        isTriggered = true;
+        if(!isExcite){
+            isTransIntoExcite = true;
+        }
+        isTransOutOfExcite = false;
+        startTimeOfState = ofGetElapsedTimeMillis();
+        isSetupState = true;
+        //isExcite = true;
+    }
+    else if((ardTalk.averagedOut < sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > motionDifference )){
+
+        state = 5;
+        isTriggered = false;
+        startTimeOfState = ofGetElapsedTimeMillis();
+        isSetupState = true;
+        
+        
+        drawTrailing.begin();
+        ofClear(0,0,0,255);
+        ofSetColor(0);
+        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+        drawTrailing.end();
+    }
+    else if((ardTalk.averagedOut > excitedThresh) & !isExcite & !isTransIntoExcite & (ardTalk.averagedOut < sensorThresh) ){
+        
+        isTransIntoExcite = true;
+        isTransOutOfExcite = false;
+        startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+        //isExcite = true;
+        
+        if(isTriggered){
+            //triggerNext();
+            state = 5;
+            isTriggered = false;
+            startTimeOfState = ofGetElapsedTimeMillis();
+            isSetupState = true;
+            
+            
+            drawTrailing.begin();
+            ofClear(0,0,0,255);
+            ofSetColor(0);
+            ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+            drawTrailing.end();
+        }
+    }
+    else if(ardTalk.averagedOut < excitedThresh ){
+        if(isTriggered){
+            //triggerNext();
+            state = 5;
+            isTriggered = false;
+            startTimeOfState = ofGetElapsedTimeMillis();
+            isSetupState = true;
+            
+            
+            drawTrailing.begin();
+            ofClear(0,0,0,255);
+            ofSetColor(0);
+            ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+            drawTrailing.end();
+            
+            
+            
+        }
+        if(!isTransOutOfExcite & isExcite){
+            isTransOutOfExcite = true;
+            isTransIntoExcite = false;
+            startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+        }
+        //isExcite = false;
+    }
+    }
+    
+    
+    if(isTransIntoExcite){
+        float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
+        float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
+        
+        
+        globalPercentTrans = ofMap(mappedVal,0,1,percentTrans,percentTransExcit);
+        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoise,amountOfNoiseExcit);
+        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiver,amontOfQuiverExcit);;
+        
+        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTrans,durationOfTransExcit);
+        colorOfBlob = color.get().getLerped(colorExcit.get(), mappedVal);
+        colorOfBackground = color2.get().getLerped(color2Excit.get(), mappedVal);
+        
+        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlpha,slurpAlphaExcit);
+        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoise,slurpNoiseExcit);
+        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiver,slurpQuiverExcit);
+        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGaus,amontOfGausExcit);
+        globalFilterThresh = ofMap(mappedVal,0,1,filterThresh,filterThreshExcit);
+        if(timeElapsed >= durOfTransIntoExcite){
+            isTransIntoExcite = false;
+            isExcite = true;
+            leftOverFadeTime =0;
+        }
+        leftOverFadeTime = timeElapsed;
+    }
+    
+    
+    else if (isTransOutOfExcite){
+        float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
+        float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
+        
+        globalPercentTrans = ofMap(mappedVal,0,1,percentTransExcit,percentTrans);
+        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoiseExcit,amountOfNoise);
+        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiverExcit,amontOfQuiver);;
+        
+        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTransExcit,durationOfTrans);
+        colorOfBlob = colorExcit.get().getLerped(color.get(), mappedVal);
+        colorOfBackground = color2Excit.get().getLerped(color2.get(), mappedVal);
+        
+        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlphaExcit,slurpAlpha);
+        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoiseExcit,slurpNoise);
+        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiverExcit,slurpQuiver);
+        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGausExcit,amontOfGaus);
+        globalFilterThresh = ofMap(mappedVal,0,1,filterThreshExcit,filterThresh);
+        
+        
+        if(timeElapsed >= durOfTransOutExcite){
+            isTransOutOfExcite = false;
+            isExcite = false;
+            leftOverFadeTime =0;
+        }
+        leftOverFadeTime = timeElapsed;
+        
+    }
+    else if(isExcite & !isTriggered){
+        globalPercentTrans = percentTransExcit;
+        globalAmountOfNoise = amountOfNoiseExcit;
+        globalAmontOfQuiver = amontOfQuiverExcit;
+        
+        globalDurationOfTrans = durationOfTransExcit;
+        colorOfBlob = colorExcit;
+        colorOfBackground = color2Excit;
+        
+        globalSlurpAlpha = slurpAlphaExcit;
+        globalSlurpNoise = slurpNoiseExcit;
+        globalSlurpQuiver = slurpQuiverExcit;
+        globalAmontOfGaus = amontOfGausExcit;
+        globalFilterThresh = filterThreshExcit;
+    }
+    else if(!isTriggered){
+        
+        globalPercentTrans = percentTrans;
+        globalAmountOfNoise = amountOfNoise;
+        globalAmontOfQuiver = amontOfQuiver;
+        
+        globalDurationOfTrans = durationOfTrans;
+        colorOfBlob = color;
+        colorOfBackground = color2; 
+        globalSlurpAlpha = slurpAlpha;
+        globalSlurpNoise = slurpNoise;
+        globalSlurpQuiver = slurpQuiver;
+        globalAmontOfGaus = amontOfGaus;
+        globalFilterThresh = filterThresh;
+    }
+
+    
 }
 
 
@@ -370,6 +722,7 @@ void morph::populateVector(){
 
 void morph::saveGuiSettings(){
     gui.saveToFile("settings.xml");
+    guiExcited.saveToFile("settings2.xml");
 }
 void morph::drawGui(int x,int y){
     
@@ -378,72 +731,166 @@ void morph::drawGui(int x,int y){
 
 void morph::drawMorph(int x,int y){
     
-    ofClear(color2);
+    
+    ofSetColor(colorOfBackground);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    
+    
+    ofClear(colorOfBackground);
+    
+   // ofBackground(<#int r#>, <#int g#>, <#int b#>)
+    
+    
+
+    ofPushMatrix();
+    
+    int rightOffset = ofGetWidth()*(rightMask/100.0);
+    int leftOffset = ofGetWidth()*(leftMask/100.0);
+    int upperOffset = ofGetHeight()*(upperMask/100.0);
+    int lowerOffset = ofGetHeight()*(lowerMask/100.0);
+    
+    
+    /*
+    ofParameter<float> scale;
+    ofParameter<int> rotation;
+    ofParameter<ofVec2f> blobOffset;
+    ofxButton flipVert;
+    ofxButton flipHor;
+     */
+    
+    ofSetColor(0);
+
+    
+    
+    ofTranslate(blobOffset->x + leftOffset + (ofGetWidth() - (leftOffset + rightOffset))/2, blobOffset->y + upperOffset + (ofGetHeight()- (upperOffset + lowerOffset))/2);
+
+    int flipx = 1;
+    int flipy = 1;
+    if(flipVert){
+        flipy = -1;
+    }
+    if(flipHor){
+        flipx= -1;
+    }
+    
+    ofScale(renderScale* flipx, renderScale* flipy);
+    
+    if(rotation.get() ==0){
+        ofRotateZ(0);
+    }
+    else{
+        ofRotateZ(360/(rotation+1));
+    }
+    
+    
     if((state  >= 3) & (state  <= 5)){
-        ofVec2f sz = getSz(items.at(transformToo).img);
-        
         ofPushMatrix();
-        ofTranslate(x, y);
+        ofVec2f sz = getSz(items.at(transformToo).img);
+        ofTranslate(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2);
+        
+        
+        //ofPushMatrix();
+        //ofTranslate(x + upperMask, y);
         //ofRotateZ(90);
         //images.at(transformToo).setAnchorPoint(.5, .5);
         
         if(items.at(transformToo).isPainting){
             //ofLog()<< alphaPainting;
             ofSetColor(255,alphaPainting);
-            items.at(transformToo).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+            items.at(transformToo).imgForPainting.draw(0,0, sz.x/1.5,sz.y/1.5 );
             ofSetColor(255);
         }
-     
         
-             items.at(transformToo).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
-        
-       
-        
+            ofSetColor(255);
+            items.at(transformToo).img.draw(0,0, sz.x/1.5,sz.y/1.5 );
             // draw text
             string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
             string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
             ofSetColor(textColor.get().r,textColor.get().g,textColor.get().b,alphaText);
-            title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ underImgMargin);
-            body.drawString(museumName, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + underTitle + underImgMargin);
+            title.drawString(titleText, 0, title.stringHeight(titleText)+ underImgMargin);
+            body.drawString(museumName,0 , title.stringHeight(titleText) + underTitle + underImgMargin);
         
             // calibration circle
             //ofDrawEllipse(-1*(sz.x/1.5)/2, (sz.y/1.5)/2, 10, 10);
             ofSetColor(255);
-
-        ofPopMatrix();
+        
+            ofPopMatrix();
         
         
     }
+ 
+    ofEnableAlphaBlending();
+    
 
-    ofPushMatrix();
-        ofTranslate(x, y);
+  
+    if(state != 4){
+        if(!isTriggered){
+            ofPushMatrix();
+            pathToPath();
+            ofPopMatrix();
+        } else{
+        
+            ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
+            drawWithGL(mergedPoints,1);
+        }
+    }
     
-        //check intersections
-        if(isIntersect){
-            filled.setColor(ofColor(0 , 255, 0));
-        }
-        else{
-            filled.setColor(ofColor(colOfForm.r , colOfForm.g, colOfForm.b, alpha));
-        }
+    /*
+    //filled.draw();
+    if(!isTriggered){
+        ofPushMatrix();
+        filled = pathToPath(filled);
+        ofPopMatrix();
+    }
+    //check intersections
+    
+   
+    filled.setColor(ofColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha));
+
         filled.draw();
-    
+     */
+        
     ofPopMatrix();
+    
+    
+    
+    ofSetColor(0);
+    ofDrawRectangle(0, 0, ofGetWidth(), upperOffset);
+    ofDrawRectangle(0, ofGetHeight()-lowerOffset, ofGetWidth(), lowerOffset);
+    ofDrawRectangle(0,0,leftOffset, ofGetHeight());
+    ofDrawRectangle(ofGetWidth()- rightOffset,0,rightOffset, ofGetHeight());
+    
     
     if( !bHide ){
        gui.draw();
+       guiExcited.draw();
+        ofDrawBitmapString(ofToString(ardTalk.averagedOut), ofGetWidth()/2, 100);
+        ofDrawBitmapString(ofToString(ardTalk.averagedOutDiff), ofGetWidth()/2, 50);
+        ofDrawBitmapString(ofToString(ofGetFrameRate()), ofGetWidth()/2, 20);
+
     }
+    
     
 }
 
 void morph::triggerNext(){
-        if (state == 4 ){
+        if (isTriggered ){
             state = 5;
+            isTriggered = false;
+            startTimeOfState = ofGetElapsedTimeMillis();
+            isSetupState = true;
+            
         }
-        else{
+        else if (!isTriggered){
             state = 2;
+            isTriggered = true;
+            if(!isExcite){
+                isTransIntoExcite = true;
+             }
+            isTransOutOfExcite = false;
+            startTimeOfState = ofGetElapsedTimeMillis();
+            isSetupState = true;
         }
-        startTimeOfState = ofGetElapsedTimeMillis();
-        isSetupState = true;
 }
 
 
@@ -455,58 +902,150 @@ int morph::nextSill(int num){
     
 }
 
+void morph::drawWithGL(vector<ofPoint> pntsToDraw, int resolution){
+    ofSetPolyMode(OF_POLY_WINDING_ODD);
+    ofBeginShape();
+    for(int i=0; i < pntsToDraw.size(); i+=resolution){
+        ofCurveVertex(pntsToDraw.at(i));
+    }
+     ofCurveVertex(pntsToDraw.at(0));
+    ofEndShape();
+}
 
-ofPath morph::pathToPath(ofPath pth){
+
+void morph::pathToPath(){
+   
+    //pixelsSlurp.clear();
+    //colorImgSlurp.clear();
     
     
-    ofPath cur;
-   // ofPolyline cur;
-    cur.clear();
+    // adjust the amount of fade...
+    int alphVal = int(ofMap(ofNoise(ofGetElapsedTimef()*globalSlurpQuiver) ,0,1,globalSlurpAlpha + globalSlurpNoise *-1,globalSlurpAlpha + globalSlurpNoise));
+    //int alphVal = slurpAlpha.get();
+    // add a little blur to it to avoid sharp trails
     
-    colorImg.allocate(ofGetWidth(), ofGetHeight() );
-    grayImg.allocate(ofGetWidth(), ofGetHeight());
+    //drawTrailing.set
     
-    drawNoColor.allocate(ofGetWidth(), ofGetHeight(),GL_RGB);
-    ofPixels pixels;
-    pixels.allocate(ofGetWidth(), ofGetHeight(),GL_RGBA);
-    
-    drawNoColor.begin();
-    ofClear(0,0,0);
-    ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
-    pth.setColor(ofColor(255));
-    pth.draw();
-    
-    drawNoColor.end();
+    // another one 
     
     
-    drawNoColor.readToPixels(pixels);
-    colorImg.setFromPixels(pixels);
-    grayImg = colorImg;
-    //grayImg.threshold(20);
+    ofPolyline plyTemp;
+    plyTemp.addVertices(mergedPoints);
+    trailingShapes.push_front(plyTemp);
+   
     
-    contourFinder.findContours(grayImg, 20, ofGetWidth()*ofGetHeight(), 10, false);
-    //ofLog()<< contourFinder.nBlobs;
-    if(contourFinder.nBlobs > 0){
-        // add all the current vertices to cur polyline
-        //cur.addVertices(contourFinder.blobs[0].pts);
-        for( int i=0; i< contourFinder.blobs[0].pts.size(); i++){
-            ofVec2f pos= contourFinder.blobs[0].pts.at(i);
-            if(i == 0) {
-                cur.newSubPath();
-                cur.moveTo(ofVec2f(pos.x-ofGetWidth()/2,pos.y-ofGetHeight()/2));
-            } else {
-                cur.curveTo(ofVec2f(pos.x-ofGetWidth()/2,pos.y-ofGetHeight()/2));
+    if(trailingShapes.size()>globalSlurpAlpha){
+        
+        /// make it really prune it down to match the slur
+        int diff = trailingShapes.size()-globalSlurpAlpha;
+        if (diff < 0){
+            trailingShapes.clear();
+        }
+        else{
+            for(int i = 0; i < diff; i++){
+                trailingShapes.pop_back();
             }
         }
         
-        //cur.setClosed(true);
-        //cur = cur.getSmoothed(7.);
+        
     }
     
     
-    //ofLog()<< cur.getVertices().size();
-    cur.simplify(.5);
-    return cur;
+    ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
+    for (int i=0; i < trailingShapes.size(); i++ ) {
+        if(i>0){
+            trailingShapes.at(i) = trailingShapes.at(i).getSmoothed(2);
+            drawWithGL(trailingShapes.at(i).getVertices(),4);
+        }
+        else{
+            drawWithGL(trailingShapes.at(i).getVertices(),1);
+        }
+        
+    }
+  
+    
+    
+    //drawWithGL(cur.getVertices(),1);
+    
+   /*
+    drawTrailingBlurX.begin();
+       // clea
+        blurX.begin();
+        blurX.setUniform1f("blurAmnt",globalAmontOfGaus);
+        ofSetColor(255);
+        drawTrailing.draw(0,0);
+        blurX.end();
+    drawTrailingBlurX.end();
+    
+    drawTrailingBlurY.begin();
+        blurY.begin();
+        blurY.setUniform1f("blurAmnt", globalAmontOfGaus);
+        ofSetColor(255);
+
+        drawTrailingBlurX.draw(0,0);
+        blurY.end();
+    drawTrailingBlurY.end();
+   
+    
+    drawTrailing.begin();
+   
+    //colorImg.draw(0,0);
+    //ofClear(0,0,0,20);
+    ofSetColor(255);
+    drawTrailingBlurY.draw(0,0);
+    ofSetColor(0,0,0, alphVal);
+    ofDrawRectangle(0,0,drawTrailingBlurY.getWidth(),drawTrailingBlurY.getHeight());
+
+    ofTranslate(drawTrailingBlurY.getWidth()/2,drawTrailingBlurY.getHeight()/2);
+    //pth.setColor(ofColor(255));
+    //pth.draw();
+        ofSetColor(255);
+        ofPushMatrix();
+        ofScale(.5, .5);
+        drawWithGL(mergedPoints,3);
+        ofPopMatrix();
+    
+    drawTrailing.end();
+    
+   */
+    //ofSetColor(255);
+    //drawTrailing.draw(-ofGetWidth()/2 ,-ofGetHeight()/2);
+    //drawTrailingBlurY.draw(0,0);
+  
+   /*
+    drawTrailing.readToPixels(pixelsSlurp);
+
+    colorImgSlurp.setFromPixels(pixelsSlurp);
+    //colorImg.blurGaussian();
+    grayImgSlurp = colorImgSlurp;
+    //grayImg.blur();
+    grayImgSlurp.threshold(globalFilterThresh);
+    
+    //grayImg.draw(0,0);
+    
+ 
+    
+    contourFinder.findContours(grayImgSlurp, 20, drawTrailingBlurY.getHeight()*drawTrailingBlurY.getWidth(), 10, false);
+    
+    //slurpedPoints = contourFinder.blobs[0].pts;
+    
+    cur.clear();
+    cur.addVertices(contourFinder.blobs[0].pts);
+    cur = cur.getSmoothed(2);
+    
+    ofPushMatrix();
+    ofTranslate(-ofGetWidth()/2, -ofGetHeight()/2);
+    ofScale(2,2);
+    ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
+    drawWithGL(cur.getVertices(),1);
+    ofPopMatrix();
+    
+    // draw ontop to give it definition!
+    ofPushMatrix();
+    //ofScale(1.2, 1.2);
+    drawWithGL(mergedPoints,1);
+    ofPopMatrix();
+    */ 
 }
 
 
@@ -567,7 +1106,7 @@ ofPolyline morph::pngToPolyline(ofImage img){
             cur.addVertex(pos);
         }
         cur.setClosed(true);
-        cur = cur.getSmoothed(7.);
+        //cur = cur.getSmoothed(7.);
     }
     //ofLog()<< cur.getVertices().size();
     return cur;

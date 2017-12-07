@@ -12,7 +12,7 @@
 #include "ofxGui.h"
 #include "ofxCsv.h"
 #include "item.h"
-
+#include "handleSerial.h"
 
 class morph{
     
@@ -48,8 +48,19 @@ private:
     ofxCvColorImage	colorImg;
     ofxCvGrayscaleImage grayImg;
     ofxCvContourFinder contourFinder;
-    ofFbo drawNoColor;
     
+    ofxCvColorImage colorImgSlurp;
+    ofxCvGrayscaleImage grayImgSlurp;
+    ofPixels pixelsSlurp;
+    
+    
+    
+    ofFbo drawNoColor;
+    ofFbo drawTrailing;
+    ofFbo drawTrailingBlurX;
+    ofFbo drawTrailingBlurY;
+    
+    ofFbo motionBlur;
     
     ofDirectory dir;
     ofDirectory csvDir;
@@ -75,7 +86,7 @@ private:
     ofParameter<float> percentTrans;
     ofParameter<float> amountOfNoise;
     ofParameter<float> amontOfQuiver;
-    ofParameter<float> amontOfGaus;
+    
     ofParameter<int> durationOfTrans;
     // transition fully into the object
     ofParameter<int> durOfImgTrans;
@@ -85,12 +96,77 @@ private:
     ofParameter<int> underImgMargin;
     ofParameter<int> underTitle;
     ofParameter<int> lineSpaceing;
+    ofParameter<int> slurpAlpha;
+    ofParameter<float> slurpNoise;
+    ofParameter<float> slurpQuiver;
+    ofParameter<float> amontOfGaus;
+    ofParameter<int> filterThresh;
+    
+    ofParameter<int> upperMask;
+    ofParameter<int> lowerMask;
+    ofParameter<int> leftMask;
+    ofParameter<int> rightMask;
+    
+    ofParameter<float> renderScale;
+    ofParameter<int> rotation;
+    ofParameter<ofVec2f> blobOffset;
+    ofParameter<bool> flipVert;
+    ofParameter<bool> flipHor;
+    
+    ofParameter<int> sensorThresh;
+    ofParameter<int> motionDifference;
+    
     ofxPanel gui;
-
+    
+    ofxPanel guiExcited;
+    
+    ofParameter<int> excitedThresh;
+    ofParameter<int> durOfTransIntoExcite;
+    ofParameter<int> durOfTransOutExcite;
+    
+    ofParameter<float> percentTransExcit;
+    ofParameter<float> amountOfNoiseExcit;
+    ofParameter<float> amontOfQuiverExcit;
+    
+    ofParameter<int> durationOfTransExcit;
+    // transition fully into the object
+    
+    ofParameter<ofColor> color2Excit;
+    ofParameter<ofColor> colorExcit;
+    
+    ofParameter<int> slurpAlphaExcit;
+    ofParameter<float> slurpNoiseExcit;
+    ofParameter<float> slurpQuiverExcit;
+    ofParameter<float> amontOfGausExcit;
+    ofParameter<int> filterThreshExcit;
+    
+    float globalPercentTrans;
+    float globalAmountOfNoise;
+    float globalAmontOfQuiver;
+    
+    int globalDurationOfTrans;
+    ofColor colorOfBlob;
+    ofColor colorOfBackground;
+    
+    int globalSlurpAlpha;
+    float globalSlurpNoise;
+    float globalSlurpQuiver;
+    float globalAmontOfGaus;
+    int globalFilterThresh;
+    
+    bool isExcite;
+    bool isTransIntoExcite;
+    bool isTransOutOfExcite;
+    
+    int startTimeOfExciteFade;
+    
+    // so that if we need to fade out suddenly in the middle of a fade in it will be continuous
+    int leftOverFadeTime;
+    ofxEasingQuart easingQuart;
+    ofxTween::ofxEasingType easingType;
     
     //ofxEasingSine easing;
     float clamp;
-    ofxTween::ofxEasingType easingType;
     
     // the state system
     int state;
@@ -118,7 +194,8 @@ private:
     int startTimeUnused;
     
     ofShader shade;
-    
+    ofShader blurX;
+    ofShader blurY;
     // check intersection
     int orientation(ofVec2f p, ofVec2f q, ofVec2f r);
     bool doIntersect(ofVec2f p1, ofVec2f q1, ofVec2f p2, ofVec2f q2);
@@ -126,8 +203,21 @@ private:
     
     bool isIntersect;
     vector<ofPoint> mergedPoints;
+    vector<ofPoint> slurpedPoints;
     
     //try out contour detecting it. 
-    ofPath pathToPath(ofPath pth);
+    void pathToPath();
+    void drawWithGL(vector<ofPoint> pntsToDraw, int resolution);
+    
+    
+    handleSerial ardTalk;
+    bool isTriggered;
+    
+    ofPolyline cur;
+    ofPolyline poly;
+    
+    deque<ofPolyline> trailingShapes;
+    
+    bool isSensorAttached; 
     
 };
