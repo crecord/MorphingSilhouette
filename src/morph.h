@@ -219,6 +219,9 @@ private:
     
     deque<ofPolyline> trailingShapes;
     
-    bool isSensorAttached; 
+    bool isSensorAttached;
+    
+    // use to roll out slowly
+    int slowCount;
     
 };

@@ -30,7 +30,7 @@ void ofApp::update(){
 void ofApp::draw(){
     //ofBackground(255);
     
-  //  blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+    blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
     //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);
     

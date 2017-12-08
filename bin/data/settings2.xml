@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <excited_Blob>
 	<Excite_Threshold>22</Excite_Threshold>
 	<dur_trans_to_excite>248</dur_trans_to_excite>
@@ -12,7 +11,7 @@
 	<gaus>1.1</gaus>
 	<filter_thresh>50</filter_thresh>
 	<color>231, 62, 29, 255</color>
-	<excited_Blob />
+	<excited_Blob/>
 	<back_col>236, 236, 234, 255</back_col>
 	<dur_trans_out_of_excite>2476</dur_trans_out_of_excite>
 	<speed_in>694</speed_in>

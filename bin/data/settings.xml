@@ -1,10 +1,9 @@
-<?xml version="1.0"?>
 <panel>
 	<amount_trans>1</amount_trans>
 	<noise>0</noise>
 	<speed>793</speed>
 	<color>189, 79, 33, 255</color>
-	<panel />
+	<panel/>
 	<speed_ofImg>1090</speed_ofImg>
 	<color_2>226, 223, 226, 184</color_2>
 	<quiver>5.9</quiver>

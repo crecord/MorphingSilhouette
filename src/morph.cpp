@@ -215,6 +215,9 @@ void morph::setup(string pathToImages, int x, int y){
     ofPolyline tempy;
    // trailingShapes.assign(3, tempy);
     isSensorAttached = false;
+    
+    slowCount = 0;
+    
 }
 
 
@@ -241,7 +244,7 @@ void morph::update(){
             timePassed = ofGetElapsedTimeMillis() - startMark;
             midTrans = pMerge.getPolyline();
         }
-        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
+        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans,true);
         quantityOfNoise = globalAmountOfNoise;
         quiv = globalAmontOfQuiver;
         
@@ -346,9 +349,9 @@ void morph::update(){
             startTimeOfState = ofGetElapsedTimeMillis();
         }
         else{
-            interpolateCoeff = ofMap(timePassed, 0, durOfImgTrans, 0, 1);
-            quantityOfNoise = ofMap(timePassed, 0, durOfImgTrans, globalAmountOfNoise, 0);
-            quiv = ofMap(timePassed, 0, durOfImgTrans, globalAmontOfQuiver, globalAmontOfQuiver*2);
+            interpolateCoeff = ofMap(timePassed, 0, durOfImgTrans, 0, 1, true);
+            quantityOfNoise = ofMap(timePassed, 0, durOfImgTrans, globalAmountOfNoise, 0, true);
+            quiv = ofMap(timePassed, 0, durOfImgTrans, globalAmontOfQuiver, globalAmontOfQuiver*2, true);
         }
         
         
@@ -360,8 +363,8 @@ void morph::update(){
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
-        alpha = int( ofMap(timePassed, 0,500,255 ,0));
-        alphaText = int( ofMap(timePassed, 0,500,0 ,255));
+        alpha = int( ofMap(timePassed, 0,500,255 ,0, true));
+        alphaText = int( ofMap(timePassed, 0,500,0 ,255, true));
         
         if(timePassed > 499){
             state =4;
@@ -383,7 +386,7 @@ void morph::update(){
         }
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         if((items.at(transformToo).isPainting)){
-            alphaPainting = int(ofClamp(ofMap(timePassed, 0, 1000, 0, 255),0,255));
+            alphaPainting = int(ofMap(timePassed, 0, 1000, 0, 255, true));
             
         }
         alpha = 0;
@@ -398,9 +401,9 @@ void morph::update(){
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
-        alpha = int( ofMap(timePassed, 0,500,0,255));
-        alphaText = int( ofMap(timePassed, 0,500,255,0));
-        alphaPainting = int(ofMap(timePassed,0,500,255,0));
+        alpha = int( ofMap(timePassed, 0,500,0,255,true));
+        alphaText = int( ofMap(timePassed, 0,500,255,0,true));
+        alphaPainting = int(ofMap(timePassed,0,500,255,0,true));
         if(timePassed > 499){
             state =6;
             startTimeOfState = ofGetElapsedTimeMillis();
@@ -429,8 +432,8 @@ void morph::update(){
         }
         
         int timePassed2 = ofGetElapsedTimeMillis() - startTimeOfState;
-        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
-        quantityOfNoise = ofMap(timePassed2, 0, durOfImgTrans, 0, globalAmountOfNoise);
+        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans,true);
+        quantityOfNoise = ofMap(timePassed2, 0, durOfImgTrans, 0, globalAmountOfNoise,true);
         quiv = globalAmontOfQuiver;
         if(timePassed2 > durOfImgTrans-1){
             state =1;
@@ -556,19 +559,19 @@ void morph::update(){
         
         
         
-        globalPercentTrans = ofMap(mappedVal,0,1,percentTrans,percentTransExcit);
-        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoise,amountOfNoiseExcit);
-        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiver,amontOfQuiverExcit);;
+        globalPercentTrans = ofMap(mappedVal,0,1,percentTrans,percentTransExcit,true);
+        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoise,amountOfNoiseExcit,true);
+        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiver,amontOfQuiverExcit, true);;
         
-        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTrans,durationOfTransExcit);
+        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTrans,durationOfTransExcit, true);
         colorOfBlob = color.get().getLerped(colorExcit.get(), mappedVal);
         colorOfBackground = color2.get().getLerped(color2Excit.get(), mappedVal);
         
-        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlpha,slurpAlphaExcit);
-        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoise,slurpNoiseExcit);
-        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiver,slurpQuiverExcit);
-        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGaus,amontOfGausExcit);
-        globalFilterThresh = ofMap(mappedVal,0,1,filterThresh,filterThreshExcit);
+        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlpha,slurpAlphaExcit, true);
+        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoise,slurpNoiseExcit, true);
+        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiver,slurpQuiverExcit, true);
+        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGaus,amontOfGausExcit, true);
+        globalFilterThresh = ofMap(mappedVal,0,1,filterThresh,filterThreshExcit, true);
         if(timeElapsed >= durOfTransIntoExcite){
             isTransIntoExcite = false;
             isExcite = true;
@@ -586,19 +589,19 @@ void morph::update(){
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeOut);
         //float mappedVal = ofMap(timeElapsed, 0., durOfTransIntoExcite, 0, 1);
         
-        globalPercentTrans = ofMap(mappedVal,0,1,percentTransExcit,percentTrans);
-        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoiseExcit,amountOfNoise);
-        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiverExcit,amontOfQuiver);;
+        globalPercentTrans = ofMap(mappedVal,0,1,percentTransExcit,percentTrans, true);
+        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoiseExcit,amountOfNoise, true);
+        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiverExcit,amontOfQuiver, true);;
         
-        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTransExcit,durationOfTrans);
-        colorOfBlob = colorExcit.get().getLerped(color.get(), mappedVal);
-        colorOfBackground = color2Excit.get().getLerped(color2.get(), mappedVal);
+        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTransExcit,durationOfTrans,true);
+        colorOfBlob = colorExcit.get().getLerped(color.get(), mappedVal );
+        colorOfBackground = color2Excit.get().getLerped(color2.get(), mappedVal );
         
-        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlphaExcit,slurpAlpha);
-        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoiseExcit,slurpNoise);
-        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiverExcit,slurpQuiver);
-        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGausExcit,amontOfGaus);
-        globalFilterThresh = ofMap(mappedVal,0,1,filterThreshExcit,filterThresh);
+        globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlphaExcit,slurpAlpha, true);
+        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoiseExcit,slurpNoise, true);
+        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiverExcit,slurpQuiver, true);
+        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGausExcit,amontOfGaus, true);
+        globalFilterThresh = ofMap(mappedVal,0,1,filterThreshExcit,filterThresh, true);
         
         
         if(timeElapsed >= durOfTransOutExcite){
@@ -857,7 +860,7 @@ void morph::pathToPath(){
     
     
     // adjust the amount of fade...
-    int alphVal = int(ofMap(ofNoise(ofGetElapsedTimef()*globalSlurpQuiver) ,0,1,globalSlurpAlpha + globalSlurpNoise *-1,globalSlurpAlpha + globalSlurpNoise));
+    int alphVal = int(ofMap(ofNoise(ofGetElapsedTimef()*globalSlurpQuiver) ,0,1,globalSlurpAlpha + globalSlurpNoise *-1,globalSlurpAlpha + globalSlurpNoise, true));
     //int alphVal = slurpAlpha.get();
     // add a little blur to it to avoid sharp trails
     
