@@ -20,8 +20,9 @@ ofxPolylineMerger::~ofxPolylineMerger(){
 
 void ofxPolylineMerger::setup() {
     nbPoints = 200;
-    easingType = ofxTween::easeInOut;
     clamp = true;
+    
+    easeState = int(ofRandom(-.4,3.4));
 }
 
 void ofxPolylineMerger::update() {
@@ -67,17 +68,47 @@ void ofxPolylineMerger::mergePolyline(float interpolationCoeff,float amntOfNoise
     
     ofPoint ptOut;
     
+    // check if we are at a transitions point.
+    if((interpolationCoeff < lastInterpCoeff)){
+        easeState = int(ofRandom(-.4,3.4));
+    }
+    
+    
+    lastInterpCoeff = interpolationCoeff;
+    
 //    cout<<"start lerp ";
     for (int i=0; i<nbPoints; i++) {
         
         //ptOut.x = ofLerp(poly1[i].x, poly2[i].x, interpolationCoeff);
         //ptOut.y = ofLerp(poly1[i].y, poly2[i].y, interpolationCoeff);
 
-        ptOut.x = ofMap(interpolationCoeff, 0., 1., poly1[i].x, poly2[i].x);
-        ptOut.y = ofMap(interpolationCoeff, 0., 1., poly1[i].y, poly2[i].y);
-
-       // ptOut.x = ofxTween::map(interpolationCoeff, 0., 1., poly1[i].x, poly2[i].x, clamp, easing, easingType);
-        //ptOut.y = ofxTween::map(interpolationCoeff, 0., 1., poly1[i].y, poly2[i].y, clamp, easing, easingType);
+        //ptOut.x = ofMap(interpolationCoeff, 0., 1., poly1[i].x, poly2[i].x);
+        //ptOut.y = ofMap(interpolationCoeff, 0., 1., poly1[i].y, poly2[i].y);
+        
+      
+       
+        if(easeState == 0){
+            ptOut.x =  ofxeasing::map_clamp(interpolationCoeff, 0.f, 1.f,  poly1[i].x + 0.f, poly2[i].x+ 0.f, &ofxeasing::cubic::easeInOut);
+            ptOut.y =  ofxeasing::map_clamp(interpolationCoeff, 0.f, 1.f, poly1[i].y + 0.f, poly2[i].y+ 0.f, &ofxeasing::cubic::easeInOut);
+        }
+        else if(easeState == 1){
+            ptOut.x =  ofxeasing::map_clamp(interpolationCoeff,  0.f, 1.f, poly1[i].x + 0.f, poly2[i].x+ 0.f, &ofxeasing::sine::easeInOut);
+            ptOut.y =  ofxeasing::map_clamp(interpolationCoeff, 0.f, 1.f, poly1[i].y + 0.f, poly2[i].y+ 0.f, &ofxeasing::sine::easeInOut);
+            
+        }
+        else if (easeState == 2){
+            ptOut.x =  ofxeasing::map_clamp(interpolationCoeff,  0.f, 1.f,  poly1[i].x + 0.f, poly2[i].x+ 0.f, &ofxeasing::quad::easeInOut);
+            ptOut.y =  ofxeasing::map_clamp(interpolationCoeff,0.f, 1.f, poly1[i].y + 0.f, poly2[i].y+ 0.f, &ofxeasing::quad::easeInOut);
+        
+        }
+        else{
+            ptOut.x =  ofxeasing::map_clamp(interpolationCoeff,  0.f, 1.f, poly1[i].x + 0.f, poly2[i].x+ 0.f, &ofxeasing::quart::easeInOut);
+            ptOut.y =  ofxeasing::map_clamp(interpolationCoeff, 0.f, 1.f,  poly1[i].y + 0.f, poly2[i].y+ 0.f, &ofxeasing::quart::easeInOut);
+        }
+        
+       
+        
+        
         float xNoise = ofMap(ofNoise(i*.05 + ofGetElapsedTimef()*speed) ,0,1,amntOfNoise *-1,amntOfNoise);
         float yNoise = ofMap(ofNoise(1000,i*.05 + ofGetElapsedTimef() *speed ),0,1,amntOfNoise *-1,amntOfNoise);
         ptOut.x += xNoise;

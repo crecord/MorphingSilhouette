@@ -9,7 +9,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxTween.h"
+#include "ofxEasing.h"
 
 class ofxPolylineMerger{
     
@@ -39,10 +39,11 @@ private:
     
     int nbPoints;
     
-    ofxEasingCubic easing;
-   // ofxEasingCirc easing;
-   // ofxEasingLinear easing;
-    float clamp;
-    ofxTween::ofxEasingType easingType;
     
+    int easeState;
+    
+
+    
+    float clamp;
+    float lastInterpCoeff;
 };
