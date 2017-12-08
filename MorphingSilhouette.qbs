@@ -28,6 +28,7 @@ Project{
             'ofxPolylineMerger',
             'ofxGui',
             'ofxCsv',
+            'ofxEasing',
         ]
 
         // additional flags for the project. the of module sets some

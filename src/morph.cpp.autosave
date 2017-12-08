@@ -711,8 +711,8 @@ void morph::lookForInter(){
 void morph::checkIntersection(ofPolyline ply){
     isIntersect = false;
     //method one- seeing if the lines intersect
-    mergedPoints = ply.getVertices();
-    lookForInter();
+   // mergedPoints = ply.getVertices();
+    //lookForInter();
     
     // method two- adding up all the angles
     //https://www.khanacademy.org/math/geometry/hs-geo-foundations/hs-geo-polygons/v/sum-of-the-exterior-angles-of-convex-polygon
@@ -911,13 +911,13 @@ int morph::nextSill(int num){
     
 }
 
-void morph::drawWithGL(vector<ofVec3f> pntsToDraw, int resolution){
+void morph::drawWithGL(ofPolyline plyline, int resolution){
     ofSetPolyMode(OF_POLY_WINDING_ODD);
     ofBeginShape();
-    for(int i=0; i < pntsToDraw.size(); i+=resolution){
-        ofCurveVertex(pntsToDraw.at(i).x,pntsToDraw.at(i).ys);
+    for(int i=0; i < plyline.getVertices.size(); i+=resolution){
+        ofCurveVertex(plyline.getVertices.at(i).x,plyline.getVertices.at(i).y);
     }
-     ofCurveVertex(pntsToDraw.at(0));
+     //ofCurveVertex(pntsToDraw.at(0));
     ofEndShape();
 }
 
