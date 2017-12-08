@@ -6,7 +6,7 @@ void ofApp::setup(){
     
     //ofHideCursor();
     //blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
-    blob1.setup("Gurman_John",ofGetWidth()/2 ,ofGetWidth()/2);
+    blob1.setup("Samuels_Diane",ofGetWidth()/2 ,ofGetWidth()/2);
     //blob2.setup("pngs",ofGetWidth()/4,ofGetHeight()/4);
     
     imageTest.load("IMG_0321.JPG");

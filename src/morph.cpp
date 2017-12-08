@@ -740,8 +740,8 @@ void morph::drawMorph(int x,int y){
             ofSetColor(255);
             items.at(transformToo).img.draw(0,0, sz.x/1.5,sz.y/1.5 );
             // draw text
-            string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
-            string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
+            string titleText = items.at(transformToo).blurb.getRow(1).getString(0);
+            string museumName = items.at(transformToo).blurb.getRow(1).getString(1) +"\n" + items.at(transformToo).blurb.getRow(1).getString(4);
             ofSetColor(textColor.get().r,textColor.get().g,textColor.get().b,alphaText);
             title.drawString(titleText, 0, title.stringHeight(titleText)+ underImgMargin);
             body.drawString(museumName,0 , title.stringHeight(titleText) + underTitle + underImgMargin);
