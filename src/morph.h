@@ -8,7 +8,7 @@
 #include "ofMain.h"
 #include "ofxPolylineMerger.h"
 #include "ofxOpenCv.h"
-#include "ofxTween.h"
+#include "ofxEasing.h"
 #include "ofxGui.h"
 #include "ofxCsv.h"
 #include "item.h"
@@ -162,8 +162,8 @@ private:
     
     // so that if we need to fade out suddenly in the middle of a fade in it will be continuous
     int leftOverFadeTime;
-    ofxEasingQuart easingQuart;
-    ofxTween::ofxEasingType easingType;
+    //ofxEasingQuart easingQuart;
+    //ofxTween::ofxEasingType easingType;
     
     //ofxEasingSine easing;
     float clamp;

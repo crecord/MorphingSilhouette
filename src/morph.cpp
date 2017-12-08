@@ -205,7 +205,7 @@ void morph::setup(string pathToImages, int x, int y){
     
     leftOverFadeTime = 0;
     // to ease from excited to non excited state. 
-    easingType = ofxTween::easeIn;
+    //easingType = ofxTween::easeIn;
     
     
     colorImgSlurp.allocate(ofGetWidth()/slurpRes, ofGetHeight()/slurpRes);
@@ -550,7 +550,10 @@ void morph::update(){
     
     if(isTransIntoExcite){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
-        float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
+        //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
+        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
+        //float mappedVal = ofMap(timeElapsed, 0., durOfTransIntoExcite, 0, 1);
+        
         
         
         globalPercentTrans = ofMap(mappedVal,0,1,percentTrans,percentTransExcit);
@@ -577,7 +580,11 @@ void morph::update(){
     
     else if (isTransOutOfExcite){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
-        float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
+        //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
+        // 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f
+        //float mappedVal =  ofxeasing::map_clamp(timeElapsed, 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeOut);
+        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeOut);
+        //float mappedVal = ofMap(timeElapsed, 0., durOfTransIntoExcite, 0, 1);
         
         globalPercentTrans = ofMap(mappedVal,0,1,percentTransExcit,percentTrans);
         globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoiseExcit,amountOfNoise);

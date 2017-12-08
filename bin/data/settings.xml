@@ -1,17 +1,17 @@
 <panel>
 	<amount_trans>1</amount_trans>
 	<noise>0</noise>
-	<speed>1585</speed>
+	<speed>793</speed>
 	<color>189, 79, 33, 255</color>
 <panel/>
 <speed_ofImg>1090</speed_ofImg>
 <color_2>226, 223, 226, 184</color_2>
 <quiver>5.9</quiver>
-<gaus>0.4</gaus>
+<gaus>2.5</gaus>
 <text_color>0, 0, 0, 255</text_color>
 	<under_img_Margin>10</under_img_Margin>
 	<under_title>21</under_title>
-<slurp_alpha>28</slurp_alpha>
+<slurp_alpha>16</slurp_alpha>
 <slurp_noise>7.75</slurp_noise>
 	<slurp_quiver>0.36</slurp_quiver>
 <Upper_Mask>0</Upper_Mask>
