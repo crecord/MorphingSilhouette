@@ -202,13 +202,13 @@ private:
     void lookForInter();
     
     bool isIntersect;
-    vector<glm::tvec3<float>> mergedPoints;
-    vector<ofPoint> slurpedPoints;
+    //vector<glm::tvec3<float>> mergedPoints;
+    //vector<ofPoint> slurpedPoints;
     
     //try out contour detecting it. 
     void pathToPath();
     //void drawWithGL(vector<ofVec3f> pntsToDraw, int resolution);
-    void drawWithGL (vector<glm::tvec3<float>>);
+    void drawWithGL (ofPolyline pols, int res);
     
     
     handleSerial ardTalk;

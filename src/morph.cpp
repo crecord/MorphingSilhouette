@@ -444,7 +444,7 @@ void morph::update(){
         pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
 
-        mergedPoints = pMerge.getPolyline().getVertices();
+        //mergedPoints = pMerge.getPolyline().getVertices();
     }
     
     /*
@@ -645,79 +645,6 @@ void morph::update(){
 
 
 
-//http://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-int morph::orientation(ofVec2f p, ofVec2f q, ofVec2f r)
-{
-    // See http://www.geeksforgeeks.org/orientation-3-ordered-points/
-    // for details of below formula.
-    float val = (q.y - p.y) * (r.x - q.x) -
-    (q.x - p.x) * (r.y - q.y);
-    
-    if (val == 0) return 0;  // colinear
-    
-    return (val > 0)? 1: 2; // clock or counterclock wise
-}
-
-// The main function that returns true if line segment 'p1q1'
-// and 'p2q2' intersect.
-bool morph::doIntersect(ofVec2f p1, ofVec2f q1, ofVec2f p2, ofVec2f q2)
-{
-    // Find the four orientations needed for general and
-    // special cases
-    int o1 = orientation(p1, q1, p2);
-    int o2 = orientation(p1, q1, q2);
-    int o3 = orientation(p2, q2, p1);
-    int o4 = orientation(p2, q2, q1);
-    
-    // General case
-    if (o1 != o2 && o3 != o4){
-        return true;
-    }
-    
-    return false; // Doesn't fall in any of the above cases
-}
-
-void morph::lookForInter(){
-    bool toCont = true;
-    for(int i=0; i < mergedPoints.size(); i+=2){
-        if(toCont & (i < mergedPoints.size()-1 )){
-        ofVec3f p1 = mergedPoints.at(i);
-        ofVec3f p2 = mergedPoints.at(i+1);
-        for(int j=0; j < mergedPoints.size(); j+=2){
-            
-            if(j < mergedPoints.size()-1){
-                ofVec3f p3 = mergedPoints.at(j);
-                ofVec3f p4 = mergedPoints.at(j+1);
-                bool isSame = (p3 == p1) & (p2 == p4);
-                if(!isSame){
-                    bool isInter = doIntersect(p1, p2, p3, p4);
-                    if(isInter){
-                        mergedPoints.erase(mergedPoints.begin()+i, mergedPoints.begin()+j+1);
-                        isIntersect = true;
-                        //break;
-                        toCont =false;
-                        lookForInter();
-                    }
-                }
-            }
-        }
-        }
-
-    }
-}
-
-void morph::checkIntersection(ofPolyline ply){
-
-    //ply.getVertices().size()
-    isIntersect = false;
-    //method one- seeing if the lines intersect
-    mergedPoints = ply.getVertices();
-    lookForInter();
-    
-    // method two- adding up all the angles
-    //https://www.khanacademy.org/math/geometry/hs-geo-foundations/hs-geo-polygons/v/sum-of-the-exterior-angles-of-convex-polygon
-}
-
 
 
 
@@ -840,7 +767,7 @@ void morph::drawMorph(int x,int y){
         } else{
         
             ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
-            drawWithGL(mergedPoints,1);
+            drawWithGL(pMerge.getPolyline(),1);
         }
     }
     
@@ -911,13 +838,13 @@ int morph::nextSill(int num){
     
 }
 
-void morph::drawWithGL(vector<ofVec3f> pntsToDraw, int resolution){
+void morph::drawWithGL(ofPolyline pols, int res){
     ofSetPolyMode(OF_POLY_WINDING_ODD);
     ofBeginShape();
-    for(int i=0; i < pntsToDraw.size(); i+=resolution){
-        ofCurveVertex(pntsToDraw.at(i).x,pntsToDraw.at(i).ys);
+    for(int i=0; i < pols.getVertices().size(); i+=res){
+        ofCurveVertex(pols.getVertices().at(i).x,pols.getVertices().at(i).y);
     }
-     ofCurveVertex(pntsToDraw.at(0));
+     //ofCurveVertex(pntsToDraw.at(0));
     ofEndShape();
 }
 
@@ -938,9 +865,9 @@ void morph::pathToPath(){
     // another one 
     
     
-    ofPolyline plyTemp;
-    plyTemp.addVertices(mergedPoints);
-    trailingShapes.push_front(plyTemp);
+    //ofPolyline plyTemp;
+    //plyTemp.addVertices(mergedPoints);
+    trailingShapes.push_front(pMerge.getPolyline());
    
     
     if(trailingShapes.size()>globalSlurpAlpha){
