@@ -20,7 +20,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     blob1.update();
-   
+   //
     
     //blob2.update();
     
@@ -30,11 +30,11 @@ void ofApp::update(){
 void ofApp::draw(){
     //ofBackground(255);
     
-    blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+  //  blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
     //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);
     
-    ///imageTest.draw(0,0);
+    //imageTest.draw(0,0);
     //ofSetColor(255,100);
     //imageTest.draw(0,0);
     //ofSetColor(255,255,0);
