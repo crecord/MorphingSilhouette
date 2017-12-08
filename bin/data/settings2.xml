@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <excited_Blob>
 	<Excite_Threshold>22</Excite_Threshold>
 	<dur_trans_to_excite>248</dur_trans_to_excite>
@@ -5,14 +6,14 @@
 	<noise>2.85</noise>
 	<quiver>7.615</quiver>
 	<speed>446</speed>
-	<slurp_alpha>19</slurp_alpha>
+	<slurp_alpha>12</slurp_alpha>
 	<slurp_noise>10</slurp_noise>
 	<slurp_quiver>0.5</slurp_quiver>
 	<gaus>1.1</gaus>
 	<filter_thresh>50</filter_thresh>
-	<color>255, 62, 29, 255</color>
-<excited_Blob/>
-<back_col>236, 236, 234, 255</back_col>
-<dur_trans_out_of_excite>2476</dur_trans_out_of_excite>
+	<color>231, 62, 29, 255</color>
+	<excited_Blob />
+	<back_col>236, 236, 234, 255</back_col>
+	<dur_trans_out_of_excite>2476</dur_trans_out_of_excite>
 	<speed_in>694</speed_in>
 </excited_Blob>

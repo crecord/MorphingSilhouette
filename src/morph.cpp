@@ -762,7 +762,8 @@ void morph::drawMorph(int x,int y){
     if(state != 4){
         if(!isTriggered){
             ofPushMatrix();
-            pathToPath();
+           // pathToPath();
+             drawWithGL(pMerge.getPolyline(),1);
             ofPopMatrix();
         } else{
         
