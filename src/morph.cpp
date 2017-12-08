@@ -329,7 +329,7 @@ void morph::update(){
             midTrans.clear();
             //slurpedPoints = contourFinder.blobs[0].pts;
             for(int i =0; i > contourFinder.blobs[0].pts.size(); i++){
-                midTrans.addVertex( contourFinder.blobs[0].pts.at(i).x - ofGetWidth()/2,contourFinder.blobs[0].pts.at(i).y - ofGetHeight()/2 );
+                midTrans.addVertex( contourFinder.blobs[0].pts.at(i).x - ofGetWidth()/2,contourFinder.blobs[0].pts.at(i).y - ofGetHeight()/2 ,0);
             }
             
             //midTrans.addVertices(contourFinder.blobs[0].pts);
@@ -443,10 +443,8 @@ void morph::update(){
     if(state != 4){
         pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
-        //checkIntersection(pMerge.getPolyline());
-        //mergedPoints = pMerge.getPolyline().getVertices();
-        //mergedPoints.assign(<#initializer_list<value_type> __il#>)
-        mergedPoints.operator=(pMerge.getPolyline().getVertices());
+
+        mergedPoints = pMerge.getPolyline().getVertices();
     }
     
     /*
@@ -683,13 +681,13 @@ void morph::lookForInter(){
     bool toCont = true;
     for(int i=0; i < mergedPoints.size(); i+=2){
         if(toCont & (i < mergedPoints.size()-1 )){
-        ofVec2f p1 = mergedPoints.at(i);
-        ofVec2f p2 = mergedPoints.at(i+1);
+        ofVec3f p1 = mergedPoints.at(i);
+        ofVec3f p2 = mergedPoints.at(i+1);
         for(int j=0; j < mergedPoints.size(); j+=2){
             
             if(j < mergedPoints.size()-1){
-                ofVec2f p3 = mergedPoints.at(j);
-                ofVec2f p4 = mergedPoints.at(j+1);
+                ofVec3f p3 = mergedPoints.at(j);
+                ofVec3f p4 = mergedPoints.at(j+1);
                 bool isSame = (p3 == p1) & (p2 == p4);
                 if(!isSame){
                     bool isInter = doIntersect(p1, p2, p3, p4);
@@ -913,11 +911,11 @@ int morph::nextSill(int num){
     
 }
 
-void morph::drawWithGL(vector<ofPoint> pntsToDraw, int resolution){
+void morph::drawWithGL(vector<ofVec3f> pntsToDraw, int resolution){
     ofSetPolyMode(OF_POLY_WINDING_ODD);
     ofBeginShape();
     for(int i=0; i < pntsToDraw.size(); i+=resolution){
-        ofCurveVertex(pntsToDraw.at(i));
+        ofCurveVertex(pntsToDraw.at(i).x,pntsToDraw.at(i).ys);
     }
      ofCurveVertex(pntsToDraw.at(0));
     ofEndShape();
@@ -1113,8 +1111,9 @@ ofPolyline morph::pngToPolyline(ofImage img){
         //cur.addVertices(contourFinder.blobs[0].pts);
         for( int i=0; i< contourFinder.blobs[0].pts.size(); i++){
             ofVec2f pos= contourFinder.blobs[0].pts.at(i);
-            pos = ofVec2f(pos.x - wid, pos.y - hi);
-            cur.addVertex(pos);
+            //pos = ofVec2f(pos.x - wid, pos.y - hi);
+            cur.addVertex(pos.x - wid, pos.y - hi,0);
+
         }
         cur.setClosed(true);
         //cur = cur.getSmoothed(7.);
