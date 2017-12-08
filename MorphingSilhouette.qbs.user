@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.0.1, 2017-12-08T10:18:31. -->
+<!-- Written by QtCreator 4.0.1, 2017-12-08T16:12:13. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -217,7 +217,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.RunConfiguration:MorphingSilhouette.qtc_Desktop_e18d0289---Qbs.RC.NameSeparator---MorphingSilhouette</value>
     <value type="QString" key="Qbs.RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default"></value>
+    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default">/home/studio/Documents/of_v20170714_linux64gcc5_release/apps/myApps/MorphingSilhouette/bin</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>

@@ -214,7 +214,7 @@ void morph::setup(string pathToImages, int x, int y){
     
     ofPolyline tempy;
    // trailingShapes.assign(3, tempy);
-    isSensorAttached = false;
+    isSensorAttached = true;
     
     slowCount = 0;
     
@@ -222,6 +222,9 @@ void morph::setup(string pathToImages, int x, int y){
 
 
 void morph::update(){
+
+    if(slowCount > 1000){
+
     ofEnableAlphaBlending();
     
 
@@ -642,7 +645,8 @@ void morph::update(){
         globalAmontOfGaus = amontOfGaus;
         globalFilterThresh = filterThresh;
     }
-
+  }
+  slowCount++;
     
 }
 
@@ -670,6 +674,7 @@ void morph::drawGui(int x,int y){
 
 void morph::drawMorph(int x,int y){
     
+    if(slowCount > 2000){
     
     ofSetColor(colorOfBackground);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
@@ -765,8 +770,8 @@ void morph::drawMorph(int x,int y){
     if(state != 4){
         if(!isTriggered){
             ofPushMatrix();
-           // pathToPath();
-             drawWithGL(pMerge.getPolyline(),1);
+            pathToPath();
+           // drawWithGL(pMerge.getPolyline(),1);
             ofPopMatrix();
         } else{
         
@@ -809,7 +814,7 @@ void morph::drawMorph(int x,int y){
         ofDrawBitmapString(ofToString(ofGetFrameRate()), ofGetWidth()/2, 20);
 
     }
-    
+    }
     
 }
 
@@ -844,12 +849,14 @@ int morph::nextSill(int num){
 
 void morph::drawWithGL(ofPolyline pols, int res){
     ofSetPolyMode(OF_POLY_WINDING_ODD);
+    if(pols.getVertices().size()> 1){
     ofBeginShape();
     for(int i=0; i < pols.getVertices().size(); i+=res){
         ofCurveVertex(pols.getVertices().at(i).x,pols.getVertices().at(i).y);
     }
      //ofCurveVertex(pntsToDraw.at(0));
     ofEndShape();
+    }
 }
 
 
@@ -904,88 +911,8 @@ void morph::pathToPath(){
     }
   
     
-    
-    //drawWithGL(cur.getVertices(),1);
-    
-   /*
-    drawTrailingBlurX.begin();
-       // clea
-        blurX.begin();
-        blurX.setUniform1f("blurAmnt",globalAmontOfGaus);
-        ofSetColor(255);
-        drawTrailing.draw(0,0);
-        blurX.end();
-    drawTrailingBlurX.end();
-    
-    drawTrailingBlurY.begin();
-        blurY.begin();
-        blurY.setUniform1f("blurAmnt", globalAmontOfGaus);
-        ofSetColor(255);
 
-        drawTrailingBlurX.draw(0,0);
-        blurY.end();
-    drawTrailingBlurY.end();
-   
-    
-    drawTrailing.begin();
-   
-    //colorImg.draw(0,0);
-    //ofClear(0,0,0,20);
-    ofSetColor(255);
-    drawTrailingBlurY.draw(0,0);
-    ofSetColor(0,0,0, alphVal);
-    ofDrawRectangle(0,0,drawTrailingBlurY.getWidth(),drawTrailingBlurY.getHeight());
 
-    ofTranslate(drawTrailingBlurY.getWidth()/2,drawTrailingBlurY.getHeight()/2);
-    //pth.setColor(ofColor(255));
-    //pth.draw();
-        ofSetColor(255);
-        ofPushMatrix();
-        ofScale(.5, .5);
-        drawWithGL(mergedPoints,3);
-        ofPopMatrix();
-    
-    drawTrailing.end();
-    
-   */
-    //ofSetColor(255);
-    //drawTrailing.draw(-ofGetWidth()/2 ,-ofGetHeight()/2);
-    //drawTrailingBlurY.draw(0,0);
-  
-   /*
-    drawTrailing.readToPixels(pixelsSlurp);
-
-    colorImgSlurp.setFromPixels(pixelsSlurp);
-    //colorImg.blurGaussian();
-    grayImgSlurp = colorImgSlurp;
-    //grayImg.blur();
-    grayImgSlurp.threshold(globalFilterThresh);
-    
-    //grayImg.draw(0,0);
-    
- 
-    
-    contourFinder.findContours(grayImgSlurp, 20, drawTrailingBlurY.getHeight()*drawTrailingBlurY.getWidth(), 10, false);
-    
-    //slurpedPoints = contourFinder.blobs[0].pts;
-    
-    cur.clear();
-    cur.addVertices(contourFinder.blobs[0].pts);
-    cur = cur.getSmoothed(2);
-    
-    ofPushMatrix();
-    ofTranslate(-ofGetWidth()/2, -ofGetHeight()/2);
-    ofScale(2,2);
-    ofSetColor(colorOfBlob.r , colorOfBlob.g, colorOfBlob.b, alpha);
-    drawWithGL(cur.getVertices(),1);
-    ofPopMatrix();
-    
-    // draw ontop to give it definition!
-    ofPushMatrix();
-    //ofScale(1.2, 1.2);
-    drawWithGL(mergedPoints,1);
-    ofPopMatrix();
-    */ 
 }
 
 
