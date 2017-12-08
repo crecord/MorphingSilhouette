@@ -444,7 +444,9 @@ void morph::update(){
         pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
     
         //checkIntersection(pMerge.getPolyline());
-        mergedPoints = pMerge.getPolyline().getVertices();
+        //mergedPoints = pMerge.getPolyline().getVertices();
+        //mergedPoints.assign(<#initializer_list<value_type> __il#>)
+        mergedPoints.operator=(pMerge.getPolyline().getVertices());
     }
     
     /*
@@ -707,6 +709,8 @@ void morph::lookForInter(){
 }
 
 void morph::checkIntersection(ofPolyline ply){
+
+    //ply.getVertices().size()
     isIntersect = false;
     //method one- seeing if the lines intersect
     mergedPoints = ply.getVertices();
