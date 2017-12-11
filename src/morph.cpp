@@ -1061,7 +1061,7 @@ void morph::pathToPath(){
   
     ofSetColor(255);
     drawTrailingBlurY.draw(-ofGetWidth()/2 ,-ofGetHeight()/2, ofGetWidth(), ofGetHeight());
-    
+    //drawTrailing.draw(-ofGetWidth()/2 ,-ofGetHeight()/2, ofGetWidth(), ofGetHeight());
     //ofSetColor(0,255,0);
     //ofDrawRectangle(0,0,400,400);
     
