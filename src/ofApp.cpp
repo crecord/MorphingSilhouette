@@ -10,7 +10,7 @@ void ofApp::setup(){
     //blob2.setup("pngs",ofGetWidth()/4,ofGetHeight()/4);
     
     imageTest.load("IMG_0321.JPG");
-    
+    slowCount =0;
 }
     
 
@@ -19,7 +19,16 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    if(slowCount > 1000){
     blob1.update();
+    }
+    
+    
+    if(slowCount < 5000){
+        slowCount++;
+        ofLog()<<slowCount; 
+    }
    //
     
     //blob2.update();
@@ -30,7 +39,12 @@ void ofApp::update(){
 void ofApp::draw(){
     //ofBackground(255);
     
-    blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+    if(slowCount > 2000){
+        blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+    }
+    else{
+        blob1.resetValues(); 
+    }
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
     //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);
     

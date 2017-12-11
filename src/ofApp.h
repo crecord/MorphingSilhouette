@@ -26,7 +26,7 @@ class ofApp : public ofBaseApp{
     
         ofImage imageTest;
  
-        
+        int slowCount; 
     
     
 };

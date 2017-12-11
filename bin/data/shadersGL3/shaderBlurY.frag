@@ -3,6 +3,7 @@
 uniform sampler2DRect tex0;
 
 uniform float blurAmnt;
+uniform float alphaValue;
 
 in vec2 texCoordVarying;
 out vec4 outputColor;
@@ -26,5 +27,5 @@ void main()
 
     color /= 25.0;
     
-    outputColor =  vec4(tex0.rgb ,color.a);
+    outputColor =  vec4(tex0.rgb ,.5);
 }
