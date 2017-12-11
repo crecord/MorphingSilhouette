@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <panel>
 	<amount_trans>0.81</amount_trans>
 	<noise>1.95</noise>
@@ -8,11 +9,12 @@
 	<color_2>201, 241, 241, 255</color_2>
 	<quiver>4.43</quiver>
 	<gaus>0.7</gaus>
+
 	<text_color>0, 0, 0, 255</text_color>
 	<under_img_Margin>10</under_img_Margin>
 	<under_title>21</under_title>
-	<slurp_alpha>7</slurp_alpha>
-	<slurp_noise>4</slurp_noise>
+	<slurp_alpha>30</slurp_alpha>
+	<slurp_noise>7</slurp_noise>
 	<slurp_quiver>0.36</slurp_quiver>
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
@@ -24,9 +26,9 @@
 	<flip_vertical>0</flip_vertical>
 	<flip_horizontal>0</flip_horizontal>
 	<sensor_threshold>115</sensor_threshold>
-	<filter_thresh>0.58</filter_thresh>
+	<filter_thresh>0.34</filter_thresh>
 	<motion_difference_threshold>10</motion_difference_threshold>
-<BtMotionBlur>-1.85</BtMotionBlur>
+    <BtMotionBlur>-1.85</BtMotionBlur>
 	<TpMotionBlur>0.55</TpMotionBlur>
 	<finalPassBlur>0.705</finalPassBlur>
 <color_3>213, 218, 219, 255</color_3>
