@@ -174,7 +174,7 @@ void morph::setup(string pathToImages, int x, int y){
     alphaPainting =0;
     
     
-    motionBlur.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    motionBlur.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
     motionBlur.begin();
     ofClear(255,255,255,0);
     ofSetColor(255);
@@ -183,12 +183,12 @@ void morph::setup(string pathToImages, int x, int y){
     
     
     
-    drawTrailingBlurY.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGBA );
+    drawTrailingBlurY.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA );
 
     
-    drawTrailingBlurX.allocate(ofGetWidth()*2, ofGetHeight()*2);
+    drawTrailingBlurX.allocate(ofGetWidth(), ofGetHeight());
     
-    drawTrailing.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    drawTrailing.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
     
     drawTrailing.begin();
     ofClear(0,0,0,255);
@@ -219,10 +219,7 @@ void morph::setup(string pathToImages, int x, int y){
     globalBtMotionBlur = BtMotionBlur;
     globalTpMotionBlur = TpMotionBlur;
     globalfinalPassBlur = finalPassBlur;
-    
-    guiExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,-5,5));
-    guiExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,-5,5));
-    guiExcited.add(finalPassBlurExcit.set("finalPassBlur",0.3,0,3));
+
     
     leftOverFadeTime = 0;
     // to ease from excited to non excited state. 
@@ -355,10 +352,10 @@ void morph::update(){
         quiv = ofMap(timePassed, 0, durOfImgTrans, globalAmontOfQuiver, globalAmontOfQuiver*2);
         
         if(isExcite){
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlphaExcit, 15);
+            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlphaExcit, 150);
         }
         else{
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlpha, 15);
+            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlpha, 150);
         }
         
         
@@ -446,10 +443,10 @@ void morph::update(){
         
         // reIntro the slurp
         if(isExcite){
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, 15, slurpAlphaExcit.get());
+            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, 103, slurpAlphaExcit.get());
         }
         else{
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans,  15, slurpAlpha.get());
+            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans,  103, slurpAlpha.get());
         }
         
         if(timePassed2 > durOfImgTrans-1){
@@ -960,7 +957,8 @@ void morph::pathToPath(){
         // clea
         //blurY.begin();
         //blurY.setUniform1f("blurAmnt", globalAmontOfGaus);
-    
+        ofSetColor(0,0,0, 255);
+        ofDrawRectangle(0,0,drawTrailingBlurY.getWidth(),drawTrailingBlurY.getHeight());
         blurX.begin();
         blurX.setUniform1f("blurAmnt",globalAmontOfGaus);
         ofSetColor(255);
@@ -970,7 +968,9 @@ void morph::pathToPath(){
     drawTrailingBlurX.end();
     
     drawTrailingBlurY.begin();
-    
+        ofSetColor(0,0,0, 255);
+        ofDrawRectangle(0,0,drawTrailingBlurY.getWidth(),drawTrailingBlurY.getHeight());
+
         blurY.begin();
         blurY.setUniform1f("blurAmnt", globalAmontOfGaus);
         blurY.setUniform1f("alphaValue", 1);
@@ -985,15 +985,15 @@ void morph::pathToPath(){
    
     //colorImg.draw(0,0);
     //ofClear(0,0,0,20);
-    ofSetColor(255);
-    drawTrailingBlurY.draw(0,0);
+   // ofSetColor(255);
+   // drawTrailingBlurY.draw(0,0);
     ofSetColor(0,0,0, alphVal);
     ofDrawRectangle(0,0,drawTrailing.getWidth(),drawTrailing.getHeight());
     ofTranslate(drawTrailing.getWidth()/2,drawTrailing.getHeight()/2);
     
     //pth.setColor(ofColor(255));
     //pth.draw();
-        ofScale(2, 2);
+     //   ofScale(2, 2);
         ofSetColor(255);
    
     drawWithGL(pMerge.getPolyline(), 1);
@@ -1060,8 +1060,9 @@ void morph::pathToPath(){
     //drawTrailingBlurY.draw(0,0);
   
     ofSetColor(255);
-    drawTrailingBlurY.draw(-ofGetWidth()/2 ,-ofGetHeight()/2, ofGetWidth(), ofGetHeight());
-    
+
+    //drawTrailingBlurY.draw(-ofGetWidth()/2 ,-ofGetHeight()/2, ofGetWidth(), ofGetHeight());
+    motionBlur.draw(-ofGetWidth()/2 ,-ofGetHeight()/2, ofGetWidth(), ofGetHeight());
     //ofSetColor(0,255,0);
     //ofDrawRectangle(0,0,400,400);
     
@@ -1073,7 +1074,7 @@ void morph::pathToPath(){
     grayImgSlurp = colorImgSlurp;
     //grayImg.blur();
     grayImgSlurp.threshold(globalFilterThresh);
-    
+ .
     //grayImgSlurp.draw(-ofGetWidth()/2 ,-ofGetHeight()/2);
     
     ofSetColor(255);
