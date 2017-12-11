@@ -25,7 +25,6 @@ public:
     void triggerNext();
     void saveGuiSettings();
     bool bHide;
-    void checkIntersection(ofPolyline ply);
     void resetValues();
 
 private:
@@ -219,14 +218,6 @@ private:
     ofShader blurY;
     ofShader threshShade;
     
-    // check intersection
-    int orientation(ofVec2f p, ofVec2f q, ofVec2f r);
-    bool doIntersect(ofVec2f p1, ofVec2f q1, ofVec2f p2, ofVec2f q2);
-    void lookForInter();
-    
-    bool isIntersect;
-    vector<ofPoint> mergedPoints;
-    vector<ofPoint> slurpedPoints;
     
     //try out contour detecting it. 
     void pathToPath();
