@@ -27,7 +27,7 @@ void ofApp::update(){
     
     if(slowCount < 5000){
         slowCount++;
-        ofLog()<<slowCount; 
+        //ofLog()<<slowCount;
     }
    //
     
@@ -43,7 +43,7 @@ void ofApp::draw(){
         blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     }
     else{
-        blob1.resetValues(); 
+        blob1.resetValues();
     }
     //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
     //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);

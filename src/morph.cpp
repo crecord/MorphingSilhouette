@@ -460,8 +460,9 @@ void morph::update(){
         }
     }
     
-    pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
-    
+    if(state != 4){
+        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
+    }
     //checkIntersection(pMerge.getPolyline());
     //mergedPoints = pMerge.getPolyline().getVertices();
     
@@ -887,8 +888,10 @@ void morph::drawMorph(int x,int y){
     }
     
     
-    pathToPath();
-    
+    // no need to morph when there is a filepath
+    if(state != 4){
+        pathToPath();
+    }
     
     
     /*
@@ -1259,8 +1262,8 @@ ofPolyline morph::pngToPolyline(ofImage img){
         //cur.addVertices(contourFinder.blobs[0].pts);
         for( int i=0; i< contourFinder.blobs[0].pts.size(); i++){
             ofVec2f pos= contourFinder.blobs[0].pts.at(i);
-            pos = ofVec2f(pos.x - wid, pos.y - hi);
-            cur.addVertex(pos);
+            //pos = ofVec2f(pos.x - wid, pos.y - hi);
+            cur.addVertex(pos.x - wid, pos.y - hi,0);
         }
         cur.setClosed(true);
         //cur = cur.getSmoothed(7.);
