@@ -1043,6 +1043,7 @@ void morph::pathToPath(){
     ofClear(255,255,255,0);
     //ofSetColor(255,0,0);
     //ofDrawRectangle(0,0,500,500);
+    // I am making an arbitrary change
     
     blurY.begin();
     //blurY.setUniform1f("blurAmnt", globalfinalPassBlur);
