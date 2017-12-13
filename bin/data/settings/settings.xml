@@ -7,7 +7,7 @@
 	<speed_ofImg>397</speed_ofImg>
 	<color_2>255, 255, 241, 255</color_2>
 	<quiver>4.43</quiver>
-	<gaus>0.045</gaus>
+	<gaus>0</gaus>
 
 	<text_color>20, 0, 0, 255</text_color>
 	<under_img_Margin>10</under_img_Margin>
@@ -29,7 +29,7 @@
 	<motion_difference_threshold>10</motion_difference_threshold>
     <BtMotionBlur>-1.5</BtMotionBlur>
 	<TpMotionBlur>0.35</TpMotionBlur>
-	<finalPassBlur>0.015</finalPassBlur>
+	<finalPassBlur>0</finalPassBlur>
 <color_3>213, 218, 219, 255</color_3>
 <group/>
 </panel>
