@@ -150,7 +150,7 @@ void morph::setup(string pathToImages, int x, int y){
     alphaPainting =0;
     
     
-    motionBlur.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    motionBlur.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
     motionBlur.begin();
     ofClear(255,255,255,0);
     ofSetColor(255);
@@ -159,7 +159,7 @@ void morph::setup(string pathToImages, int x, int y){
     
 
     
-    drawTrailing.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    drawTrailing.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
     
     drawTrailing.begin();
     ofClear(0,0,0,255);
@@ -240,14 +240,18 @@ void morph::resetValues(){
 
 void morph::update(){
     
-    gpuBlur1.blurOffset = 130 * globalAmontOfGaus;
-    gpuBlur1.blurPasses = 10 * 1 - globalAmontOfGaus;
+    gpuBlur1.blurOffset = 1.5;
+    gpuBlur1.blurPasses = 1;
+
+    //gpuBlur1.blurOffset = 130 * globalAmontOfGaus;
+    //gpuBlur1.blurPasses = 10 * 1 - globalAmontOfGaus;
     gpuBlur1.numBlurOverlays = 1;
     gpuBlur1.blurOverlayGain = 255;
-    
+    gpuBlur2.blurOffset = 1.5;
+    gpuBlur2.blurPasses = 1;
 
-    gpuBlur2.blurOffset = 130 * globalfinalPassBlur;
-    gpuBlur2.blurPasses = 10 * 1 - globalfinalPassBlur;
+   // gpuBlur2.blurOffset = 130 * globalfinalPassBlur;
+   // gpuBlur2.blurPasses = 10 * 1 - globalfinalPassBlur;
     gpuBlur2.numBlurOverlays = 1;
     gpuBlur2.blurOverlayGain = 255;
      
@@ -849,8 +853,9 @@ void morph::pathToPath(){
         threshShade.end();
     motionBlur.end();
     
-    
-    
+    //motionBlur.draw(-ofGetWidth()/2 ,-ofGetHeight()/2,ofGetWidth(), ofGetHeight());
+
+
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     gpuBlur2.beginDrawScene();
         ofClear(0, 0, 0, 0);
@@ -868,7 +873,7 @@ void morph::pathToPath(){
         gpuBlur2.drawBlurFbo();
         ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     ofPopMatrix();
-    
+
     ofSetColor(255);
 
 }
