@@ -13,6 +13,8 @@
 #include "ofxCsv.h"
 #include "item.h"
 #include "handleSerial.h"
+#include "ofxFboBlur.h"
+
 
 class morph{
     
@@ -49,24 +51,19 @@ private:
     ofxCvGrayscaleImage grayImg;
     ofxCvContourFinder contourFinder;
     
-    ofxCvColorImage colorImgSlurp;
-    ofxCvGrayscaleImage grayImgSlurp;
-    ofPixels pixelsSlurp;
     
     
     
     ofFbo drawNoColor;
+    
     ofFbo drawTrailing;
-    ofFbo drawTrailingBlurX;
-    ofFbo drawTrailingBlurY;
+
     
     ofFbo motionBlur;
     
     ofDirectory dir;
     ofDirectory csvDir;
-   // vector<ofImage> images;
-    //vector<ofPolyline> polys;
-    //vector<ofxCsv> blurbs;
+
     
     vector<item> items;
     
@@ -182,9 +179,7 @@ private:
     
     // so that if we need to fade out suddenly in the middle of a fade in it will be continuous
     int leftOverFadeTime;
-    //ofxEasingQuart easingQuart;
-    //ofxTween::ofxEasingType easingType;
-    
+      
     //ofxEasingSine easing;
     float clamp;
     
@@ -214,14 +209,10 @@ private:
     int startTimeUnused;
     
     ofShader shade;
-    ofShader blurX;
-    ofShader blurY;
     ofShader threshShade;
     
     
-    //try out contour detecting it. 
     void pathToPath();
-    //void drawWithGL(vector<ofPoint> pntsToDraw);
     void drawWithGL (ofPolyline pols, int res);
     
     
@@ -232,6 +223,9 @@ private:
     
     bool isSensor;
     
+    ofxFboBlur gpuBlur1;
+    ofxFboBlur gpuBlur2;
     
+    int fadeSlurpToo;
     
 };
