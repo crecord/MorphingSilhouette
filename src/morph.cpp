@@ -46,86 +46,7 @@ void morph::setup(string pathToImages, int x, int y){
     midTrans = items.at(transformFrom).poly;
     
   
-    gui.setup("panel");
-    gui.add(percentTrans.set("amount trans",.6,0,1));
-    gui.add(amountOfNoise.set("noise",10,0,30));
-    gui.add(amontOfQuiver.set("quiver",10,1,50));
-    
-    gui.add(durationOfTrans.set("speed",300,100,10000));
-    gui.add(slurpAlpha.set("slurp alpha", 5, 0,255));
-    
-    gui.add(slurpNoise.set("slurp noise",10,0,50));
-    gui.add(slurpQuiver.set("slurp quiver",.5,0,3));
-    
-    gui.add(amontOfGaus.set("gaus",.5,0,1));
-    gui.add(filterThresh.set("filter thresh",.2,0,1));
-    
-    
-    gui.add(BtMotionBlur.set("BtMotionBlur",1,-5,5));
-    gui.add(TpMotionBlur.set("TpMotionBlur",0,-5,5));
-    gui.add(finalPassBlur.set("finalPassBlur",0.3,0,1));
-
-    
-    //durOfImgTrans
-    gui.add(durOfImgTrans.set("speed ofImg",200,100,10000));
-    gui.add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    gui.add(color2.set("color 2",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    gui.add(color3.set("color 3",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    gui.add(textColor.set("text color",ofColor(0),ofColor(0,0),ofColor(255,255)));
-    gui.add(underImgMargin.set("under img Margin",0,100,10));
-    gui.add(underTitle.set("under title", 0,100,5));
-    
-    
-    gui.add(upperMask.set("Upper Mask", 0, 0, 100));
-    gui.add(lowerMask.set("Lower Mask", 0, 0, 100));
-    gui.add(leftMask.set("Left Mask", 0, 0, 100));
-    gui.add(rightMask.set("Right Mask", 0, 0, 100));
-    
-    
-    gui.add(renderScale.set("scale",1,0,3));
-    gui.add(rotation.set("rotate", 0, 0, 3));
-    gui.add(blobOffset.set("offset", ofVec2f(0,0), ofVec2f(-ofGetWidth()/2,-ofGetHeight()/2), ofVec2f(ofGetWidth()/2,ofGetHeight()/2)));
-    gui.add(flipVert.set("flip vertical", false));
-    gui.add(flipHor.set("flip horizontal", false));
-    
-    gui.add(sensorThresh.set("sensor threshold", 100, 10, 500));
-    gui.add(motionDifference.set("motion difference threshold", 10, 1, 500));
-    
-    
-    gui.loadFromFile("settings/settings.xml");
-    
-    guiExcited.setup("excited Blob");
-    guiExcited.add(excitedThresh.set("Excite Threshold", 30, 10, 500));
-    
-    guiExcited.add(durOfTransIntoExcite.set("dur trans to excite",200,100,10000));
-    guiExcited.add(durOfTransOutExcite.set("dur trans out of excite",200,100,10000));
-    
-    guiExcited.add(percentTransExcit.set("amount trans",.6,0,1));
-    guiExcited.add(amountOfNoiseExcit.set("noise",10,0,30));
-    guiExcited.add(amontOfQuiverExcit.set("quiver",10,1,50));
-    
-    guiExcited.add(durationOfTransExcit.set("speed in",300,100,10000));
-   
-    
-    guiExcited.add(slurpAlphaExcit.set("slurp alpha", 5, 0,255));
-    
-    guiExcited.add(slurpNoiseExcit.set("slurp noise",10,0,50));
-    guiExcited.add(slurpQuiverExcit.set("slurp quiver",.5,0,3));
-    
-    guiExcited.add(amontOfGausExcit.set("gaus",.5,0,1));
-    guiExcited.add(filterThreshExcit.set("filter thresh",0.2,0,1));
-    
-    
-    guiExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,-5,5));
-    guiExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,-5,5));
-    guiExcited.add(finalPassBlurExcit.set("finalPassBlur",0.3,0,1));
-
-    //durOfImgTrans
-    
-    guiExcited.add(colorExcit.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    
-    guiExcited.add(color2Excit.set("back col",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    guiExcited.loadFromFile("settings/settings2.xml");
+ 
     
     isExcite = false;
     isTransIntoExcite = false;
@@ -150,7 +71,7 @@ void morph::setup(string pathToImages, int x, int y){
     alphaPainting =0;
     
     
-    motionBlur.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
+    motionBlur.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
     motionBlur.begin();
     ofClear(255,255,255,0);
     ofSetColor(255);
@@ -159,7 +80,7 @@ void morph::setup(string pathToImages, int x, int y){
     
 
     
-    drawTrailing.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
+    drawTrailing.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
     
     drawTrailing.begin();
     ofClear(0,0,0,255);
@@ -173,23 +94,7 @@ void morph::setup(string pathToImages, int x, int y){
     grayImg.allocate(ofGetWidth(), ofGetHeight());
     colorImg.allocate(ofGetWidth(), ofGetHeight() );
     
-    globalPercentTrans = percentTrans;
-    globalAmountOfNoise = amountOfNoise;
-    globalAmontOfQuiver = amontOfQuiver;
     
-    globalDurationOfTrans = durationOfTrans;
-    colorOfBlob = color;
-    colorOfBackground = color2;
-    
-    globalSlurpAlpha = slurpAlpha;
-    globalSlurpNoise = slurpNoise;
-    globalSlurpQuiver = slurpQuiver;
-    globalAmontOfGaus = amontOfGaus;
-    globalFilterThresh = filterThresh;
-    
-    globalBtMotionBlur = BtMotionBlur;
-    globalTpMotionBlur = TpMotionBlur;
-    globalfinalPassBlur = finalPassBlur;
 
     
     leftOverFadeTime = 0;
@@ -230,6 +135,8 @@ void morph::setup(string pathToImages, int x, int y){
     // the target value to fade slurp out to
     fadeSlurpToo = 150;
     
+    gManager.setup();
+    
 }
 
 void morph::resetValues(){
@@ -245,8 +152,11 @@ void morph::update(){
 
     //gpuBlur1.blurOffset = 130 * globalAmontOfGaus;
     //gpuBlur1.blurPasses = 10 * 1 - globalAmontOfGaus;
+    
+    
     gpuBlur1.numBlurOverlays = 1;
     gpuBlur1.blurOverlayGain = 255;
+    
     gpuBlur2.blurOffset = 1.5;
     gpuBlur2.blurPasses = 1;
 
@@ -271,16 +181,16 @@ void morph::update(){
         
         //colOfForm = color2;
         int timePassed = ofGetElapsedTimeMillis() - startMark;
-        if (timePassed > globalDurationOfTrans-1){
+        if (timePassed > gManager.globalDurationOfTrans-1){
             startMark = ofGetElapsedTimeMillis();
             transformFrom = nextSill(transformFrom);
             transformToo = nextSill(transformToo);
             timePassed = ofGetElapsedTimeMillis() - startMark;
             midTrans = pMerge.getPolyline();
         }
-        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
-        quantityOfNoise = globalAmountOfNoise;
-        quiv = globalAmontOfQuiver;
+        interpolateCoeff = ofMap(timePassed, 0, gManager.globalDurationOfTrans, 0, 1*gManager.globalPercentTrans);
+        quantityOfNoise = gManager.globalAmountOfNoise;
+        quiv = gManager.globalAmontOfQuiver;
         
         // overall time left unattended
         if ((ofGetElapsedTimeMillis() - startTimeUnused) > 90000 ){
@@ -344,20 +254,20 @@ void morph::update(){
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         
         
-        interpolateCoeff = ofMap(timePassed, 0, durOfImgTrans, 0, 1);
+        interpolateCoeff = ofMap(timePassed, 0, gManager.durOfImgTrans, 0, 1);
         
         // fade out the noise and the slurp
-        quantityOfNoise = ofMap(timePassed, 0, durOfImgTrans, globalAmountOfNoise, 0);
-        quiv = ofMap(timePassed, 0, durOfImgTrans, globalAmontOfQuiver, 0);
+        quantityOfNoise = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmountOfNoise, 0);
+        quiv = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmontOfQuiver, 0);
         
         if(isExcite){
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlphaExcit, fadeSlurpToo);
+            gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlphaExcit, fadeSlurpToo);
         }
         else{
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, slurpAlpha, fadeSlurpToo);
+            gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlpha, fadeSlurpToo);
         }
         
-        if (timePassed > durOfImgTrans-1){
+        if (timePassed > gManager.durOfImgTrans-1){
             state = 3;
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
@@ -433,7 +343,7 @@ void morph::update(){
         //return to normal image fade back in noise (AUTOMATIC)
         //colOfForm = color2;
         int timePassed = ofGetElapsedTimeMillis() - startMark;
-        if (timePassed > globalDurationOfTrans-1){
+        if (timePassed > gManager.globalDurationOfTrans-1){
             startMark = ofGetElapsedTimeMillis();
             transformFrom = nextSill(transformFrom);
             transformToo = nextSill(transformToo);
@@ -442,19 +352,19 @@ void morph::update(){
         }
         
         int timePassed2 = ofGetElapsedTimeMillis() - startTimeOfState;
-        interpolateCoeff = ofMap(timePassed, 0, globalDurationOfTrans, 0, 1*globalPercentTrans);
-        quantityOfNoise = ofMap(timePassed2, 0, durOfImgTrans, 0, globalAmountOfNoise);
-        quiv = globalAmontOfQuiver;
+        interpolateCoeff = ofMap(timePassed, 0, gManager.globalDurationOfTrans, 0, 1*gManager.globalPercentTrans);
+        quantityOfNoise = ofMap(timePassed2, 0, gManager.durOfImgTrans, 0, gManager.globalAmountOfNoise);
+        quiv = gManager.globalAmontOfQuiver;
         
         // reIntro the slurp
         if(isExcite){
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans, fadeSlurpToo, slurpAlphaExcit.get());
+            gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, fadeSlurpToo, gManager.slurpAlphaExcit.get());
         }
         else{
-            globalSlurpAlpha = ofMap(timePassed, 0, durOfImgTrans,  fadeSlurpToo, slurpAlpha.get());
+            gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans,  fadeSlurpToo, gManager.slurpAlpha.get());
         }
         
-        if(timePassed2 > durOfImgTrans-1){
+        if(timePassed2 > gManager.durOfImgTrans-1){
             state =1;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
@@ -469,7 +379,7 @@ void morph::update(){
     
         ardTalk.update();
         
-        if((ardTalk.averagedOut > sensorThresh) & !isTriggered){
+        if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             
             // Let's show an image!
             state = 2;
@@ -482,7 +392,7 @@ void morph::update(){
             isSetupState = true;
         }
         // transform back into the blob if the person moves out of the threshold and is moving face
-        else if((ardTalk.averagedOut < sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > motionDifference )){
+        else if((ardTalk.averagedOut < gManager.sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > gManager.motionDifference )){
             state = 5;
             isTriggered = false;
             startTimeOfState = ofGetElapsedTimeMillis();
@@ -501,14 +411,14 @@ void morph::update(){
         }
         
         // go into excited mode
-        else if((ardTalk.averagedOut > excitedThresh) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < sensorThresh) ){
+        else if((ardTalk.averagedOut > gManager.excitedThresh) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh) ){
             isTransIntoExcite = true;
             isTransOutOfExcite = false;
             startTimeOfExciteFade =  ofGetElapsedTimeMillis();
 
         }
        
-        else if(ardTalk.averagedOut < excitedThresh ){
+        else if(ardTalk.averagedOut < gManager.excitedThresh ){
             if(isTriggered){
                 //triggerNext();
                 state = 5;
@@ -534,31 +444,11 @@ void morph::update(){
     if(isTransIntoExcite){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
-        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        
-        globalPercentTrans = ofMap(mappedVal,0,1,percentTrans,percentTransExcit);
-        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoise,amountOfNoiseExcit);
-        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiver,amontOfQuiverExcit);;
-        
-        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTrans,durationOfTransExcit);
-        colorOfBlob = color.get().getLerped(colorExcit.get(), mappedVal);
-        colorOfBackground = color2.get().getLerped(color2Excit.get(), mappedVal);
-        
-        if((state  < 2) | (state  > 6)){
-            globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlpha,slurpAlphaExcit);
-        }
-        
-        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoise,slurpNoiseExcit);
-        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiver,slurpQuiverExcit);
-        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGaus,amontOfGausExcit);
-        globalFilterThresh = ofMap(mappedVal,0,1,filterThresh,filterThreshExcit);
-        
-        globalBtMotionBlur = ofMap(mappedVal,0,1,BtMotionBlur,BtMotionBlurExcit);
-        globalTpMotionBlur = ofMap(mappedVal,0,1,TpMotionBlur,TpMotionBlurExcit);
-        globalfinalPassBlur = ofMap(mappedVal,0,1,finalPassBlur,finalPassBlurExcit);
+        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
         
         
-        if(timeElapsed >= durOfTransIntoExcite){
+        
+        if(timeElapsed >= gManager.durOfTransIntoExcite){
             isTransIntoExcite = false;
             isExcite = true;
             leftOverFadeTime =0;
@@ -571,30 +461,10 @@ void morph::update(){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
         
-        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, durOfTransOutExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
+        float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransOutExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
+        gManager.scaleExciteValues(false, mappedVal,((state  < 2) | (state  > 6)));
         
-        globalPercentTrans = ofMap(mappedVal,0,1,percentTransExcit,percentTrans);
-        globalAmountOfNoise = ofMap(mappedVal,0,1,amountOfNoiseExcit,amountOfNoise);
-        globalAmontOfQuiver = ofMap(mappedVal,0,1,amontOfQuiverExcit,amontOfQuiver);;
-        
-        globalDurationOfTrans = ofMap(mappedVal,0,1,durationOfTransExcit,durationOfTrans);
-        colorOfBlob = colorExcit.get().getLerped(color.get(), mappedVal);
-        colorOfBackground = color2Excit.get().getLerped(color2.get(), mappedVal);
-        
-        if((state  < 2) | (state  > 6)){
-            globalSlurpAlpha = ofMap(mappedVal,0,1,slurpAlphaExcit,slurpAlpha);
-        }
-        
-        globalSlurpNoise = ofMap(mappedVal,0,1,slurpNoiseExcit,slurpNoise);
-        globalSlurpQuiver = ofMap(mappedVal,0,1,slurpQuiverExcit,slurpQuiver);
-        globalAmontOfGaus = ofMap(mappedVal,0,1,amontOfGausExcit,amontOfGaus);
-        globalFilterThresh = ofMap(mappedVal,0,1,filterThreshExcit,filterThresh);
-        
-        globalBtMotionBlur = ofMap(mappedVal,0,1,BtMotionBlurExcit,BtMotionBlur);
-        globalTpMotionBlur = ofMap(mappedVal,0,1,TpMotionBlurExcit,TpMotionBlur);
-        globalfinalPassBlur = ofMap(mappedVal,0,1,finalPassBlurExcit,finalPassBlur);
-        
-        if(timeElapsed >= durOfTransOutExcite){
+        if(timeElapsed >= gManager.durOfTransOutExcite){
             isTransOutOfExcite = false;
             isExcite = false;
             leftOverFadeTime =0;
@@ -603,48 +473,16 @@ void morph::update(){
         
     }
     else if(isExcite & !isTriggered){
-        globalPercentTrans = percentTransExcit;
-        globalAmountOfNoise = amountOfNoiseExcit;
-        globalAmontOfQuiver = amontOfQuiverExcit;
         
-        globalDurationOfTrans = durationOfTransExcit;
-        colorOfBlob = colorExcit;
-        colorOfBackground = color2Excit;
+        gManager.initGlobalMovements(true, ((state  < 2) | (state  > 6)));
         
-        if((state  < 2) | (state  > 6)){
-            globalSlurpAlpha = slurpAlphaExcit;
-        }
-        
-        globalSlurpNoise = slurpNoiseExcit;
-        globalSlurpQuiver = slurpQuiverExcit;
-        globalAmontOfGaus = amontOfGausExcit;
-        globalFilterThresh = filterThreshExcit;
-        
-        globalBtMotionBlur = BtMotionBlurExcit;
-        globalTpMotionBlur = TpMotionBlurExcit;
-        globalfinalPassBlur = finalPassBlurExcit;
         
     }
     else if(!isTriggered){
         
-        globalPercentTrans = percentTrans;
-        globalAmountOfNoise = amountOfNoise;
-        globalAmontOfQuiver = amontOfQuiver;
+        gManager.initGlobalMovements(false, ((state  < 2) | (state  > 6)));
         
-        globalDurationOfTrans = durationOfTrans;
-        colorOfBlob = color;
-        colorOfBackground = color2;
-        if((state  < 2) | (state  > 6)){
-            globalSlurpAlpha = slurpAlpha;
-        }
-        globalSlurpNoise = slurpNoise;
-        globalSlurpQuiver = slurpQuiver;
-        globalAmontOfGaus = amontOfGaus;
-        globalFilterThresh = filterThresh;
         
-        globalBtMotionBlur = BtMotionBlur;
-        globalTpMotionBlur = TpMotionBlur;
-        globalfinalPassBlur = finalPassBlur;
     }
     
 
@@ -662,8 +500,7 @@ void morph::populateVector(){
 }
 
 void morph::saveGuiSettings(){
-    gui.saveToFile("settings/settings.xml");
-    guiExcited.saveToFile("settings/settings2.xml");
+    
 }
 void morph::drawGui(int x,int y){
     
@@ -673,34 +510,34 @@ void morph::drawGui(int x,int y){
 void morph::drawMorph(int x,int y){
     
     
-    ofSetColor(color3);
+    ofSetColor(gManager.color3);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
     ofPushMatrix();
     
-        int rightOffset = ofGetWidth()*(rightMask/100.0);
-        int leftOffset = ofGetWidth()*(leftMask/100.0);
-        int upperOffset = ofGetHeight()*(upperMask/100.0);
-        int lowerOffset = ofGetHeight()*(lowerMask/100.0);
+        int rightOffset = ofGetWidth()*(gManager.rightMask/100.0);
+        int leftOffset = ofGetWidth()*(gManager.leftMask/100.0);
+        int upperOffset = ofGetHeight()*(gManager.upperMask/100.0);
+        int lowerOffset = ofGetHeight()*(gManager.lowerMask/100.0);
     
-        ofTranslate(blobOffset->x + leftOffset + (ofGetWidth() - (leftOffset + rightOffset))/2, blobOffset->y + upperOffset + (ofGetHeight()- (upperOffset + lowerOffset))/2);
+        ofTranslate(gManager.blobOffset->x + leftOffset + (ofGetWidth() - (leftOffset + rightOffset))/2, gManager.blobOffset->y + upperOffset + (ofGetHeight()- (upperOffset + lowerOffset))/2);
 
         int flipx = 1;
         int flipy = 1;
-        if(flipVert){
+        if(gManager.flipVert){
             flipy = -1;
         }
-        if(flipHor){
+        if(gManager.flipHor){
             flipx= -1;
         }
     
-        ofScale(renderScale* flipx, renderScale* flipy);
+        ofScale(gManager.renderScale* flipx, gManager.renderScale* flipy);
     
-        if(rotation.get() ==0){
+        if(gManager.rotation.get() ==0){
             ofRotateZ(0);
         }
         else{
-            ofRotateZ(360/(rotation+1));
+            ofRotateZ(360/(gManager.rotation+1));
         }
 
         // draw images if fadeing in, displaying or fading out image
@@ -718,9 +555,9 @@ void morph::drawMorph(int x,int y){
             // draw text
             string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
             string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
-            ofSetColor(textColor.get().r,textColor.get().g,textColor.get().b,alphaText);
-            title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ underImgMargin);
-            body.drawString(museumName, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + underTitle + underImgMargin);
+            ofSetColor(gManager.textColor.get().r,gManager.textColor.get().g,gManager.textColor.get().b,alphaText);
+            title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ gManager.underImgMargin);
+            body.drawString(museumName, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + gManager.underTitle + gManager.underImgMargin);
             ofSetColor(255);
         }
     
@@ -742,9 +579,8 @@ void morph::drawMorph(int x,int y){
     
     
     if( !bHide ){
-        gui.draw();
-        guiExcited.draw();
-        ofSetColor(200);
+        gManager.draw('h');
+        ofSetColor(100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOut), ofGetWidth()/2, 100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOutDiff), ofGetWidth()/2, 50);
         ofDrawBitmapString(ofToString(ofGetFrameRate()), ofGetWidth()/2, 20);
@@ -796,10 +632,10 @@ void morph::pathToPath(){
     // this is how fast the motion trail is faded away.
     int alphVal;
     if((state  < 2) | (state  > 6)){
-       alphVal = int(ofMap(ofNoise(ofGetElapsedTimef()*globalSlurpQuiver) ,0,1,globalSlurpAlpha + globalSlurpNoise *-1,globalSlurpAlpha + globalSlurpNoise));
+       alphVal = int(ofMap(ofNoise(ofGetElapsedTimef()*gManager.globalSlurpQuiver) ,0,1,gManager.globalSlurpAlpha + gManager.globalSlurpNoise *-1,gManager.globalSlurpAlpha + gManager.globalSlurpNoise));
     }
     else{
-        alphVal = globalSlurpAlpha;
+        alphVal = gManager.globalSlurpAlpha;
     }
     
     // draw the previous trail and blur it
@@ -843,11 +679,11 @@ void morph::pathToPath(){
     motionBlur.begin();
         ofClear(255,255,255,0);
         threshShade.begin();
-            threshShade.setUniform4f("blobCol", colorOfBlob.r/255.f, colorOfBlob.g/255.f, colorOfBlob.b/255.f, colorOfBlob.a/255.f);
-            threshShade.setUniform4f("backCol", colorOfBackground.r/255.f, colorOfBackground.g/255.f, colorOfBackground.b/255.f, colorOfBackground.a/255.f);
-            threshShade.setUniform1f("thresholdPnt",globalFilterThresh);
-            threshShade.setUniform1f("motionBlrBt",globalBtMotionBlur);
-            threshShade.setUniform1f("motionBlrTp",globalTpMotionBlur);
+            threshShade.setUniform4f("blobCol", gManager.colorOfBlob.r/255.f, gManager.colorOfBlob.g/255.f, gManager.colorOfBlob.b/255.f, gManager.colorOfBlob.a/255.f);
+            threshShade.setUniform4f("backCol", gManager.colorOfBackground.r/255.f, gManager.colorOfBackground.g/255.f, gManager.colorOfBackground.b/255.f, gManager.colorOfBackground.a/255.f);
+            threshShade.setUniform1f("thresholdPnt",gManager.globalFilterThresh);
+            threshShade.setUniform1f("motionBlrBt",gManager.globalBtMotionBlur);
+            threshShade.setUniform1f("motionBlrTp",gManager.globalTpMotionBlur);
             threshShade.setUniform1f("alphaVal",alpha/255.f);
             drawTrailing.draw(0,0);
         threshShade.end();
