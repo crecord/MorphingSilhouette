@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <excited_Blob>
 	<Excite_Threshold>41</Excite_Threshold>
 	<dur_trans_to_excite>248</dur_trans_to_excite>
@@ -11,12 +12,12 @@
 	<gaus>1.1</gaus>
 	<filter_thresh>50</filter_thresh>
 	<color>144, 62, 29, 255</color>
-	<excited_Blob/>
+	<excited_Blob />
 	<back_col>191, 104, 55, 255</back_col>
 	<dur_trans_out_of_excite>2476</dur_trans_out_of_excite>
 	<speed_in>4901</speed_in>
 	<BtMotionBlur>2.1</BtMotionBlur>
 	<TpMotionBlur>0.8</TpMotionBlur>
 	<finalPassBlur>0.3</finalPassBlur>
-<group/>
+	<group />
 </excited_Blob>
