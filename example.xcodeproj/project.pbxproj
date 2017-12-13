@@ -21,6 +21,7 @@
 		0B73B4821F79896500E0D3A2 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B73B4801F79896500E0D3A2 /* item.cpp */; };
 		0BBD73751FDA2A5400BCCD26 /* ofxCsv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73711FDA2A5400BCCD26 /* ofxCsv.cpp */; };
 		0BBD73761FDA2A5400BCCD26 /* ofxCsvRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73731FDA2A5400BCCD26 /* ofxCsvRow.cpp */; };
+		0BBD73931FDF2F9F00BCCD26 /* ofxFboBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73911FDF2F9F00BCCD26 /* ofxFboBlur.cpp */; };
 		0BBD874E1E5C831000DEE299 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */; };
 		0BBD874F1E5C831000DEE299 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873F1E5C831000DEE299 /* ofxButton.cpp */; };
 		0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD87421E5C831000DEE299 /* ofxGuiGroup.cpp */; };
@@ -256,6 +257,8 @@
 		0BBD73721FDA2A5400BCCD26 /* ofxCsv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCsv.h; sourceTree = "<group>"; };
 		0BBD73731FDA2A5400BCCD26 /* ofxCsvRow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCsvRow.cpp; sourceTree = "<group>"; };
 		0BBD73741FDA2A5400BCCD26 /* ofxCsvRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCsvRow.h; sourceTree = "<group>"; };
+		0BBD73911FDF2F9F00BCCD26 /* ofxFboBlur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFboBlur.cpp; sourceTree = "<group>"; };
+		0BBD73921FDF2F9F00BCCD26 /* ofxFboBlur.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxFboBlur.h; sourceTree = "<group>"; };
 		0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		0BBD873E1E5C831000DEE299 /* ofxBaseGui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		0BBD873F1E5C831000DEE299 /* ofxButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -779,6 +782,24 @@
 			path = ../../../addons/ofxCsv/src;
 			sourceTree = "<group>";
 		};
+		0BBD738F1FDF2F9F00BCCD26 /* ofxFboBlur */ = {
+			isa = PBXGroup;
+			children = (
+				0BBD73901FDF2F9F00BCCD26 /* src */,
+			);
+			name = ofxFboBlur;
+			sourceTree = "<group>";
+		};
+		0BBD73901FDF2F9F00BCCD26 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0BBD73911FDF2F9F00BCCD26 /* ofxFboBlur.cpp */,
+				0BBD73921FDF2F9F00BCCD26 /* ofxFboBlur.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxFboBlur/src;
+			sourceTree = "<group>";
+		};
 		0BBD873B1E5C831000DEE299 /* ofxGui */ = {
 			isa = PBXGroup;
 			children = (
@@ -827,6 +848,7 @@
 				0BBD873B1E5C831000DEE299 /* ofxGui */,
 				0BBD736B1FDA29DC00BCCD26 /* ofxEasing */,
 				0BBD736F1FDA2A5400BCCD26 /* ofxCsv */,
+				0BBD738F1FDF2F9F00BCCD26 /* ofxFboBlur */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -980,6 +1002,7 @@
 				0B73B4821F79896500E0D3A2 /* item.cpp in Sources */,
 				0B5A88321E52547800E5E569 /* ofApp.cpp in Sources */,
 				0BBD87511E5C831000DEE299 /* ofxLabel.cpp in Sources */,
+				0BBD73931FDF2F9F00BCCD26 /* ofxFboBlur.cpp in Sources */,
 				0BBD874E1E5C831000DEE299 /* ofxBaseGui.cpp in Sources */,
 				0BBD87531E5C831000DEE299 /* ofxSlider.cpp in Sources */,
 				0B5A87FA1E5253B200E5E569 /* ofxCvFloatImage.cpp in Sources */,

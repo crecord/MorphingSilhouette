@@ -4,12 +4,10 @@
 void ofApp::setup(){
     //ofSetFullscreen(true);
     
-    //ofHideCursor();
     //blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
-    blob1.setup("Samuels_Diane",ofGetWidth()/2 ,ofGetWidth()/2);
-    //blob2.setup("pngs",ofGetWidth()/4,ofGetHeight()/4);
+    blob1.setup("collection_Images/Rogers_Rob",ofGetWidth()/2 ,ofGetWidth()/2);
     
-    imageTest.load("IMG_0321.JPG");
+    //imageTest.load("curators/Bridgett_Tamiah/painting/5199.png");
     slowCount =0;
 }
     
@@ -20,18 +18,17 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    if(slowCount > 1000){
+   // if(slowCount > 1000){
     blob1.update();
-    }
+   // }
     
-    
+    /*
     if(slowCount < 5000){
         slowCount++;
         //ofLog()<<slowCount;
     }
-   //
+     */
     
-    //blob2.update();
     
 }
 
@@ -39,21 +36,17 @@ void ofApp::update(){
 void ofApp::draw(){
     //ofBackground(255);
     
+    
+    blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+    
+    /*
     if(slowCount > 2000){
         blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     }
     else{
         blob1.resetValues();
-    }
-    //blob2.drawMorph(ofGetWidth()/4,ofGetHeight()/4);
-    //ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 300);
-    
-    //imageTest.draw(0,0);
-    //ofSetColor(255,100);
-    //imageTest.draw(0,0);
-    //ofSetColor(255,255,0);
-    //ofDrawEllipse(mouseX, mouseY, 50, 50);
-    
+    }*/
+     
     
     
 
@@ -61,39 +54,16 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    /*
-    if(key == 'g'){
-       // generatePolyline();
-    }
-    if(key == 'f'){
-        pMerge.setNbPoints(pMerge.getNbPoints()+1);
-    }
-    else if (key == 'd'){
-        if(pMerge.getNbPoints()>3){
-            pMerge.setNbPoints(pMerge.getNbPoints()-1);
-        }
-    }
-    else if (key == ' '){
 
-    }
-    else if(key =='h'){
-    
-        bHide = !bHide;
-    }
-
-    */
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+
     if (key == ' '){
-        // trigger next.
         blob1.triggerNext();
     }
-    else if (key == 'g'){
-        blob2.triggerNext();
-    }
-    else if (key == 'h'){
+    if (key == 'h'){
         blob1.bHide = !blob1.bHide;
        // blob2.bHide = !blob2.bHide;
     }
