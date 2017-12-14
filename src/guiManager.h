@@ -38,6 +38,7 @@ public:
     int globalDurationOfTrans;
     ofColor colorOfBlob;
     ofColor colorOfBackground;
+    ofColor colorOfHighlight;
     
     int globalSlurpAlpha;
     float globalSlurpNoise;
@@ -117,6 +118,7 @@ public:
     ofParameter<int> durationOfTransExcit;
     // transition fully into the object
     
+    ofParameter<ofColor> color3Excit;
     ofParameter<ofColor> color2Excit;
     ofParameter<ofColor> colorExcit;
     
@@ -149,20 +151,14 @@ private:
     bool isThresholdOverride;
     bool isOrientOverride;
     
-    
     string curatorName;
-    
     bool isInside;
     bool isVertical;
     bool isLeftScreen;
    
-    
     vector<string> allNames = { "Benz","Bridgett", "Fraley","Legacy","Michals","Needles","Samuels","Sebak", "Smith", "Rogers", "Gurman", "Pell", "German" };
     vector<string> inside = { "Fraley", "Rogers", "Gurman", "Pell", "German" };
     vector<string> vertical = { "Michals", "Smith", "Gurman" };
     vector<string> left = { "Sebak", "Samuels", "Pell" };
-
-   
-    
     
 };

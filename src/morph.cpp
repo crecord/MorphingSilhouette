@@ -683,6 +683,7 @@ void morph::pathToPath(){
         threshShade.begin();
             threshShade.setUniform4f("blobCol", gManager.colorOfBlob.r/255.f, gManager.colorOfBlob.g/255.f, gManager.colorOfBlob.b/255.f, gManager.colorOfBlob.a/255.f);
             threshShade.setUniform4f("backCol", gManager.colorOfBackground.r/255.f, gManager.colorOfBackground.g/255.f, gManager.colorOfBackground.b/255.f, gManager.colorOfBackground.a/255.f);
+            threshShade.setUniform4f("highCol", gManager.colorOfHighlight.r/255.f, gManager.colorOfHighlight.g/255.f, gManager.colorOfHighlight.b/255.f, gManager.colorOfHighlight.a/255.f);
             threshShade.setUniform1f("thresholdPnt",gManager.globalFilterThresh);
             threshShade.setUniform1f("motionBlrBt",gManager.globalBtMotionBlur);
             threshShade.setUniform1f("motionBlrTp",gManager.globalTpMotionBlur);

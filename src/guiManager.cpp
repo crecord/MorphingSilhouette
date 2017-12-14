@@ -47,9 +47,9 @@ void guiManager::setup(string name){
     guiUniversal.add(blurTwoPasses.set("blur2 Passes",1,0,4));
     
     guiUniversal.add(durOfImgTrans.set("speed ofImg",200,100,10000));
-    guiUniversal.add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    guiUniversal.add(color2.set("color 2",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    guiUniversal.add(color3.set("color 3",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    guiUniversal.add(color.set("color Blob",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    guiUniversal.add(color2.set("color Back",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    guiUniversal.add(color3.set("color High",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
     guiUniversal.add(textColor.set("text color",ofColor(0),ofColor(0,0),ofColor(255,255)));
     
     
@@ -82,9 +82,8 @@ void guiManager::setup(string name){
     
     
     guiUniversalExcited.add(colorExcit.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    
     guiUniversalExcited.add(color2Excit.set("back col",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
-    
+    guiUniversalExcited.add(color3Excit.set("hightlight col",ofColor(200,100,140),ofColor(0,0),ofColor(255,255)));
     
     // inside specific
     //ofxPanel guiSensorThresholding;!!!!!!!!!!!!!!!!
@@ -225,6 +224,7 @@ void guiManager::setup(string name){
     globalDurationOfTrans = durationOfTrans;
     colorOfBlob = color;
     colorOfBackground = color2;
+    colorOfHighlight = color3;
     
     globalSlurpAlpha = slurpAlpha;
     globalSlurpNoise = slurpNoise;
@@ -283,6 +283,7 @@ void guiManager::scaleExciteValues(bool isScalingToExcited, float mappedVal, boo
     // do something here
     colorOfBlob = color.get().getLerped(colorExcit.get(), abs(down - mappedVal));
     colorOfBackground = color2.get().getLerped(color2Excit.get(), abs(down - mappedVal));
+    colorOfHighlight = color3.get().getLerped(color3Excit.get(), abs(down - mappedVal));
     
     if(isInTrigMode){
         globalSlurpAlpha = ofMap(mappedVal,down,up,slurpAlpha,slurpAlphaExcit);
@@ -313,7 +314,8 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalDurationOfTrans = durationOfTransExcit;
         colorOfBlob = colorExcit;
         colorOfBackground = color2Excit;
-    
+        colorOfHighlight = color3Excit;
+        
         if(isInTrigMode){
             globalSlurpAlpha = slurpAlphaExcit;
         }
@@ -340,6 +342,7 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalDurationOfTrans = durationOfTrans;
         colorOfBlob = color;
         colorOfBackground = color2;
+        colorOfHighlight = color3;
         if(isInTrigMode){
             globalSlurpAlpha = slurpAlpha;
         }

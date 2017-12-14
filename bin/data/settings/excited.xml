@@ -20,4 +20,5 @@
 	<blur1_Passes>1</blur1_Passes>
 	<blur2_offset>0.5</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
+<hightlight_col>200, 100, 140, 255</hightlight_col>
 </excited_Blob>

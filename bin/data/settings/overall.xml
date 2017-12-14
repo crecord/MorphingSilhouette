@@ -8,8 +8,8 @@
 	<slurp_quiver>0.5</slurp_quiver>
 	<gaus>0.5</gaus>
 	<filter_thresh>0.2</filter_thresh>
-	<BtMotionBlur>-1.4</BtMotionBlur>
-	<TpMotionBlur>0.4</TpMotionBlur>
+	<BtMotionBlur>-3.6</BtMotionBlur>
+	<TpMotionBlur>0.75</TpMotionBlur>
 	<finalPassBlur>0.3</finalPassBlur>
 	<speed_ofImg>200</speed_ofImg>
 	<color>239, 215, 140, 255</color>
@@ -19,6 +19,9 @@
 <Universal_Bolb/>
 <blur1_offset>0.81</blur1_offset>
 	<blur1_Passes>1</blur1_Passes>
-	<blur2_offset>1.11</blur2_offset>
+	<blur2_offset>0.78</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
+<color_Blob>255, 62, 44, 255</color_Blob>
+	<color_Back>241, 223, 223, 255</color_Back>
+	<color_High>175, 169, 163, 255</color_High>
 </Universal_Bolb>
