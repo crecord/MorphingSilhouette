@@ -18,12 +18,15 @@ public:
     
     
     
-    void setup();
-    void draw(char identitifier);
+    void setup(string name);
+    void draw();
     void scaleValues(bool isGettingExcited, float mappedValue);
     void scaleExciteValues(bool isScalingToExcited, float mappedVal, bool isInTrigMode);
     void initGlobalMovements(bool isExcite, bool isInTrigMode);
     void saveSettings();
+    void overRide();
+    
+    int guiState; 
     
     // the gui controlled variables 
     
@@ -120,26 +123,32 @@ private:
     
     ofxPanel guiUniversal;
     ofxPanel guiUniversalExcited;
-    // inside outside specific
+    
+    // inside specific
     ofxPanel guiSensorThresholding;
+    // dependent on vertical and orientation
     ofxPanel guiOrientation;
+    
+    
+    bool isOverallOverride;
+    bool isExcitedOverride;
+    bool isThresholdOverride;
+    bool isOrientOverride;
     
     
     string curatorName;
     
-    bool isOutside;
+    bool isInside;
     bool isVertical;
     bool isLeftScreen;
+   
     
-    string inside [5] = { "16", "2", "77", "40", "12071" };
-    string vertical [5] = { "16", "2", "77", "40", "12071" };
-    string left [5] = { "16", "2", "77", "40", "12071" };
+    vector<string> allNames = { "Benz","Bridgett", "Fraley","Legacy","Michals","Needles","Samuels","Sebak", "Smith", "Rogers", "Gurman", "Pell", "German" };
+    vector<string> inside = { "Fraley", "Rogers", "Gurman", "Pell", "German" };
+    vector<string> vertical = { "Michals", "Smith", "Gurman" };
+    vector<string> left = { "Sebak", "Samuels", "Pell" };
 
-    // maybe a function to see what is over written and
-    // save some values to ovewrite
-    /*
-     if it is in this ovewrite file then alter the xml internally....
-     */
+   
     
     
 };

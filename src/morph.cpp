@@ -8,12 +8,18 @@
 
 #include "morph.h"
 
-void morph::setup(string pathToImages, int x, int y){
+void morph::setup( int x, int y){
     
+    
+    ofxCsv name;
+    name.load("CuratorName.csv");
+    string curatorName = name.getRow(0).getString(0);
+    string pathToImages = "collection_Images/" + curatorName;
+    
+    gManager.setup(curatorName);
     
     interpolateCoeff = 0;
     pMerge.setup();
-    
     
     dir.allowExt("png");
     dir.listDir(pathToImages);
@@ -135,7 +141,7 @@ void morph::setup(string pathToImages, int x, int y){
     // the target value to fade slurp out to
     fadeSlurpToo = 150;
     
-    gManager.setup();
+    
     
 }
 
@@ -579,7 +585,7 @@ void morph::drawMorph(int x,int y){
     
     
     if( !bHide ){
-        gManager.draw('h');
+        gManager.draw();
         ofSetColor(100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOut), ofGetWidth()/2, 100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOutDiff), ofGetWidth()/2, 50);

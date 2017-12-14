@@ -20,7 +20,7 @@ class morph{
     
 public:
     
-    void setup(string pathToImages, int x, int y);
+    void setup(int x, int y);
     void update();
     void drawGui(int x,int y);
     void drawMorph(int x,int y);
@@ -28,10 +28,13 @@ public:
     void saveGuiSettings();
     bool bHide;
     void resetValues();
+    guiManager gManager;
+    
+    
 
 private:
 
-    guiManager gManager; 
+    
     
     ofPolyline pngToPolyline(ofImage img);
     ofVec2f getSz(ofImage img);
