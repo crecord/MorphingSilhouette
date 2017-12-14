@@ -36,13 +36,15 @@ void guiManager::setup(string name){
     guiUniversal.add(slurpNoise.set("slurp noise",10,0,50));
     guiUniversal.add(slurpQuiver.set("slurp quiver",.5,0,3));
     
-    guiUniversal.add(amontOfGaus.set("gaus",.5,0,1));
+    guiUniversal.add(blurOneOffset.set("blur1 offset",.5,0,3));
+    guiUniversal.add(blurOnePasses.set("blur1 Passes",1,0,4));
     guiUniversal.add(filterThresh.set("filter thresh",.2,0,1));
     
     
     guiUniversal.add(BtMotionBlur.set("BtMotionBlur",1,-5,5));
     guiUniversal.add(TpMotionBlur.set("TpMotionBlur",0,-5,5));
-    guiUniversal.add(finalPassBlur.set("finalPassBlur",0.3,0,1));
+    guiUniversal.add(blurTwoOffset.set("blur2 offset",.5,0,3));
+    guiUniversal.add(blurTwoPasses.set("blur2 Passes",1,0,4));
     
     guiUniversal.add(durOfImgTrans.set("speed ofImg",200,100,10000));
     guiUniversal.add(color.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
@@ -67,13 +69,17 @@ void guiManager::setup(string name){
     guiUniversalExcited.add(slurpNoiseExcit.set("slurp noise",10,0,50));
     guiUniversalExcited.add(slurpQuiverExcit.set("slurp quiver",.5,0,3));
     
-    guiUniversalExcited.add(amontOfGausExcit.set("gaus",.5,0,1));
+    guiUniversalExcited.add(blurOneOffsetExcit.set("blur1 offset",.5,0,3));
+    guiUniversalExcited.add(blurOnePassesExcit.set("blur1 Passes",1,0,4));
+    
     guiUniversalExcited.add(filterThreshExcit.set("filter thresh",0.2,0,1));
     
     
     guiUniversalExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,-5,5));
     guiUniversalExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,-5,5));
-    guiUniversalExcited.add(finalPassBlurExcit.set("finalPassBlur",0.3,0,1));
+    guiUniversalExcited.add(blurTwoOffsetExcit.set("blur2 offset",.5,0,3));
+    guiUniversalExcited.add(blurTwoPassesExcit.set("blur2 Passes",1,0,4));
+    
     
     guiUniversalExcited.add(colorExcit.set("color",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
     
@@ -223,12 +229,16 @@ void guiManager::setup(string name){
     globalSlurpAlpha = slurpAlpha;
     globalSlurpNoise = slurpNoise;
     globalSlurpQuiver = slurpQuiver;
-    globalAmontOfGaus = amontOfGaus;
+    globalBlurOneOffset = blurOneOffset;
+    globalBlurOnePasses = blurOnePasses;
     globalFilterThresh = filterThresh;
     
     globalBtMotionBlur = BtMotionBlur;
     globalTpMotionBlur = TpMotionBlur;
-    globalfinalPassBlur = finalPassBlur;
+    
+    
+    globalBlurTwoOffset = blurTwoOffset;
+    globalBlurTwoPasses = blurTwoPasses;
     
     
     
@@ -280,13 +290,16 @@ void guiManager::scaleExciteValues(bool isScalingToExcited, float mappedVal, boo
     
     globalSlurpNoise = ofMap(mappedVal,down,up,slurpNoise,slurpNoiseExcit);
     globalSlurpQuiver = ofMap(mappedVal,down,up,slurpQuiver,slurpQuiverExcit);
-    globalAmontOfGaus = ofMap(mappedVal,down,up,amontOfGaus,amontOfGausExcit);
     globalFilterThresh = ofMap(mappedVal,down,up,filterThresh,filterThreshExcit);
     
     globalBtMotionBlur = ofMap(mappedVal,down,up,BtMotionBlur,BtMotionBlurExcit);
     globalTpMotionBlur = ofMap(mappedVal,down,up,TpMotionBlur,TpMotionBlurExcit);
-    globalfinalPassBlur = ofMap(mappedVal,down,up,finalPassBlur,finalPassBlurExcit);
     
+    globalBlurOneOffset = ofMap(mappedVal,down,up,blurOneOffset,blurOneOffsetExcit);
+    globalBlurOnePasses = ofMap(mappedVal,down,up,blurOnePasses,blurOnePassesExcit);
+    globalBlurTwoOffset = ofMap(mappedVal,down,up,blurTwoOffset,blurTwoOffsetExcit);
+    globalBlurTwoPasses = ofMap(mappedVal,down,up,blurTwoPasses,blurTwoPassesExcit);
+
 }
 
 
@@ -307,12 +320,17 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
     
         globalSlurpNoise = slurpNoiseExcit;
         globalSlurpQuiver = slurpQuiverExcit;
-        globalAmontOfGaus = amontOfGausExcit;
         globalFilterThresh = filterThreshExcit;
         
         globalBtMotionBlur = BtMotionBlurExcit;
         globalTpMotionBlur = TpMotionBlurExcit;
-        globalfinalPassBlur = finalPassBlurExcit;
+        
+        globalBlurOneOffset = blurOneOffsetExcit;
+        globalBlurOnePasses = blurOnePassesExcit;
+        globalBlurTwoOffset = blurTwoOffsetExcit;
+        globalBlurTwoPasses = blurTwoPassesExcit;
+        
+        
     }
     else {
         globalPercentTrans = percentTrans;
@@ -327,12 +345,15 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         }
         globalSlurpNoise = slurpNoise;
         globalSlurpQuiver = slurpQuiver;
-        globalAmontOfGaus = amontOfGaus;
         globalFilterThresh = filterThresh;
         
         globalBtMotionBlur = BtMotionBlur;
         globalTpMotionBlur = TpMotionBlur;
-        globalfinalPassBlur = finalPassBlur;
+        
+        globalBlurOneOffset = blurOneOffset;
+        globalBlurOnePasses = blurOnePasses;
+        globalBlurTwoOffset = blurTwoOffset;
+        globalBlurTwoPasses = blurTwoPasses;
     }
 }
 

@@ -16,4 +16,8 @@
 	<color>100, 223, 140, 255</color>
 	<back_col>33, 58, 33, 255</back_col>
 <excited_Blob/>
+<blur1_offset>0.5</blur1_offset>
+	<blur1_Passes>1</blur1_Passes>
+	<blur2_offset>0.5</blur2_offset>
+	<blur2_Passes>1</blur2_Passes>
 </excited_Blob>

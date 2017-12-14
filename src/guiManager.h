@@ -42,11 +42,18 @@ public:
     int globalSlurpAlpha;
     float globalSlurpNoise;
     float globalSlurpQuiver;
-    float globalAmontOfGaus;
+    
+    float globalBlurOneOffset;
+    int globalBlurOnePasses;
+    
     float globalFilterThresh;
     
     float globalBtMotionBlur;
     float globalTpMotionBlur;
+    
+    float globalBlurTwoOffset;
+    int globalBlurTwoPasses;
+    
     float globalfinalPassBlur;
     
     
@@ -70,13 +77,17 @@ public:
     ofParameter<int> slurpAlpha;
     ofParameter<float> slurpNoise;
     ofParameter<float> slurpQuiver;
-    ofParameter<float> amontOfGaus;
+    
+    ofParameter<float> blurOneOffset;
+    ofParameter<int> blurOnePasses;
+    
     ofParameter<float> filterThresh;
     
     ofParameter<float> BtMotionBlur;
     ofParameter<float> TpMotionBlur;
-    ofParameter<float> finalPassBlur;
     
+    ofParameter<float> blurTwoOffset;
+    ofParameter<int> blurTwoPasses;
     
     ofParameter<int> upperMask;
     ofParameter<int> lowerMask;
@@ -112,12 +123,15 @@ public:
     ofParameter<int> slurpAlphaExcit;
     ofParameter<float> slurpNoiseExcit;
     ofParameter<float> slurpQuiverExcit;
-    ofParameter<float> amontOfGausExcit;
+    ofParameter<float> blurOneOffsetExcit;
+    ofParameter<int> blurOnePassesExcit;
     ofParameter<float> filterThreshExcit;
     
     ofParameter<float> BtMotionBlurExcit;
     ofParameter<float> TpMotionBlurExcit;
-    ofParameter<float> finalPassBlurExcit;
+   
+    ofParameter<float> blurTwoOffsetExcit;
+    ofParameter<int> blurTwoPassesExcit;
     
 private:
     

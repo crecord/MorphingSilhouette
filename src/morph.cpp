@@ -153,18 +153,14 @@ void morph::resetValues(){
 
 void morph::update(){
     
-    gpuBlur1.blurOffset = 1.5;
-    gpuBlur1.blurPasses = 1;
+    gpuBlur1.blurOffset = gManager.globalBlurOneOffset;
+    gpuBlur1.blurPasses = gManager.globalBlurOnePasses;
 
-    //gpuBlur1.blurOffset = 130 * globalAmontOfGaus;
-    //gpuBlur1.blurPasses = 10 * 1 - globalAmontOfGaus;
-    
-    
     gpuBlur1.numBlurOverlays = 1;
     gpuBlur1.blurOverlayGain = 255;
     
-    gpuBlur2.blurOffset = 1.5;
-    gpuBlur2.blurPasses = 1;
+    gpuBlur2.blurOffset = gManager.globalBlurTwoOffset;
+    gpuBlur2.blurPasses = gManager.globalBlurTwoPasses;
 
    // gpuBlur2.blurOffset = 130 * globalfinalPassBlur;
    // gpuBlur2.blurPasses = 10 * 1 - globalfinalPassBlur;
