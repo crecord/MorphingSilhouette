@@ -150,7 +150,7 @@ void morph::setup(string pathToImages, int x, int y){
     alphaPainting =0;
     
     
-    motionBlur.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
+    motionBlur.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
     motionBlur.begin();
     ofClear(255,255,255,0);
     ofSetColor(255);
@@ -159,7 +159,7 @@ void morph::setup(string pathToImages, int x, int y){
     
 
     
-    drawTrailing.allocate(ofGetWidth(), ofGetHeight(), GL_RGB );
+    drawTrailing.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
     
     drawTrailing.begin();
     ofClear(0,0,0,255);

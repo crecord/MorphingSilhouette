@@ -37,7 +37,7 @@ void ofApp::draw(){
     //ofBackground(255);
     
     
-    blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+   // blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
     
 
     if(slowCount > 2000){
