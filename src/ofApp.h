@@ -27,6 +27,7 @@ class ofApp : public ofBaseApp{
         ofImage imageTest;
  
         int slowCount; 
-    
+        int fakeVal;
+    bool fakeSensor; 
     
 };

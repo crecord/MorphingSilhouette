@@ -1,0 +1,22 @@
+<Universal_Bolb>
+	<amount_trans>0.915</amount_trans>
+	<noise>1.35</noise>
+	<quiver>3.205</quiver>
+	<speed>496</speed>
+	<slurp_alpha>22</slurp_alpha>
+	<slurp_noise>10</slurp_noise>
+	<slurp_quiver>0.5</slurp_quiver>
+	<blur1_offset>0.75</blur1_offset>
+	<blur1_Passes>1</blur1_Passes>
+	<filter_thresh>0.2</filter_thresh>
+	<BtMotionBlur>5</BtMotionBlur>
+	<TpMotionBlur>0</TpMotionBlur>
+	<blur2_offset>0.525</blur2_offset>
+	<blur2_Passes>1</blur2_Passes>
+	<speed_ofImg>200</speed_ofImg>
+	<color_Blob>222, 76, 57, 255</color_Blob>
+	<color_Back>217, 202, 204, 255</color_Back>
+	<color_High>232, 214, 119, 255</color_High>
+	<text_color>0, 0, 0, 255</text_color>
+<Universal_Bolb/>
+</Universal_Bolb>
