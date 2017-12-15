@@ -70,8 +70,8 @@ void morph::setup( int x, int y){
 
     doText = false;
     
-    title.load("font/Klavika-Regular.otf", 20);
-    body.load("font/franklinGothic.otf", 12);
+    //title.load("font/Klavika-Regular.otf", 20);
+    body.load("font/franklinGothic.otf", 20);
     
     
     alphaPainting =0;
@@ -107,7 +107,7 @@ void morph::setup( int x, int y){
 
     
     
-    isSensor = false;
+    isSensor = true;
     
     
     ofFbo::Settings s;
@@ -259,8 +259,8 @@ void morph::update(){
         interpolateCoeff = ofMap(timePassed, 0, gManager.durOfImgTrans, 0, 1);
         
         // fade out the noise and the slurp
-        quantityOfNoise = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmountOfNoise, 0);
-        quiv = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmontOfQuiver, 0);
+        //quantityOfNoise = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmountOfNoise, 0);
+        //quiv = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmontOfQuiver, 0);
         
         if(isExcite){
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlphaExcit, fadeSlurpToo);
@@ -283,17 +283,23 @@ void morph::update(){
             isSetupState = false;
         }
         
-        int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
-        alpha = int( ofMap(timePassed, 0,500,255 ,0));
-        alphaText = int( ofMap(timePassed, 0,500,0 ,255));
+        int timePass = ofGetElapsedTimeMillis() - startTimeOfState;
         
-        if(timePassed > 499){
+        
+        float scaleVal = ofMap(timePass, 0,500, 0, 1);
+        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        
+        alpha = int( ofMap(timePass, 0,500,0,255));
+        alphaText = int( ofMap(timePass, 0,500,0 ,255));
+        
+        if(timePass > 499){
             state =4;
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
-            alpha = 0;
+            alpha = 255;
             alphaText = 255;
             alphaPainting =0;
+            gManager.colorOfBlob = gManager.colorOfHighlight;
         }
     }
     else if( state == 4){
@@ -310,19 +316,23 @@ void morph::update(){
             alphaPainting = int(ofClamp(ofMap(timePassed, 0, 1000, 0, 255),0,255));
             
         }
-        alpha = 0;
+        alpha = 255;
     }
     
     else if( state == 5){
         //fade out image
         if(isSetupState){
             isSetupState = false;
-            alpha = 0;
+            alpha = 255;
             
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
-        alpha = int( ofMap(timePassed, 0,500,0,255));
+        
+        float scaleVal = ofMap(timePassed, 0,500, 1,0);
+        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        
+        alpha = int( ofMap(timePassed, 0,500,255,0));
         alphaText = int( ofMap(timePassed, 0,500,255,0));
         alphaPainting = int(ofMap(timePassed,0,500,255,0));
         
@@ -330,7 +340,7 @@ void morph::update(){
             state =6;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
-            alpha = 255;
+            alpha = 0;
             alphaText = 0;
             alphaPainting =0;
 
@@ -338,7 +348,7 @@ void morph::update(){
     }
     else if( state == 6){
         if(isSetupState){
-            alpha = 255;
+            alpha = 0;
             isSetupState = false;
             midTrans = pMerge.getPolyline();
         }
@@ -355,8 +365,8 @@ void morph::update(){
         
         int timePassed2 = ofGetElapsedTimeMillis() - startTimeOfState;
         interpolateCoeff = ofMap(timePassed, 0, gManager.globalDurationOfTrans, 0, 1*gManager.globalPercentTrans);
-        quantityOfNoise = ofMap(timePassed2, 0, gManager.durOfImgTrans, 0, gManager.globalAmountOfNoise);
-        quiv = gManager.globalAmontOfQuiver;
+       // quantityOfNoise = ofMap(timePassed2, 0, gManager.durOfImgTrans, 0, gManager.globalAmountOfNoise);
+        //quiv = gManager.globalAmontOfQuiver;
         
         // reIntro the slurp
         if(isExcite){
@@ -373,13 +383,13 @@ void morph::update(){
         }
     }
     
-    if(state != 4){
+    //if(state != 4){
         pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
-    }
+    //}
     
     if(isSensor){
     
-        ardTalk.update();
+        //ardTalk.update(0,false);
         
         if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             
@@ -393,7 +403,10 @@ void morph::update(){
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
         }
-        // transform back into the blob if the person moves out of the threshold and is moving face
+        // transform back into the blob if the person moves out of the threshold and is moving fast
+        
+        
+        
         else if((ardTalk.averagedOut < gManager.sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > gManager.motionDifference )){
             state = 5;
             isTriggered = false;
@@ -413,7 +426,7 @@ void morph::update(){
         }
         
         // go into excited mode
-        else if((ardTalk.averagedOut > gManager.excitedThresh) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh) ){
+        else if((ardTalk.averagedOut > gManager.excitedThresh.get()) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh.get())){
             isTransIntoExcite = true;
             isTransOutOfExcite = false;
             startTimeOfExciteFade =  ofGetElapsedTimeMillis();
@@ -427,12 +440,14 @@ void morph::update(){
                 isTriggered = false;
                 startTimeOfState = ofGetElapsedTimeMillis();
                 isSetupState = true;
-
+                
+                /*
                 drawTrailing.begin();
                     ofClear(0,0,0,255);
                     ofSetColor(0);
                     ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
                 drawTrailing.end();
+                 */
             }
             if(!isTransOutOfExcite & isExcite){
                 isTransOutOfExcite = true;
@@ -447,7 +462,7 @@ void morph::update(){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        
+        gManager.scaleExciteValues(true, mappedVal,((state  < 2) | (state  > 6)));
         
         
         if(timeElapsed >= gManager.durOfTransIntoExcite){
@@ -506,8 +521,29 @@ void morph::saveGuiSettings(){
 }
 void morph::drawGui(int x,int y){
     
-   
 }
+
+void morph::applyScale(int wid, int height, int scale){
+    ofTranslate(gManager.blobOffset->x * scale + leftOffset * scale + (wid - (leftOffset* scale + rightOffset* scale))/2, gManager.blobOffset->y* scale + upperOffset* scale + (height- (upperOffset* scale + lowerOffset* scale))/2);
+    int flipx = 1;
+    int flipy = 1;
+    if(gManager.flipVert){
+        flipy = -1;
+    }
+    if(gManager.flipHor){
+        flipx= -1;
+    }
+    
+    ofScale(gManager.renderScale* flipx* scale, gManager.renderScale* flipy* scale);
+    
+    if(gManager.rotation.get() ==0){
+        ofRotateZ(0);
+    }
+    else{
+        ofRotateZ(360/(gManager.rotation+1));
+    }
+}
+
 
 void morph::drawMorph(int x,int y){
     
@@ -515,62 +551,94 @@ void morph::drawMorph(int x,int y){
     ofSetColor(gManager.color3);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-    ofPushMatrix();
+    //ofPushMatrix();
     
-        int rightOffset = ofGetWidth()*(gManager.rightMask/100.0);
-        int leftOffset = ofGetWidth()*(gManager.leftMask/100.0);
-        int upperOffset = ofGetHeight()*(gManager.upperMask/100.0);
-        int lowerOffset = ofGetHeight()*(gManager.lowerMask/100.0);
+         rightOffset = ofGetWidth()*(gManager.rightMask/100.0);
+         leftOffset = ofGetWidth()*(gManager.leftMask/100.0);
+         upperOffset = ofGetHeight()*(gManager.upperMask/100.0);
+         lowerOffset = ofGetHeight()*(gManager.lowerMask/100.0);
     
-        ofTranslate(gManager.blobOffset->x + leftOffset + (ofGetWidth() - (leftOffset + rightOffset))/2, gManager.blobOffset->y + upperOffset + (ofGetHeight()- (upperOffset + lowerOffset))/2);
-
-        int flipx = 1;
-        int flipy = 1;
-        if(gManager.flipVert){
-            flipy = -1;
-        }
-        if(gManager.flipHor){
-            flipx= -1;
-        }
-    
-        ofScale(gManager.renderScale* flipx, gManager.renderScale* flipy);
-    
-        if(gManager.rotation.get() ==0){
-            ofRotateZ(0);
-        }
-        else{
-            ofRotateZ(360/(gManager.rotation+1));
-        }
-
-        // draw images if fadeing in, displaying or fading out image
-        if((state  >= 3) & (state  <= 5)){
-            ofVec2f sz = getSz(items.at(transformToo).img);
-        
-            if(items.at(transformToo).isPainting){
-                ofSetColor(255,alphaPainting);
-                items.at(transformToo).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
-                ofSetColor(255);
-            }
-        
-            ofSetColor(255);
-            items.at(transformToo).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
-            // draw text
-            string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
-            string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
-            ofSetColor(gManager.textColor.get().r,gManager.textColor.get().g,gManager.textColor.get().b,alphaText);
-            title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ gManager.underImgMargin);
-            body.drawString(museumName, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + gManager.underTitle + gManager.underImgMargin);
-            ofSetColor(255);
-        }
     
     
         ofSetColor(255,255);
         // no need to morph when there is a filepath
-        if(state != 4){
+        //if(state != 4){
             pathToPath();
+        //}
+    
+    
+    // draw images if fadeing in, displaying or fading out image
+        if((state  >= 3) & (state  <= 5)){
+            ofVec2f sz = getSz(items.at(transformToo).img);
+            
+            ofPushMatrix();
+                applyScale(ofGetWidth(), ofGetHeight(), 1);
+                if(items.at(transformToo).isPainting){
+                    ofSetColor(255,alphaPainting);
+                    items.at(transformToo).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+                    ofSetColor(255);
+                }
+                ofSetColor(255,alpha);
+                items.at(transformToo).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+            ofPopMatrix();
+            
+            // draw text
+            string allTheText;
+            
+            for(int i =0; i < items.at(transformToo).blurb.getRow(1).getNumCols(); i++){
+                string temp =  items.at(transformToo).blurb.getRow(1).getString(i);
+                if (temp.size() > 0){
+                    allTheText += temp + "\n";
+                }
+            }
+            
+            /*
+            guiOrientation.add(textScale.set("text scale", 1,-1,4));
+            guiOrientation.add(textFlipVert.set("text flip vertical", false));
+            guiOrientation.add(textFlipHor.set("text flip horizontal", false));
+            guiOrientation.add(isImageAnchor.set("is image anchor", true));
+            guiOrientation.add(textPos.set("text Pos if no anchor", ofVec2f(50,ofGetHeight()/2), ofVec2f(0,0), ofVec2f(ofGetWidth(),ofGetHeight())));
+            */
+            
+            ofPushMatrix();
+            
+                //string titleText = items.at(transformToo).blurb.getRow(0).getString(0);
+                //string museumName = items.at(transformToo).blurb.getRow(0).getString(1) +"\n" + items.at(transformToo).blurb.getRow(0).getString(2);
+                ofSetColor(gManager.textColor.get().r,gManager.textColor.get().g,gManager.textColor.get().b,alphaText);
+                if(gManager.isImageAnchor){
+                    ofPushMatrix();
+                    applyScale(ofGetWidth(), ofGetHeight(), 1);
+                }
+                else{
+                    ofTranslate(gManager.textPos->x, gManager.textPos->y);
+                }
+                //title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ gManager.underImgMargin);
+                // body.drawString(allTheText, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + gManager.underTitle + gManager.underImgMargin);
+            
+                int flipx = 1;
+                int flipy = 1;
+                if(gManager.textFlipVert){
+                    flipy = -1;
+                }
+                if(gManager.textFlipHor){
+                    flipx= -1;
+                }
+            
+                ofScale(gManager.textScale* flipx, gManager.textScale* flipy);
+            
+                if(gManager.isImageAnchor){
+                    body.drawString(allTheText, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2) + gManager.underTitle + gManager.underImgMargin);
+                    ofPopMatrix();
+                }else{
+                    body.drawString(allTheText, 0,0);
+                }
+                ofPopMatrix();
+            
+                ofSetColor(255);
+            
         }
     
-    ofPopMatrix();
+    //ofPopMatrix();
     
     // draw squares to box off areas with the screen.
     ofSetColor(0);
@@ -663,17 +731,21 @@ void morph::pathToPath(){
             ofEnableBlendMode(OF_BLENDMODE_ALPHA);
         ofPopMatrix();
     
-        // draw the background to fade away the slurp
-        ofSetColor(0,0,0, alphVal);
-        ofDrawRectangle(0,0,drawTrailing.getWidth(),drawTrailing.getHeight());
+        ofPushMatrix();
     
-        // draw the blob at twice the scale
-        // will scale down later to increase resolution
-        ofTranslate(drawTrailing.getWidth()/2,drawTrailing.getHeight()/2);
-        ofScale(2, 2);
-        ofSetColor(255);
-        drawWithGL(pMerge.getPolyline(), 1);
+            ofSetColor(0,0,0, alphVal);
+            ofDrawRectangle(0,0,drawTrailing.getWidth(),drawTrailing.getHeight());
+            applyScale(drawTrailing.getWidth(),drawTrailing.getHeight(),2);
     
+            // draw the background to fade away the slurp
+    
+            // draw the blob at twice the scale
+            // will scale down later to increase resolution
+            //ofTranslate(drawTrailing.getWidth()/2,drawTrailing.getHeight()/2);
+            //ofScale(2, 2);
+            ofSetColor(255);
+            drawWithGL(pMerge.getPolyline(), 1);
+        ofPopMatrix();
     drawTrailing.end();
     
     
@@ -708,7 +780,7 @@ void morph::pathToPath(){
     ofPushMatrix();
         ofSetColor(255);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); //pre-multiplied alpha
-        ofTranslate(-ofGetWidth()/2 ,-ofGetHeight()/2 );
+        //ofTranslate(-ofGetWidth()/2 ,-ofGetHeight()/2 );
         gpuBlur2.drawBlurFbo();
         ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     ofPopMatrix();

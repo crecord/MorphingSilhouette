@@ -18,7 +18,7 @@ public:
     
     
     void setup();
-    void update(); 
+    void update(int fakVal, bool isFake);
     int sensorVal;
     float averagedOut;
     float averagedOutDiff;

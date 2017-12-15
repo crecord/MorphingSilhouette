@@ -9,6 +9,9 @@ void ofApp::setup(){
     
     //imageTest.load("curators/Bridgett_Tamiah/painting/5199.png");
     slowCount =0;
+    
+    fakeSensor = true;
+    fakeVal = 0;
 }
     
 
@@ -19,6 +22,8 @@ void ofApp::setup(){
 void ofApp::update(){
     
    // if(slowCount > 1000){
+    
+    blob1.ardTalk.update(fakeVal, true);
     blob1.update();
    // }
     
@@ -61,6 +66,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+    
     // 49 to 52
     if((key >= 49) & (key <= 52)){
         blob1.gManager.guiState = ofToInt(ofToString(char(key)));
@@ -80,6 +86,17 @@ void ofApp::keyReleased(int key){
         blob1.gManager.overRide();
         
     }
+    else if (key == 'n'){
+        if(fakeVal > 0){
+            fakeVal -= 5;
+        }
+    }
+    else if (key == 'm'){
+        
+          fakeVal += 5;
+        
+    }
+    
 }
 
 void ofApp::exit(){

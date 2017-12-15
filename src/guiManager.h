@@ -75,6 +75,15 @@ public:
     ofParameter<int> underImgMargin;
     ofParameter<int> underTitle;
     ofParameter<int> lineSpaceing;
+    
+    ofParameter<float> textScale;
+    ofParameter<bool> textFlipHor;
+    ofParameter<bool> textFlipVert;
+    ofParameter<bool> isImageAnchor;
+    ofParameter<ofVec2f> textPos;
+    
+    
+    
     ofParameter<int> slurpAlpha;
     ofParameter<float> slurpNoise;
     ofParameter<float> slurpQuiver;

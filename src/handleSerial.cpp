@@ -29,12 +29,18 @@ void handleSerial::setup(){
     lastValue = 0;
 }
 
-void handleSerial::update(){
+void handleSerial::update(int fakVal, bool isFake){
     //@add 2015/10/20 ########################################
     serialString = "";
     serialString = ofxGetSerialString(serial,'\n'); //read until end of line
-    if(serialString.length()>0){
-        sensorVal = ofToInt(serialString);
+    if((serialString.length()>0) | isFake){
+        
+        if(isFake){
+            sensorVal = fakVal;
+        }
+        else{
+            sensorVal = ofToInt(serialString);
+        }
         
         //int absDiff = abs(result - lastSensorValue);
         diffList.push_front(sensorVal);

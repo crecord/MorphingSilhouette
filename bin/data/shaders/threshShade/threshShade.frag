@@ -32,7 +32,7 @@ void main()
         
         texel0 = vec4(scaled,scaled,scaled, texel0.a);
         
-        texel0 = vec4(backCol.r + texel0.r * (highCol.r - backCol.r), backCol.g + texel0.g * (highCol.g - backCol.g), backCol.b + texel0.b * (highCol.b - backCol.b), alphaVal);
+        texel0 = vec4(backCol.r + texel0.r * (highCol.r - backCol.r), backCol.g + texel0.g * (highCol.g - backCol.g), backCol.b + texel0.b * (highCol.b - backCol.b), 1);
         
         //texel0 = vec4(backCol.r,backCol.g,backCol.b,backCol.a);
     }

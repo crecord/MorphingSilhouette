@@ -111,6 +111,14 @@ void guiManager::setup(string name){
     guiOrientation.add(underImgMargin.set("under img Margin",0,100,10));
     guiOrientation.add(underTitle.set("under title", 0,100,5));
     
+    guiOrientation.add(textScale.set("text scale", 1,-1,4));
+    guiOrientation.add(textFlipVert.set("text flip vertical", false));
+    guiOrientation.add(textFlipHor.set("text flip horizontal", false));
+    guiOrientation.add(isImageAnchor.set("is image anchor", true));
+    guiOrientation.add(textPos.set("text Pos if no anchor", ofVec2f(50,ofGetHeight()/2), ofVec2f(0,0), ofVec2f(ofGetWidth(),ofGetHeight())));
+    
+    
+    
     
     // make it so they won't draw on top of each other
     guiUniversal.setPosition(10,10);
@@ -281,11 +289,12 @@ void guiManager::scaleExciteValues(bool isScalingToExcited, float mappedVal, boo
     globalDurationOfTrans = ofMap(mappedVal,down,up,durationOfTrans,durationOfTransExcit);
    
     // do something here
-    colorOfBlob = color.get().getLerped(colorExcit.get(), abs(down - mappedVal));
+    
     colorOfBackground = color2.get().getLerped(color2Excit.get(), abs(down - mappedVal));
     colorOfHighlight = color3.get().getLerped(color3Excit.get(), abs(down - mappedVal));
     
     if(isInTrigMode){
+        colorOfBlob = color.get().getLerped(colorExcit.get(), abs(down - mappedVal));
         globalSlurpAlpha = ofMap(mappedVal,down,up,slurpAlpha,slurpAlphaExcit);
     }
     
@@ -312,11 +321,12 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalAmontOfQuiver = amontOfQuiverExcit;
     
         globalDurationOfTrans = durationOfTransExcit;
-        colorOfBlob = colorExcit;
+        
         colorOfBackground = color2Excit;
         colorOfHighlight = color3Excit;
         
         if(isInTrigMode){
+            colorOfBlob = colorExcit;
             globalSlurpAlpha = slurpAlphaExcit;
         }
     
@@ -340,10 +350,12 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalAmontOfQuiver = amontOfQuiver;
         
         globalDurationOfTrans = durationOfTrans;
-        colorOfBlob = color;
+        
         colorOfBackground = color2;
         colorOfHighlight = color3;
+        
         if(isInTrigMode){
+            colorOfBlob = color;
             globalSlurpAlpha = slurpAlpha;
         }
         globalSlurpNoise = slurpNoise;

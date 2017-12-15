@@ -29,7 +29,7 @@ public:
     bool bHide;
     void resetValues();
     guiManager gManager;
-    
+    handleSerial ardTalk;
     
 
 private:
@@ -128,7 +128,7 @@ private:
     void drawWithGL (ofPolyline pols, int res);
     
     
-    handleSerial ardTalk;
+    
     bool isTriggered;
     
      ofPolyline cur;
@@ -139,5 +139,13 @@ private:
     ofxFboBlur gpuBlur2;
     
     int fadeSlurpToo;
+    
+    void applyScale(int wid, int height, int scale);
+    
+    
+    int rightOffset;
+    int leftOffset;
+    int upperOffset;
+    int lowerOffset;
     
 };
