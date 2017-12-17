@@ -96,6 +96,9 @@ void ofApp::keyReleased(int key){
           fakeVal += 5;
         
     }
+    else if (key == 'b'){
+        blob1.falseImgPos = blob1.nextSill(blob1.falseImgPos);
+    }
     
 }
 

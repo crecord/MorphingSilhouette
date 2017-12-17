@@ -76,7 +76,7 @@ public:
     ofParameter<int> underTitle;
     ofParameter<int> lineSpaceing;
     
-    ofParameter<float> textScale;
+    ofParameter<int> textScale;
     ofParameter<bool> textFlipHor;
     ofParameter<bool> textFlipVert;
     ofParameter<bool> isImageAnchor;
@@ -106,6 +106,7 @@ public:
     
     ofParameter<float> renderScale;
     ofParameter<int> rotation;
+    ofParameter<int> rotationText;
     ofParameter<ofVec2f> blobOffset;
     ofParameter<bool> flipVert;
     ofParameter<bool> flipHor;
@@ -144,6 +145,8 @@ public:
     ofParameter<float> blurTwoOffsetExcit;
     ofParameter<int> blurTwoPassesExcit;
     
+    ofTrueTypeFont body;
+    
 private:
     
     ofxPanel guiUniversal;
@@ -169,5 +172,9 @@ private:
     vector<string> inside = { "Fraley", "Rogers", "Gurman", "Pell", "German" };
     vector<string> vertical = { "Michals", "Smith", "Gurman" };
     vector<string> left = { "Sebak", "Samuels", "Pell" };
+    
+    
+    
+    void textScaleChanged(int & txtScl);
     
 };

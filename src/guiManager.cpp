@@ -21,8 +21,6 @@ void guiManager::setup(string name){
     
     
     
-    
-    
     // ofxPanel guiUniversal;!!!!!!!!!!!!!!!!!!
     guiUniversal.setup("Universal Bolb");
     
@@ -30,7 +28,7 @@ void guiManager::setup(string name){
     guiUniversal.add(amountOfNoise.set("noise",10,0,30));
     guiUniversal.add(amontOfQuiver.set("quiver",10,1,50));
     
-    guiUniversal.add(durationOfTrans.set("speed",300,100,10000));
+    guiUniversal.add(durationOfTrans.set("speed",300,100,4000));
     guiUniversal.add(slurpAlpha.set("slurp alpha", 5, 0,255));
     
     guiUniversal.add(slurpNoise.set("slurp noise",10,0,50));
@@ -41,8 +39,8 @@ void guiManager::setup(string name){
     guiUniversal.add(filterThresh.set("filter thresh",.2,0,1));
     
     
-    guiUniversal.add(BtMotionBlur.set("BtMotionBlur",1,-5,5));
-    guiUniversal.add(TpMotionBlur.set("TpMotionBlur",0,-5,5));
+    guiUniversal.add(BtMotionBlur.set("BtMotionBlur",1,0,1));
+    guiUniversal.add(TpMotionBlur.set("TpMotionBlur",0,0,1));
     guiUniversal.add(blurTwoOffset.set("blur2 offset",.5,0,3));
     guiUniversal.add(blurTwoPasses.set("blur2 Passes",1,0,4));
     
@@ -63,7 +61,7 @@ void guiManager::setup(string name){
     guiUniversalExcited.add(amountOfNoiseExcit.set("noise",10,0,30));
     guiUniversalExcited.add(amontOfQuiverExcit.set("quiver",10,1,50));
     
-    guiUniversalExcited.add(durationOfTransExcit.set("speed in",300,100,10000));
+    guiUniversalExcited.add(durationOfTransExcit.set("speed in",300,100,4000));
 
     guiUniversalExcited.add(slurpAlphaExcit.set("slurp alpha", 5, 0,255));
     guiUniversalExcited.add(slurpNoiseExcit.set("slurp noise",10,0,50));
@@ -75,8 +73,8 @@ void guiManager::setup(string name){
     guiUniversalExcited.add(filterThreshExcit.set("filter thresh",0.2,0,1));
     
     
-    guiUniversalExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,-5,5));
-    guiUniversalExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,-5,5));
+    guiUniversalExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,0,1));
+    guiUniversalExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,0,1));
     guiUniversalExcited.add(blurTwoOffsetExcit.set("blur2 offset",.5,0,3));
     guiUniversalExcited.add(blurTwoPassesExcit.set("blur2 Passes",1,0,4));
     
@@ -104,6 +102,7 @@ void guiManager::setup(string name){
     
     guiOrientation.add(renderScale.set("scale",1,0,3));
     guiOrientation.add(rotation.set("rotate", 0, 0, 3));
+    
     guiOrientation.add(blobOffset.set("offset", ofVec2f(0,0), ofVec2f(-ofGetWidth()/2,-ofGetHeight()/2), ofVec2f(ofGetWidth()/2,ofGetHeight()/2)));
     guiOrientation.add(flipVert.set("flip vertical", false));
     guiOrientation.add(flipHor.set("flip horizontal", false));
@@ -111,7 +110,9 @@ void guiManager::setup(string name){
     guiOrientation.add(underImgMargin.set("under img Margin",0,100,10));
     guiOrientation.add(underTitle.set("under title", 0,100,5));
     
-    guiOrientation.add(textScale.set("text scale", 1,-1,4));
+    guiOrientation.add(rotationText.set("Rotate Text", 0, 0, 3));
+    
+    guiOrientation.add(textScale.set("text scale", 20,10,50));
     guiOrientation.add(textFlipVert.set("text flip vertical", false));
     guiOrientation.add(textFlipHor.set("text flip horizontal", false));
     guiOrientation.add(isImageAnchor.set("is image anchor", true));
@@ -139,6 +140,9 @@ void guiManager::setup(string name){
     direct.allowExt(".xml");
     direct.listDir("settings/");
     direct.sort();
+    
+    
+    
     
     // loop through them and see if any start with the curators name
     for(int i =0; i < direct.size(); i++){
@@ -222,8 +226,9 @@ void guiManager::setup(string name){
         }
     }
     
+    body.load("font/FranklinGothicBook.ttf", textScale.get(), true, true, true,.1,72);
     
-
+    textScale.addListener(this, &guiManager::textScaleChanged);
     
     globalPercentTrans = percentTrans;
     globalAmountOfNoise = amountOfNoise;
@@ -252,6 +257,13 @@ void guiManager::setup(string name){
     
     
 }
+
+
+void guiManager::textScaleChanged(int & txtScl){
+    //ofSetCircleResolution(circleResolution);
+    body.load("font/FranklinGothicBook.ttf", txtScl, true, true, true,.1,72);
+}
+
 
 void guiManager::draw(){
     

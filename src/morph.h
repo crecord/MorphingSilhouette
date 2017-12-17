@@ -30,8 +30,9 @@ public:
     void resetValues();
     guiManager gManager;
     handleSerial ardTalk;
+    int falseImgPos;
+    int nextSill(int num);
     
-
 private:
 
     
@@ -39,7 +40,7 @@ private:
     ofPolyline pngToPolyline(ofImage img);
     ofVec2f getSz(ofImage img);
     
-    int nextSill(int num);
+    
     
     void generatePolyline();
     void populateVector();
@@ -113,7 +114,7 @@ private:
     
     
     ofTrueTypeFont title;
-    ofTrueTypeFont body;
+
     
     int alphaText;
     vector<int> randomIndices;
@@ -140,12 +141,19 @@ private:
     
     int fadeSlurpToo;
     
-    void applyScale(int wid, int height, int scale);
+    void applyScale(int wid, int height, int scale, bool isNoOffset=false);
     
     
     int rightOffset;
     int leftOffset;
     int upperOffset;
     int lowerOffset;
+    
+    ofVec2f largestBlobDimensions;
+    
+    int fboWidth;
+    int fboHeight;
+    int fboXpos;
+    int fboYPos;
     
 };
