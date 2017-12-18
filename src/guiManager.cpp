@@ -121,10 +121,10 @@ void guiManager::setup(string name){
     
     
     // make it so they won't draw on top of each other
-    guiUniversal.setPosition(10,10);
-    guiUniversalExcited.setPosition(10,10);
-    guiSensorThresholding.setPosition(10,10);
-    guiOrientation.setPosition(10,10);
+    guiUniversal.setPosition(ofGetWidth()/2,10);
+    guiUniversalExcited.setPosition(ofGetWidth()/2,10);
+    guiSensorThresholding.setPosition(ofGetWidth()/2,10);
+    guiOrientation.setPosition(ofGetWidth()/2,10);
     
     
     

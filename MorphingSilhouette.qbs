@@ -21,8 +21,9 @@ Project{
             'src/item.h',
             'src/morph.cpp',
             'src/morph.h',
+            'src/guiManager.h',
+            'src/guiManager.cpp',
         ]
-
         of.addons: [
             'ofxOpenCv',
             'ofxPolylineMerger',

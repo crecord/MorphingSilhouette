@@ -71,7 +71,7 @@ void morph::setup( int x, int y){
     doText = false;
     
     //title.load("font/Klavika-Regular.otf", 20);
-    body.load("font/franklinGothic.otf", 20);
+    body.load("font/franklinGothic.otf",13);
     
     
     alphaPainting =0;
@@ -389,7 +389,7 @@ void morph::update(){
     
     if(isSensor){
     
-        //ardTalk.update(0,false);
+        ardTalk.update(0,false);
         
         if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             

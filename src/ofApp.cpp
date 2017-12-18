@@ -22,12 +22,9 @@ void ofApp::setup(){
 void ofApp::update(){
     
    // if(slowCount > 1000){
-    
-    blob1.ardTalk.update(fakeVal, true);
+   //blob1.ardTalk.update(fakeVal, true);
     blob1.update();
    // }
-    
-
     if(slowCount < 5000){
         slowCount++;
         //ofLog()<<slowCount;
