@@ -86,33 +86,40 @@ void ofApp::keyReleased(int key){
         blob1.gManager.overRide();
         
     }
-    else if (key == 'n'){
+    
+    if(!blob1.isSensor){
+     if (key == 'n'){
         if(fakeVal > 0){
             fakeVal -= 5;
         }
     }
-    else if (key == 'm'){
+     if (key == 'm'){
         
           fakeVal += 5;
         
     }
-    else if (key == 'l'){
+     if (key == 'l'){
         
         fakeVal = 0;
         
     }
-    else if (key == 'k'){
+     if (key == 'k'){
         
         fakeVal = 150;
         
     }
-    else if (key == 'j'){
+     if (key == 'j'){
         
         fakeVal = 50;
-        
     }
-    else if (key == 'b'){
+    }
+    
+    
+     if (key == 'b'){
         blob1.falseImgPos = blob1.nextSill(blob1.falseImgPos);
+    }
+     if (key == 'a'){
+        blob1.isSensor = !blob1.isSensor; 
     }
     
 }

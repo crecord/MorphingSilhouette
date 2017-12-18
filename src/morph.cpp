@@ -63,7 +63,7 @@ void morph::setup( int x, int y){
     
     
      
-    bHide = false;
+    bHide = true;
     state = 1;
     startTimeOfState = ofGetElapsedTimeMillis();
     startMark = ofGetElapsedTimeMillis();
@@ -158,6 +158,7 @@ void morph::setup( int x, int y){
     falseImgPos = 0;
     
     isPaintingSquiggleTime = false;
+    lastTransformed = 100;
     
 }
 
@@ -222,16 +223,22 @@ void morph::update(){
             isSetupState = false;
             
             startMark = ofGetElapsedTimeMillis();
-            transformFrom = nextSill(transformFrom);
+            //transformFrom = nextSill(transformFrom);
             
             // deciding which one to visibly transform into.
-            // TO DO: Let's try not to repeat
+            // don't repeat the last one that appeared
             int transformTooControlled = transformToo;
-            if( interpolateCoeff < .7){
+            if( interpolateCoeff < .6){
                 transformTooControlled = transformFrom;
+                if (transformTooControlled == lastTransformed){
+                    lastTransformed = transformToo;
+                }
             }
-            transformToo = transformTooControlled;
             
+            
+            
+            transformToo = transformTooControlled;
+            lastTransformed = transformToo;
             
             
             
@@ -417,23 +424,23 @@ void morph::update(){
     }
     
     if(state != 4){
-        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver);
+        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity);
     }else{
         //bool isP =items.at(transformToo).isPainting;
         //ofLog()<< ofToString(isPaintingSquiggleTime);
         if(isPaintingSquiggleTime == true){
-            pMerge.mergePolyline(midTrans, items.at(transformToo).paintingPoly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver);
+            pMerge.mergePolyline(midTrans, items.at(transformToo).paintingPoly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity);
         }
         else{
-             pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver,false);
+             pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity, false);
         }
       
     }
     
     if(isSensor){
     
-        //ardTalk.update(0,false);
-        
+        ardTalk.update(0,false);
+    }
         if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             
             // Let's show an image!
@@ -492,11 +499,8 @@ void morph::update(){
             
             isTransOutOfExcite = false;
             startTimeOfExciteFade =  ofGetElapsedTimeMillis();
-
         }
-       
-        
-    }
+    
     
     if(isTransIntoExcite & ((state  < 2) | (state  > 6))){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
@@ -528,6 +532,20 @@ void morph::update(){
         }
         leftOverFadeTime = timeElapsed;
         
+    }
+    
+    if(!bHide & !isTransOutOfExcite & !isTransIntoExcite & state != 3 & state != 5){
+        
+        if(state == 4 ){
+            gManager.initGlobalMovements(3);
+        }
+        else if (isExcite){
+             gManager.initGlobalMovements(2);
+        }
+        else {
+            gManager.initGlobalMovements(1);
+        }
+
     }
     
     /*
@@ -749,8 +767,21 @@ void morph::triggerNext(){
 
 
 int morph::nextSill(int num){
-    int siz = items.size();
-    return  num = (int) ofRandom(0, siz);
+    int  transformT;
+
+    if(randomIndices.size() > 0){
+        int num = ofRandom(randomIndices.size()-1);
+        transformT = randomIndices.at(num);
+        randomIndices.erase(randomIndices.begin() + num);
+    }
+    else{
+        populateVector();
+        int num = ofRandom(randomIndices.size()-1);
+        transformT = randomIndices.at(num);
+        randomIndices.erase(randomIndices.begin() + num);
+    }
+    return transformT;
+    
 }
 
 

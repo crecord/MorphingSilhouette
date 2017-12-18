@@ -26,7 +26,8 @@ void guiManager::setup(string name){
     
     guiUniversal.add(percentTrans.set("amount trans",.6,0,1));
     guiUniversal.add(amountOfNoise.set("noise",10,0,30));
-    guiUniversal.add(amontOfQuiver.set("quiver",10,1,50));
+    guiUniversal.add(amontOfQuiver.set("quiver",10,1,10));
+    guiUniversal.add(density.set("density",0.05,0,.7));
     
     guiUniversal.add(durationOfTrans.set("speed",300,100,4000));
     guiUniversal.add(slurpAlpha.set("slurp alpha", 5, 0,255));
@@ -59,8 +60,8 @@ void guiManager::setup(string name){
     
     guiUniversalExcited.add(percentTransExcit.set("amount trans",.6,0,1));
     guiUniversalExcited.add(amountOfNoiseExcit.set("noise",10,0,30));
-    guiUniversalExcited.add(amontOfQuiverExcit.set("quiver",10,1,50));
-    
+    guiUniversalExcited.add(amontOfQuiverExcit.set("quiver",10,1,10));
+    guiUniversalExcited.add(densityExcit.set("density",0.05,0,.7));
     guiUniversalExcited.add(durationOfTransExcit.set("speed in",300,100,4000));
 
     guiUniversalExcited.add(slurpAlphaExcit.set("slurp alpha", 5, 0,255));
@@ -91,7 +92,8 @@ void guiManager::setup(string name){
     // maybe add fade in painting time and fade in image time....
 
     guiUniversalImage.add(amountOfNoiseImage.set("noise",10,0,30));
-    guiUniversalImage.add(amountOfQuiverImage.set("quiver",10,1,50));
+    guiUniversalImage.add(amountOfQuiverImage.set("quiver",10,1,10));
+    guiUniversalImage.add(densityImage.set("density",0.05,0,.7));
     
     guiUniversalImage.add(blurOneOffsetImage.set("blur1 offset",.5,0,3));
     guiUniversalImage.add(blurOnePassesImage.set("blur1 Passes",1,0,4));
@@ -144,10 +146,10 @@ void guiManager::setup(string name){
     
     
     // make it so they won't draw on top of each other
-    guiUniversal.setPosition(10,10);
-    guiUniversalExcited.setPosition(10,10);
-    guiSensorThresholding.setPosition(10,10);
-    guiOrientation.setPosition(10,10);
+    guiUniversal.setPosition(ofGetWidth()/2,10);
+    guiUniversalExcited.setPosition(ofGetWidth()/2,10);
+    guiSensorThresholding.setPosition(ofGetWidth()/2,10);
+    guiOrientation.setPosition(ofGetWidth()/2,10);
     
     
     
@@ -265,6 +267,7 @@ void guiManager::setup(string name){
     globalPercentTrans = percentTrans;
     globalAmountOfNoise = amountOfNoise;
     globalAmontOfQuiver = amontOfQuiver;
+    globalDensity = density;
     
     globalDurationOfTrans = durationOfTrans;
     colorOfBlob = color;
@@ -327,6 +330,7 @@ void guiManager::createSnapShot(){
     snapshotGlobalPercentTrans = globalPercentTrans;
     snapshotGlobalAmountOfNoise = globalAmountOfNoise;
     snapshotGlobalAmontOfQuiver =globalAmontOfQuiver;
+    snapshotGlobalDensity = globalDensity;
     
     snapshotGlobalDurationOfTrans = globalDurationOfTrans;
     snapshotColorOfBlob = colorOfBlob;
@@ -358,7 +362,8 @@ void guiManager::scaleIntoExcited(float mappedVal){
     
     globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
     globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseExcit);
-    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiverExcit);;
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiverExcit);
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityExcit);
     
     globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
     
@@ -389,6 +394,7 @@ void guiManager::scaleIntoNormal(float mappedVal){
     globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTrans);
     globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoise);
     globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiver);;
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,density);
     
     globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTrans);
     
@@ -418,6 +424,7 @@ void guiManager::scaleIntoImageValue(float mappedVal){
     globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
     globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseImage);
     globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amountOfQuiverImage);;
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityImage);
     
     globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
     
@@ -458,16 +465,17 @@ void scaleIntoNormal(float mappedVal);
 
 
 
-void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
+void guiManager::initGlobalMovements(int state){
     
     
-    if(!isInTrigMode){
+    if(state == 3){
 
         globalAmountOfNoise = amountOfNoiseImage;
         globalAmontOfQuiver = amountOfQuiverImage;
+        globalDensity = densityImage;
         
         colorOfHighlight = colorImage;
-        
+        colorOfBlob = colorImage; 
         globalBtMotionBlur = BtMotionBlurImage;
         globalTpMotionBlur = TpMotionBlurImage;
         
@@ -477,23 +485,21 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalBlurTwoPasses = blurTwoPassesImage;
         
     }
-    else{
-    
-    if(isExcite){
+    else if(state == 2){
         globalPercentTrans = percentTransExcit;
         globalAmountOfNoise = amountOfNoiseExcit;
         globalAmontOfQuiver = amontOfQuiverExcit;
-    
+        globalDensity = densityExcit;
+        
         globalDurationOfTrans = durationOfTransExcit;
         
         colorOfBackground = color2Excit;
         colorOfHighlight = color3Excit;
         
-        if(isInTrigMode){
-            colorOfBlob = colorExcit;
-            globalSlurpAlpha = slurpAlphaExcit;
-        }
-    
+        colorOfBlob = colorExcit;
+        globalSlurpAlpha = slurpAlphaExcit;
+        
+        
         globalSlurpNoise = slurpNoiseExcit;
         globalSlurpQuiver = slurpQuiverExcit;
         globalFilterThresh = filterThreshExcit;
@@ -505,23 +511,22 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalBlurOnePasses = blurOnePassesExcit;
         globalBlurTwoOffset = blurTwoOffsetExcit;
         globalBlurTwoPasses = blurTwoPassesExcit;
-        
-        
+    
     }
-    else {
+    else if (state == 1 ){
         globalPercentTrans = percentTrans;
         globalAmountOfNoise = amountOfNoise;
         globalAmontOfQuiver = amontOfQuiver;
+        globalDensity = density;
         
         globalDurationOfTrans = durationOfTrans;
         
         colorOfBackground = color2;
         colorOfHighlight = color3;
         
-        if(isInTrigMode){
-            colorOfBlob = color;
-            globalSlurpAlpha = slurpAlpha;
-        }
+        colorOfBlob = color;
+        globalSlurpAlpha = slurpAlpha;
+       
         globalSlurpNoise = slurpNoise;
         globalSlurpQuiver = slurpQuiver;
         globalFilterThresh = filterThresh;
@@ -534,8 +539,8 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalBlurTwoOffset = blurTwoOffset;
         globalBlurTwoPasses = blurTwoPasses;
     }
-    }
-}
+    
+  }
 
 
 

@@ -63,7 +63,7 @@ void ofxPolylineMerger::setPoly2(ofPolyline &p2){
 //    cout<<"setting poly 2 of size "<<p2.size()<<endl;
 }
 
-void ofxPolylineMerger::mergePolyline(float interpolationCoeff,float amntOfNoise, float speed, bool isMorph){
+void ofxPolylineMerger::mergePolyline(float interpolationCoeff,float amntOfNoise, float speed, float density, bool isMorph){
     polyOut.clear();
     
     ofPoint ptOut;
@@ -113,8 +113,8 @@ void ofxPolylineMerger::mergePolyline(float interpolationCoeff,float amntOfNoise
        
         
         
-        float xNoise = ofMap(ofNoise(i*.05 + ofGetElapsedTimef()*speed) ,0,1,amntOfNoise *-1,amntOfNoise);
-        float yNoise = ofMap(ofNoise(1000,i*.05 + ofGetElapsedTimef() *speed ),0,1,amntOfNoise *-1,amntOfNoise);
+        float xNoise = ofMap(ofNoise(i*density + ofGetElapsedTimef()*speed) ,0,1,amntOfNoise *-1,amntOfNoise);
+        float yNoise = ofMap(ofNoise(1000,i*density + ofGetElapsedTimef() *speed ),0,1,amntOfNoise *-1,amntOfNoise);
         ptOut.x += xNoise;
         ptOut.y += yNoise;
         
@@ -131,12 +131,12 @@ void ofxPolylineMerger::mergePolyline(float interpolationCoeff,float amntOfNoise
 
 }
 
-void ofxPolylineMerger::mergePolyline(ofPolyline &p1, ofPolyline &p2, float interpolationCoeff, float amntOfNoise, float speed, bool isMorph){
+void ofxPolylineMerger::mergePolyline(ofPolyline &p1, ofPolyline &p2, float interpolationCoeff, float amntOfNoise, float speed,  float density,bool isMorph){
     
     if(isMorph){
         setPoly1(p1);
         setPoly2(p2);
     }
     
-    mergePolyline(interpolationCoeff, amntOfNoise, speed, isMorph);
+    mergePolyline(interpolationCoeff, amntOfNoise, speed,  density, isMorph);
 }

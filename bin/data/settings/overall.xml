@@ -2,7 +2,7 @@
 	<amount_trans>0.875</amount_trans>
 	<noise>2.7</noise>
 	<quiver>4.185</quiver>
-	<speed>743</speed>
+	<speed>1465</speed>
 	<slurp_alpha>47</slurp_alpha>
 	<slurp_noise>0.5</slurp_noise>
 	<slurp_quiver>0.075</slurp_quiver>
@@ -14,9 +14,10 @@
 	<blur2_offset>0.225</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
 	<speed_ofImg>200</speed_ofImg>
-	<color_Blob>255, 96, 46, 255</color_Blob>
+	<color_Blob>223, 96, 46, 255</color_Blob>
 	<color_Back>46, 23, 39, 255</color_Back>
 	<color_High>255, 214, 225, 255</color_High>
 	<text_color>180, 157, 162, 255</text_color>
 <Universal_Bolb/>
+<density>0.07</density>
 </Universal_Bolb>

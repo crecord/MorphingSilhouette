@@ -27,7 +27,7 @@ public:
     void scaleIntoNormal(float mappedVal);
     
     void scaleExciteValues(bool isScalingToExcited, float mappedVal, bool isInTrigMode);
-    void initGlobalMovements(bool isExcite, bool isInTrigMode);
+    void initGlobalMovements(int state);
     void saveSettings();
     void overRide();
     
@@ -39,6 +39,7 @@ public:
     float globalPercentTrans;
     float globalAmountOfNoise;
     float globalAmontOfQuiver;
+    float globalDensity;
     
     int globalDurationOfTrans;
     ofColor colorOfBlob;
@@ -67,6 +68,7 @@ public:
     float snapshotGlobalPercentTrans;
     float snapshotGlobalAmountOfNoise;
     float snapshotGlobalAmontOfQuiver;
+    float snapshotGlobalDensity;
     
     int snapshotGlobalDurationOfTrans;
     ofColor snapshotColorOfBlob;
@@ -95,6 +97,7 @@ public:
     ofParameter<float> percentTrans;
     ofParameter<float> amountOfNoise;
     ofParameter<float> amontOfQuiver;
+    ofParameter<float> density;
     
     ofParameter<int> durationOfTrans;
     // transition fully into the object
@@ -157,6 +160,7 @@ public:
     ofParameter<float> percentTransExcit;
     ofParameter<float> amountOfNoiseExcit;
     ofParameter<float> amontOfQuiverExcit;
+    ofParameter<float> densityExcit;
     
     ofParameter<int> durationOfTransExcit;
     // transition fully into the object
@@ -183,6 +187,7 @@ public:
     ofParameter<ofColor> colorImage;
     ofParameter<float> amountOfNoiseImage;
     ofParameter<float> amountOfQuiverImage;
+    ofParameter<float> densityImage;
     ofParameter<float> blurOneOffsetImage;
     ofParameter<int> blurOnePassesImage;
     ofParameter<float> filterThreshImage;

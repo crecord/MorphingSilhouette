@@ -1,6 +1,6 @@
 <image_display_settings>
-	<noise>1.65</noise>
-	<quiver>2.715</quiver>
+	<noise>4.5</noise>
+	<quiver>1.45</quiver>
 	<blur1_offset>0</blur1_offset>
 	<blur1_Passes>0</blur1_Passes>
 <image_display_settings/>
@@ -8,5 +8,6 @@
 	<TpMotionBlur>0</TpMotionBlur>
 	<blur2_offset>1.71</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
-	<color_squig>139, 89, 187, 255</color_squig>
+	<color_squig>145, 93, 127, 255</color_squig>
+<density>0.1085</density>
 </image_display_settings>

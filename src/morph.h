@@ -32,10 +32,9 @@ public:
     handleSerial ardTalk;
     int falseImgPos;
     int nextSill(int num);
+    bool isSensor;
     
 private:
-
-    
     
     ofPolyline pngToPolyline(ofImage img);
     ofVec2f getSz(ofImage img);
@@ -134,7 +133,7 @@ private:
     
      ofPolyline cur;
     
-    bool isSensor;
+   
     
     ofxFboBlur gpuBlur1;
     ofxFboBlur gpuBlur2;
@@ -158,5 +157,6 @@ private:
     
     
     bool isPaintingSquiggleTime;
+    int lastTransformed;
     
 };

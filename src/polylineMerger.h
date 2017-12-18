@@ -29,8 +29,8 @@ public:
     void setPoly1(ofPolyline & p1);
     void setPoly2(ofPolyline & p1);
     
-    void mergePolyline(float interpolationCoeff, float amntOfNoise, float speed, bool isMorph);
-    void mergePolyline(ofPolyline &p1, ofPolyline &p2, float interpolationCoeff, float amntOfNoise, float speed, bool isMorph=true);
+    void mergePolyline(float interpolationCoeff, float amntOfNoise, float speed, float density, bool isMorph);
+    void mergePolyline(ofPolyline &p1, ofPolyline &p2, float interpolationCoeff, float amntOfNoise, float speed, float density, bool isMorph=true);
     
 private:
     ofPolyline poly1;
