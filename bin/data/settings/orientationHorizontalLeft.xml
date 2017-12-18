@@ -2,11 +2,11 @@
 <Orientation>
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
-	<Left_Mask>0</Left_Mask>
+	<Left_Mask>36</Left_Mask>
 	<Right_Mask>0</Right_Mask>
 	<scale>0.975</scale>
 	<rotate>0</rotate>
-	<offset>303.673, -16.5306</offset>
+	<offset>-29.3878, -16.5306</offset>
 	<flip_vertical>0</flip_vertical>
 	<flip_horizontal>0</flip_horizontal>
 	<under_img_Margin>42</under_img_Margin>
