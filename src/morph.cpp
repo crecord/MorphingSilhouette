@@ -74,9 +74,6 @@ void morph::setup( int x, int y){
     doText = false;
     
     //title.load("font/Klavika-Regular.otf", 20);
-
-    body.load("font/franklinGothic.otf",gManager.textScale);
-
     //bool ofTrueTypeFont::load(const string &filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=true, bool makeContours=false, float simplifyAmt=0.3f, int dpi=0)
     
     
@@ -87,7 +84,6 @@ void morph::setup( int x, int y){
     fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
     fboXpos = (gManager.blobOffset->x + ofGetWidth()/2) - fboWidth/2;
     fboYPos = (gManager.blobOffset->y + ofGetHeight()/2) - fboHeight/2;
-
     
     
     alphaPainting =0;
@@ -375,6 +371,7 @@ void morph::update(){
         alphaPainting = int(ofMap(timePassed,0,500,255,0));
         
         if(timePassed > 500){
+            gManager.createSnapShot();
             isTransIntoExcite = false;
             isTransOutOfExcite = false;
             state =6;
@@ -444,9 +441,7 @@ void morph::update(){
     if(isSensor){
     
         ardTalk.update(0,false);
-
     }
-
         if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             
             // Let's show an image!

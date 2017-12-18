@@ -46,7 +46,7 @@ void ofxPolylineMerger::setPoly1(ofPolyline &p1){
             poly1.addVertex(poly1[poly1.size()-1]);
         }
     }else{
-        poly1.addVertex(ofVec2f(0.5, 0.5));
+        poly1.addVertex(0.5, 0.5,0);
     }
 //    cout<<"setting poly 1 of size "<<p1.size()<<endl;
 }
@@ -58,7 +58,7 @@ void ofxPolylineMerger::setPoly2(ofPolyline &p2){
             poly2.addVertex(poly2[poly2.size()-1]);
         }
     }else{
-        poly2.addVertex(ofVec2f(0.5, 0.5));
+        poly2.addVertex(0.5, 0.5,0);
     }
 //    cout<<"setting poly 2 of size "<<p2.size()<<endl;
 }

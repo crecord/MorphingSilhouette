@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<image_display_settings>
+	<noise>4.05</noise>
+	<quiver>2.665</quiver>
+	<density>0.035</density>
+	<blur1_offset>0.5</blur1_offset>
+	<blur1_Passes>1</blur1_Passes>
+	<BtMotionBlur>1</BtMotionBlur>
+	<TpMotionBlur>0</TpMotionBlur>
+	<blur2_offset>1.815</blur2_offset>
+	<blur2_Passes>1</blur2_Passes>
+	<color_squig>153, 127, 141, 255</color_squig>
+</image_display_settings>
