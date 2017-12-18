@@ -21,16 +21,18 @@ Project{
             'src/item.h',
             'src/morph.cpp',
             'src/morph.h',
+            'src/guiManager.h',
+            'src/guiManager.cpp',
+            'src/polylineMerger.h',
+            'src/polylineMerger.cpp',
         ]
-
         of.addons: [
             'ofxOpenCv',
-            'ofxPolylineMerger',
             'ofxGui',
             'ofxCsv',
             'ofxEasing',
+            'ofxFboBlur',
         ]
-
         // additional flags for the project. the of module sets some
         // flags by default to add the core libraries, search paths...
         // this flags can be augmented through the following properties:
