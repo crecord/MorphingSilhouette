@@ -6,7 +6,7 @@
 //
 //
 #include "ofMain.h"
-#include "ofxPolylineMerger.h"
+#include "polylineMerger.h"
 #include "ofxOpenCv.h"
 #include "ofxEasing.h"
 #include "ofxCsv.h"
@@ -30,16 +30,16 @@ public:
     void resetValues();
     guiManager gManager;
     handleSerial ardTalk;
+    int falseImgPos;
+    int nextSill(int num);
+    bool isSensor;
     
-
 private:
-
-    
     
     ofPolyline pngToPolyline(ofImage img);
     ofVec2f getSz(ofImage img);
     
-    int nextSill(int num);
+    
     
     void generatePolyline();
     void populateVector();
@@ -113,7 +113,7 @@ private:
     
     
     ofTrueTypeFont title;
-    ofTrueTypeFont body;
+
     
     int alphaText;
     vector<int> randomIndices;
@@ -133,19 +133,30 @@ private:
     
      ofPolyline cur;
     
-    bool isSensor;
+   
     
     ofxFboBlur gpuBlur1;
     ofxFboBlur gpuBlur2;
     
     int fadeSlurpToo;
     
-    void applyScale(int wid, int height, int scale);
+    void applyScale(int wid, int height, int scale, bool isNoOffset=false);
     
     
     int rightOffset;
     int leftOffset;
     int upperOffset;
     int lowerOffset;
+    
+    ofVec2f largestBlobDimensions;
+    
+    int fboWidth;
+    int fboHeight;
+    int fboXpos;
+    int fboYPos;
+    
+    
+    bool isPaintingSquiggleTime;
+    int lastTransformed;
     
 };

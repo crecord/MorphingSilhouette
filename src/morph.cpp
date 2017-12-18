@@ -10,12 +10,12 @@
 
 void morph::setup( int x, int y){
     
+    largestBlobDimensions = ofVec2f(0,0);
     
     ofxCsv name;
     name.load("CuratorName.csv");
     string curatorName = name.getRow(0).getString(0);
     string pathToImages = "collection_Images/" + curatorName;
-    
     gManager.setup(curatorName);
     
     interpolateCoeff = 0;
@@ -42,6 +42,9 @@ void morph::setup( int x, int y){
         imgTemp.load(dir.getPath(i));
         ofPolyline ply = pngToPolyline(imgTemp);
         temp.setup(pathToImages, dir.getPath(i), csvDir.getPath(i), imgTemp, ply);
+        if(temp.isPainting){
+            temp.paintingPoly = pngToPolyline(temp.imgForPainting);
+        }
         items.push_back(temp);
     }
     
@@ -60,7 +63,7 @@ void morph::setup( int x, int y){
     
     
      
-    bHide = false;
+    bHide = true;
     state = 1;
     startTimeOfState = ofGetElapsedTimeMillis();
     startMark = ofGetElapsedTimeMillis();
@@ -71,13 +74,26 @@ void morph::setup( int x, int y){
     doText = false;
     
     //title.load("font/Klavika-Regular.otf", 20);
-    body.load("font/franklinGothic.otf",13);
+
+    body.load("font/franklinGothic.otf",gManager.textScale);
+
+    //bool ofTrueTypeFont::load(const string &filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=true, bool makeContours=false, float simplifyAmt=0.3f, int dpi=0)
+    
+    
+    
+    //body.load("font/franklinGothic.otf", 20);
+    
+    fboWidth = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
+    fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+    fboXpos = (gManager.blobOffset->x + ofGetWidth()/2) - fboWidth/2;
+    fboYPos = (gManager.blobOffset->y + ofGetHeight()/2) - fboHeight/2;
+
     
     
     alphaPainting =0;
     
     
-    motionBlur.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    motionBlur.allocate(fboWidth*2,fboHeight*2, GL_RGB );
     motionBlur.begin();
     ofClear(255,255,255,0);
     ofSetColor(255);
@@ -86,12 +102,12 @@ void morph::setup( int x, int y){
     
 
     
-    drawTrailing.allocate(ofGetWidth()*2, ofGetHeight()*2, GL_RGB );
+    drawTrailing.allocate(fboWidth*2, fboHeight*2, GL_RGB );
     
     drawTrailing.begin();
     ofClear(0,0,0,255);
     ofSetColor(0);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
     drawTrailing.end();
     
     ardTalk.setup();
@@ -111,8 +127,8 @@ void morph::setup( int x, int y){
     
     
     ofFbo::Settings s;
-    s.width = ofGetWidth();
-    s.height = ofGetHeight();
+    s.width = fboWidth;
+    s.height = fboHeight;
     s.internalformat = GL_RGBA;
     s.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
     s.maxFilter = GL_LINEAR; GL_NEAREST;
@@ -122,16 +138,16 @@ void morph::setup( int x, int y){
     s.useStencil = false;
 
     
-    ofBackground(22);
+    //ofBackground(22);
     ofFbo::Settings t;
-    t.width = ofGetWidth();
-   t.height = ofGetHeight();
+    t.width = fboWidth;
+    t.height = fboHeight;
     t.internalformat = GL_RGBA;
     t.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
     t.maxFilter = GL_LINEAR; GL_NEAREST;
     t.numSamples = 0;
     t.numColorbuffers = 1;
-   t.useDepth = false;
+    t.useDepth = false;
     t.useStencil = false;
     
     gpuBlur1.setup(t, false);
@@ -141,7 +157,12 @@ void morph::setup( int x, int y){
     // the target value to fade slurp out to
     fadeSlurpToo = 150;
     
+    //glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | GLUT_MULTISAMPLE);
+    //glutInitDisplayString( "rgba double samples>=4 ");
+    falseImgPos = 0;
     
+    isPaintingSquiggleTime = false;
+    lastTransformed = 100;
     
 }
 
@@ -152,6 +173,10 @@ void morph::resetValues(){
 
 
 void morph::update(){
+    
+    fboXpos = (gManager.blobOffset->x + ofGetWidth()/2) - fboWidth/2;
+    fboYPos = (gManager.blobOffset->y + ofGetHeight()/2) - fboHeight/2;
+    
     
     gpuBlur1.blurOffset = gManager.globalBlurOneOffset;
     gpuBlur1.blurPasses = gManager.globalBlurOnePasses;
@@ -166,12 +191,9 @@ void morph::update(){
    // gpuBlur2.blurPasses = 10 * 1 - globalfinalPassBlur;
     gpuBlur2.numBlurOverlays = 1;
     gpuBlur2.blurOverlayGain = 255;
-     
- 
+    
     ofEnableAlphaBlending();
-    
 
-    
     //ofLog()<< state;
 
     if(state == 1){
@@ -205,15 +227,23 @@ void morph::update(){
             isSetupState = false;
             
             startMark = ofGetElapsedTimeMillis();
-            transformFrom = nextSill(transformFrom);
+            //transformFrom = nextSill(transformFrom);
             
             // deciding which one to visibly transform into.
-            // TO DO: Let's try not to repeat
+            // don't repeat the last one that appeared
             int transformTooControlled = transformToo;
-            if( interpolateCoeff < .7){
+            if( interpolateCoeff < .6){
                 transformTooControlled = transformFrom;
+                if (transformTooControlled == lastTransformed){
+                    lastTransformed = transformToo;
+                }
             }
+            
+            
+            
             transformToo = transformTooControlled;
+            lastTransformed = transformToo;
+            
             
             
             // old code for deciding which index to transform into
@@ -261,18 +291,20 @@ void morph::update(){
         // fade out the noise and the slurp
         //quantityOfNoise = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmountOfNoise, 0);
         //quiv = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmontOfQuiver, 0);
-        
+        /*
         if(isExcite){
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlphaExcit, fadeSlurpToo);
         }
         else{
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlpha, fadeSlurpToo);
         }
+         */
         
         if (timePassed > gManager.durOfImgTrans-1){
             state = 3;
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
+            falseImgPos = transformToo;
         }
         
         
@@ -281,14 +313,15 @@ void morph::update(){
         // fade in image (AUTOMATIC)
         if(isSetupState){
             isSetupState = false;
+            gManager.createSnapShot();
         }
         
         int timePass = ofGetElapsedTimeMillis() - startTimeOfState;
         
         
         float scaleVal = ofMap(timePass, 0,500, 0, 1);
-        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
-        
+        //gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        gManager.scaleIntoImageValue(scaleVal);
         alpha = int( ofMap(timePass, 0,500,0,255));
         alphaText = int( ofMap(timePass, 0,500,0 ,255));
         
@@ -299,12 +332,12 @@ void morph::update(){
             alpha = 255;
             alphaText = 255;
             alphaPainting =0;
-            gManager.colorOfBlob = gManager.colorOfHighlight;
+            //gManager.colorOfBlob = gManager.colorOfHighlight;
         }
     }
     else if( state == 4){
         //looking at the solid image (AUTOMATIC)
-        
+        gManager.colorOfBlob = gManager.colorOfHighlight;
         // if it is a painting item initiate the fade in
         if(isSetupState){
             isSetupState = false;
@@ -314,7 +347,9 @@ void morph::update(){
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         if((items.at(transformToo).isPainting)){
             alphaPainting = int(ofClamp(ofMap(timePassed, 0, 1000, 0, 255),0,255));
-            
+        }
+        if(alphaPainting >= 255){
+            isPaintingSquiggleTime = true;
         }
         alpha = 255;
     }
@@ -324,25 +359,31 @@ void morph::update(){
         if(isSetupState){
             isSetupState = false;
             alpha = 255;
+            isPaintingSquiggleTime=false;
+            gManager.createSnapShot();
             
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         
         float scaleVal = ofMap(timePassed, 0,500, 1,0);
-        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        //gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
         
+        gManager.scaleIntoExcited(1-scaleVal);
         alpha = int( ofMap(timePassed, 0,500,255,0));
         alphaText = int( ofMap(timePassed, 0,500,255,0));
         alphaPainting = int(ofMap(timePassed,0,500,255,0));
         
-        if(timePassed > 499){
+        if(timePassed > 500){
+            isTransIntoExcite = false;
+            isTransOutOfExcite = false;
             state =6;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
             alpha = 0;
             alphaText = 0;
             alphaPainting =0;
+            isExcite = true;
 
         }
     }
@@ -368,6 +409,7 @@ void morph::update(){
        // quantityOfNoise = ofMap(timePassed2, 0, gManager.durOfImgTrans, 0, gManager.globalAmountOfNoise);
         //quiv = gManager.globalAmontOfQuiver;
         
+        /*
         // reIntro the slurp
         if(isExcite){
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, fadeSlurpToo, gManager.slurpAlphaExcit.get());
@@ -375,22 +417,36 @@ void morph::update(){
         else{
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans,  fadeSlurpToo, gManager.slurpAlpha.get());
         }
+         */
         
         if(timePassed2 > gManager.durOfImgTrans-1){
             state =1;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
+            falseImgPos =0;
         }
     }
     
-    //if(state != 4){
-        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
-    //}
+    if(state != 4){
+        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity);
+    }else{
+        //bool isP =items.at(transformToo).isPainting;
+        //ofLog()<< ofToString(isPaintingSquiggleTime);
+        if(isPaintingSquiggleTime == true){
+            pMerge.mergePolyline(midTrans, items.at(transformToo).paintingPoly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity);
+        }
+        else{
+             pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver, gManager.globalDensity, false);
+        }
+      
+    }
     
     if(isSensor){
     
         ardTalk.update(0,false);
-        
+
+    }
+
         if((ardTalk.averagedOut > gManager.sensorThresh) & !isTriggered){
             
             // Let's show an image!
@@ -398,41 +454,24 @@ void morph::update(){
             isTriggered = true;
             if(!isExcite){
                 isTransIntoExcite = true;
+                gManager.createSnapShot();
             }
+            isExcite = true;
             isTransOutOfExcite = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
         }
         // transform back into the blob if the person moves out of the threshold and is moving fast
-        
-        
-        
+    
         else if((ardTalk.averagedOut < gManager.sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > gManager.motionDifference )){
             state = 5;
             isTriggered = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
-        
             
-            // clear out draw trailing
-            // might not be necessary anymore
-            /*
-            drawTrailing.begin();
-                ofClear(0,0,0,255);
-                ofSetColor(0);
-                ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
-            drawTrailing.end();
-            */
-        }
-        
-        // go into excited mode
-        else if((ardTalk.averagedOut > gManager.excitedThresh.get()) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh.get())){
-            isTransIntoExcite = true;
-            isTransOutOfExcite = false;
-            startTimeOfExciteFade =  ofGetElapsedTimeMillis();
 
         }
-       
+        // also transorm into excited if it is less than excited
         else if(ardTalk.averagedOut < gManager.excitedThresh ){
             if(isTriggered){
                 //triggerNext();
@@ -442,28 +481,39 @@ void morph::update(){
                 isSetupState = true;
                 
                 /*
-                drawTrailing.begin();
-                    ofClear(0,0,0,255);
-                    ofSetColor(0);
-                    ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
-                drawTrailing.end();
+                 drawTrailing.begin();
+                 ofClear(0,0,0,255);
+                 ofSetColor(0);
+                 ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
+                 drawTrailing.end();
                  */
             }
-            if(!isTransOutOfExcite & isExcite){
-                isTransOutOfExcite = true;
-                isTransIntoExcite = false;
-                startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+            else{
+                if(!isTransOutOfExcite & isExcite){
+                    isTransOutOfExcite = true;
+                    gManager.createSnapShot();
+                    isTransIntoExcite = false;
+                    startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+                }
             }
         }
+        
+        // go into excited mode if the sensor is between the two thresholds and isn't any states already
+        else if((ardTalk.averagedOut > gManager.excitedThresh.get()) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh.get())){
+            isTransIntoExcite = true;
+            gManager.createSnapShot();
+            
+            isTransOutOfExcite = false;
+            startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+        }
     
-    }
     
-    if(isTransIntoExcite){
+    if(isTransIntoExcite & ((state  < 2) | (state  > 6))){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        gManager.scaleExciteValues(true, mappedVal,((state  < 2) | (state  > 6)));
-        
+        //gManager.scaleExciteValues(true, mappedVal,((state  < 2) | (state  > 6)));
+        gManager.scaleIntoExcited(mappedVal);
         
         if(timeElapsed >= gManager.durOfTransIntoExcite){
             isTransIntoExcite = false;
@@ -474,12 +524,12 @@ void morph::update(){
     }
     
     
-    else if (isTransOutOfExcite){
+    else if (isTransOutOfExcite  & ((state  < 2) | (state  > 6))){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
-        
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransOutExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        gManager.scaleExciteValues(false, mappedVal,((state  < 2) | (state  > 6)));
+        //gManager.scaleExciteValues(false, mappedVal,((state  < 2) | (state  > 6)));
+        gManager.scaleIntoNormal(mappedVal);
         
         if(timeElapsed >= gManager.durOfTransOutExcite){
             isTransOutOfExcite = false;
@@ -489,6 +539,22 @@ void morph::update(){
         leftOverFadeTime = timeElapsed;
         
     }
+    
+    if(!bHide & !isTransOutOfExcite & !isTransIntoExcite & state != 3 & state != 5){
+        
+        if(state == 4 ){
+            gManager.initGlobalMovements(3);
+        }
+        else if (isExcite){
+             gManager.initGlobalMovements(2);
+        }
+        else {
+            gManager.initGlobalMovements(1);
+        }
+
+    }
+    
+    /*
     else if(isExcite & !isTriggered){
         
         gManager.initGlobalMovements(true, ((state  < 2) | (state  > 6)));
@@ -498,9 +564,12 @@ void morph::update(){
     else if(!isTriggered){
         
         gManager.initGlobalMovements(false, ((state  < 2) | (state  > 6)));
-        
-        
-    }
+
+    }*/
+    
+    
+    //gManager.initGlobalMovements(isExcite, isTriggered);
+    
     
 
     
@@ -523,8 +592,17 @@ void morph::drawGui(int x,int y){
     
 }
 
-void morph::applyScale(int wid, int height, int scale){
-    ofTranslate(gManager.blobOffset->x * scale + leftOffset * scale + (wid - (leftOffset* scale + rightOffset* scale))/2, gManager.blobOffset->y* scale + upperOffset* scale + (height- (upperOffset* scale + lowerOffset* scale))/2);
+// void applyScale(int wid, int height, int scale, bool isNoOffset=false)
+
+void morph::applyScale(int wid, int height, int scale,  bool isNoOffset){
+    
+    if(!isNoOffset){
+        ofTranslate(gManager.blobOffset->x * scale + leftOffset * scale + (wid - (leftOffset* scale + rightOffset* scale))/2, gManager.blobOffset->y* scale + upperOffset* scale + (height- (upperOffset* scale + lowerOffset* scale))/2);
+    }
+    else{
+        ofTranslate( leftOffset * scale + (wid - (leftOffset* scale + rightOffset* scale))/2, upperOffset* scale + (height- (upperOffset* scale + lowerOffset* scale))/2);
+    }
+    
     int flipx = 1;
     int flipy = 1;
     if(gManager.flipVert){
@@ -542,13 +620,14 @@ void morph::applyScale(int wid, int height, int scale){
     else{
         ofRotateZ(360/(gManager.rotation+1));
     }
+    //ofDrawRectangle(gManager.blobOffset->x, gManager.blobOffset->y, <#float w#>, <#float h#>)
 }
 
 
 void morph::drawMorph(int x,int y){
     
     
-    ofSetColor(gManager.color3);
+    ofSetColor(gManager.colorOfBackground);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
     //ofPushMatrix();
@@ -569,29 +648,30 @@ void morph::drawMorph(int x,int y){
     
     // draw images if fadeing in, displaying or fading out image
         if((state  >= 3) & (state  <= 5)){
-            ofVec2f sz = getSz(items.at(transformToo).img);
+            ofVec2f sz = getSz(items.at(falseImgPos).img);
             
             ofPushMatrix();
                 applyScale(ofGetWidth(), ofGetHeight(), 1);
-                if(items.at(transformToo).isPainting){
+                if(items.at(falseImgPos).isPainting){
                     ofSetColor(255,alphaPainting);
-                    items.at(transformToo).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+                    items.at(falseImgPos).imgForPainting.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
                     ofSetColor(255);
                 }
                 ofSetColor(255,alpha);
-                items.at(transformToo).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
+                items.at(falseImgPos).img.draw(-1*(sz.x/1.5)/2,-1*(sz.y/1.5)/2, sz.x/1.5,sz.y/1.5 );
             ofPopMatrix();
             
             // draw text
             string allTheText;
             
-            for(int i =0; i < items.at(transformToo).blurb.getRow(1).getNumCols(); i++){
-                string temp =  items.at(transformToo).blurb.getRow(1).getString(i);
+            for(int i =0; i < items.at(falseImgPos).blurb.getRow(1).getNumCols(); i++){
+                string temp =  items.at(falseImgPos).blurb.getRow(1).getString(i);
                 if (temp.size() > 0){
                     allTheText += temp + "\n";
                 }
             }
             
+            ofStringReplace(allTheText, "*", "©");
             /*
             guiOrientation.add(textScale.set("text scale", 1,-1,4));
             guiOrientation.add(textFlipVert.set("text flip vertical", false));
@@ -610,7 +690,17 @@ void morph::drawMorph(int x,int y){
                     applyScale(ofGetWidth(), ofGetHeight(), 1);
                 }
                 else{
-                    ofTranslate(gManager.textPos->x, gManager.textPos->y);
+                    
+                    
+                    ofTranslate(gManager.textPos->x, gManager.textPos->y );
+                    
+                    if(gManager.rotationText.get() ==0){
+                        ofRotateZ(0);
+                    }
+                    else{
+                        ofRotateZ(360/(gManager.rotationText+1));
+                    }
+                    
                 }
                 //title.drawString(titleText, -1*(sz.x/1.5)/2, ((sz.y/1.5)/2)+ title.stringHeight(titleText)+ gManager.underImgMargin);
                 // body.drawString(allTheText, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2)+ title.stringHeight(titleText) + gManager.underTitle + gManager.underImgMargin);
@@ -624,13 +714,26 @@ void morph::drawMorph(int x,int y){
                     flipx= -1;
                 }
             
-                ofScale(gManager.textScale* flipx, gManager.textScale* flipy);
+            int num =int(gManager.textScale.get() * 20);
+                //body.setGlobalDpi(300);
+                //ofScale(gManager.textScale* flipx, gManager.textScale* flipy);
+            //" ©"
+            
             
                 if(gManager.isImageAnchor){
-                    body.drawString(allTheText, -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2) + gManager.underTitle + gManager.underImgMargin);
+                
+                    gManager.body.drawStringAsShapes(allTheText , -1* (sz.x/1.5)/2 , ((sz.y/1.5)/2) + gManager.underTitle + gManager.underImgMargin);
                     ofPopMatrix();
                 }else{
-                    body.drawString(allTheText, 0,0);
+                    
+                    ofEnableAlphaBlending();
+                    ofFill();
+                    //ofSetColor(0,0,0);
+                    ofRectangle box = gManager.body.getStringBoundingBox(allTheText, 0, 0);
+                    ofDrawEllipse(0,0,20,20);
+                   // body.drawStringAsShapes(allTheText + " ©", 0,-1*box.getHeight());
+                    gManager.body.drawStringAsShapes(allTheText, 0,-1*box.getHeight());
+                    gManager.body.drawString(allTheText, 0,-1*box.getHeight());
                 }
                 ofPopMatrix();
             
@@ -647,17 +750,13 @@ void morph::drawMorph(int x,int y){
     ofDrawRectangle(0,0,leftOffset, ofGetHeight());
     ofDrawRectangle(ofGetWidth()- rightOffset,0,rightOffset, ofGetHeight());
     
-    
     if( !bHide ){
         gManager.draw();
         ofSetColor(100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOut), ofGetWidth()/2, 100);
         ofDrawBitmapString(ofToString(ardTalk.averagedOutDiff), ofGetWidth()/2, 50);
         ofDrawBitmapString(ofToString(ofGetFrameRate()), ofGetWidth()/2, 20);
-
     }
-    
-    
 }
 
 void morph::triggerNext(){
@@ -673,11 +772,21 @@ void morph::triggerNext(){
 }
 
 
-
-
 int morph::nextSill(int num){
-    int siz = items.size();
-    return  num = (int) ofRandom(0, siz);
+    int  transformT;
+
+    if(randomIndices.size() > 0){
+        int num = ofRandom(randomIndices.size()-1);
+        transformT = randomIndices.at(num);
+        randomIndices.erase(randomIndices.begin() + num);
+    }
+    else{
+        populateVector();
+        int num = ofRandom(randomIndices.size()-1);
+        transformT = randomIndices.at(num);
+        randomIndices.erase(randomIndices.begin() + num);
+    }
+    return transformT;
     
 }
 
@@ -713,7 +822,7 @@ void morph::pathToPath(){
     gpuBlur1.beginDrawScene();
         ofClear(0, 0, 0, 0);
         ofSetColor(255);
-        drawTrailing.draw(0,0, ofGetWidth(), ofGetHeight());
+        drawTrailing.draw(0,0, fboWidth, fboHeight);
     gpuBlur1.endDrawScene();
     
     gpuBlur1.performBlur();
@@ -735,7 +844,7 @@ void morph::pathToPath(){
     
             ofSetColor(0,0,0, alphVal);
             ofDrawRectangle(0,0,drawTrailing.getWidth(),drawTrailing.getHeight());
-            applyScale(drawTrailing.getWidth(),drawTrailing.getHeight(),2);
+            applyScale(drawTrailing.getWidth(),drawTrailing.getHeight(),2, true);
     
             // draw the background to fade away the slurp
     
@@ -771,19 +880,27 @@ void morph::pathToPath(){
     gpuBlur2.beginDrawScene();
         ofClear(0, 0, 0, 0);
         ofSetColor(255);
-        motionBlur.draw(0,0,ofGetWidth(),ofGetHeight());
+        motionBlur.draw(0,0,fboWidth, fboHeight);
     gpuBlur2.endDrawScene();
     
     gpuBlur2.performBlur();
     
     
     ofPushMatrix();
+    ofTranslate(fboXpos, fboYPos);
         ofSetColor(255);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); //pre-multiplied alpha
         //ofTranslate(-ofGetWidth()/2 ,-ofGetHeight()/2 );
         gpuBlur2.drawBlurFbo();
         ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     ofPopMatrix();
+
+    // try drawing
+    
+   // ofSetColor(50, 200, 55, 100);
+   // ofDrawRectangle(gManager.,0,);
+    // ofTranslate(gManager.blobOffset->x * scale + leftOffset * scale + (wid - (leftOffset* scale + rightOffset* scale))/2, gManager.blobOffset->y* scale + upperOffset* scale + (height- (upperOffset* scale + lowerOffset* scale))/2);
+    
 
     ofSetColor(255);
 
@@ -815,6 +932,14 @@ ofPolyline morph::pngToPolyline(ofImage img){
     //int newHeight = img.getHeight()*(ofGetWidth()/1.5)/img.getWidth();
     ofVec2f sz = getSz(img);
     
+    if(sz.x > largestBlobDimensions.x ){
+        largestBlobDimensions.x = sz.x;
+    }
+    
+    if(sz.y > largestBlobDimensions.y ){
+        largestBlobDimensions.y = sz.y;
+    }
+    
     ofPushMatrix();
     int wid = img.getWidth()/2;
     int hi = img.getHeight()/2;
@@ -827,8 +952,6 @@ ofPolyline morph::pngToPolyline(ofImage img){
     ofPopMatrix();
     
     shade.end();
-    
-    
     drawNoColor.end();
     
     

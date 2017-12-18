@@ -26,6 +26,7 @@ public:
     ofImage img;
     ofImage imgForPainting;
     ofPolyline poly;
+    ofPolyline paintingPoly;
     ofxCsv blurb;
     bool isPainting;
     bool isPaintingReady; 
