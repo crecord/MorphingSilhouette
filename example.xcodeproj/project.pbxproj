@@ -16,13 +16,13 @@
 		0B5A87FD1E5253B200E5E569 /* ofxCvImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A87241E5253B200E5E569 /* ofxCvImage.cpp */; };
 		0B5A87FE1E5253B200E5E569 /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A87261E5253B200E5E569 /* ofxCvShortImage.cpp */; };
 		0B5A87FF1E5253B200E5E569 /* opencv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B5A87F51E5253B200E5E569 /* opencv.a */; };
-		0B5A882F1E5253BC00E5E569 /* ofxPolylineMerger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A882D1E5253BC00E5E569 /* ofxPolylineMerger.cpp */; };
 		0B5A88321E52547800E5E569 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A88301E52547800E5E569 /* ofApp.cpp */; };
 		0B73B4821F79896500E0D3A2 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B73B4801F79896500E0D3A2 /* item.cpp */; };
 		0BBD73751FDA2A5400BCCD26 /* ofxCsv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73711FDA2A5400BCCD26 /* ofxCsv.cpp */; };
 		0BBD73761FDA2A5400BCCD26 /* ofxCsvRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73731FDA2A5400BCCD26 /* ofxCsvRow.cpp */; };
 		0BBD73931FDF2F9F00BCCD26 /* ofxFboBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73911FDF2F9F00BCCD26 /* ofxFboBlur.cpp */; };
 		0BBD73A01FE1CCB000BCCD26 /* guiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD739E1FE1CCB000BCCD26 /* guiManager.cpp */; };
+		0BBD73C81FE6FFA900BCCD26 /* polylineMerger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD73C61FE6FFA900BCCD26 /* polylineMerger.cpp */; };
 		0BBD874E1E5C831000DEE299 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */; };
 		0BBD874F1E5C831000DEE299 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD873F1E5C831000DEE299 /* ofxButton.cpp */; };
 		0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD87421E5C831000DEE299 /* ofxGuiGroup.cpp */; };
@@ -246,8 +246,6 @@
 		0B5A87E11E5253B200E5E569 /* videostab.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = videostab.hpp; sourceTree = "<group>"; };
 		0B5A87F51E5253B200E5E569 /* opencv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv.a; sourceTree = "<group>"; };
 		0B5A87F71E5253B200E5E569 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		0B5A882D1E5253BC00E5E569 /* ofxPolylineMerger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPolylineMerger.cpp; sourceTree = "<group>"; };
-		0B5A882E1E5253BC00E5E569 /* ofxPolylineMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxPolylineMerger.h; sourceTree = "<group>"; };
 		0B5A88301E52547800E5E569 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
 		0B5A88311E52547800E5E569 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
 		0B73B4801F79896500E0D3A2 /* item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = item.cpp; sourceTree = "<group>"; };
@@ -262,6 +260,8 @@
 		0BBD73921FDF2F9F00BCCD26 /* ofxFboBlur.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxFboBlur.h; sourceTree = "<group>"; };
 		0BBD739E1FE1CCB000BCCD26 /* guiManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = guiManager.cpp; sourceTree = "<group>"; };
 		0BBD739F1FE1CCB000BCCD26 /* guiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = guiManager.h; sourceTree = "<group>"; };
+		0BBD73C61FE6FFA900BCCD26 /* polylineMerger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = polylineMerger.cpp; sourceTree = "<group>"; };
+		0BBD73C71FE6FFA900BCCD26 /* polylineMerger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = polylineMerger.h; sourceTree = "<group>"; };
 		0BBD873D1E5C831000DEE299 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		0BBD873E1E5C831000DEE299 /* ofxBaseGui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		0BBD873F1E5C831000DEE299 /* ofxButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -729,24 +729,6 @@
 			path = license;
 			sourceTree = "<group>";
 		};
-		0B5A882B1E5253BC00E5E569 /* ofxPolylineMerger */ = {
-			isa = PBXGroup;
-			children = (
-				0B5A882C1E5253BC00E5E569 /* src */,
-			);
-			name = ofxPolylineMerger;
-			sourceTree = "<group>";
-		};
-		0B5A882C1E5253BC00E5E569 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				0B5A882D1E5253BC00E5E569 /* ofxPolylineMerger.cpp */,
-				0B5A882E1E5253BC00E5E569 /* ofxPolylineMerger.h */,
-			);
-			name = src;
-			path = ../../../addons/ofxPolylineMerger/src;
-			sourceTree = "<group>";
-		};
 		0BBD736B1FDA29DC00BCCD26 /* ofxEasing */ = {
 			isa = PBXGroup;
 			children = (
@@ -847,7 +829,6 @@
 			isa = PBXGroup;
 			children = (
 				0B5A87161E5253B200E5E569 /* ofxOpenCv */,
-				0B5A882B1E5253BC00E5E569 /* ofxPolylineMerger */,
 				0BBD873B1E5C831000DEE299 /* ofxGui */,
 				0BBD736B1FDA29DC00BCCD26 /* ofxEasing */,
 				0BBD736F1FDA2A5400BCCD26 /* ofxCsv */,
@@ -891,6 +872,8 @@
 				0B73B4801F79896500E0D3A2 /* item.cpp */,
 				0B34CDDB1FD31BDA00A3E4CA /* handleSerial.cpp */,
 				0B34CDDC1FD31BDA00A3E4CA /* handleSerial.h */,
+				0BBD73C61FE6FFA900BCCD26 /* polylineMerger.cpp */,
+				0BBD73C71FE6FFA900BCCD26 /* polylineMerger.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -991,13 +974,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B5A882F1E5253BC00E5E569 /* ofxPolylineMerger.cpp in Sources */,
 				0BF5E90C1F30E26E003523A6 /* morph.cpp in Sources */,
 				0BBD73761FDA2A5400BCCD26 /* ofxCsvRow.cpp in Sources */,
 				0B5A87F81E5253B200E5E569 /* ofxCvColorImage.cpp in Sources */,
 				0B5A87FE1E5253B200E5E569 /* ofxCvShortImage.cpp in Sources */,
 				0BBD87501E5C831000DEE299 /* ofxGuiGroup.cpp in Sources */,
 				0BBD73A01FE1CCB000BCCD26 /* guiManager.cpp in Sources */,
+				0BBD73C81FE6FFA900BCCD26 /* polylineMerger.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				0BBD73751FDA2A5400BCCD26 /* ofxCsv.cpp in Sources */,
 				0B34CDDD1FD31BDA00A3E4CA /* handleSerial.cpp in Sources */,

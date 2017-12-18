@@ -42,6 +42,9 @@ void morph::setup( int x, int y){
         imgTemp.load(dir.getPath(i));
         ofPolyline ply = pngToPolyline(imgTemp);
         temp.setup(pathToImages, dir.getPath(i), csvDir.getPath(i), imgTemp, ply);
+        if(temp.isPainting){
+            temp.paintingPoly = pngToPolyline(temp.imgForPainting);
+        }
         items.push_back(temp);
     }
     
@@ -154,7 +157,7 @@ void morph::setup( int x, int y){
     //glutInitDisplayString( "rgba double samples>=4 ");
     falseImgPos = 0;
     
-    
+    isPaintingSquiggleTime = false;
     
 }
 
@@ -230,6 +233,8 @@ void morph::update(){
             transformToo = transformTooControlled;
             
             
+            
+            
             // old code for deciding which index to transform into
             /*
             int transformTooControlled = transformToo;
@@ -275,18 +280,20 @@ void morph::update(){
         // fade out the noise and the slurp
         //quantityOfNoise = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmountOfNoise, 0);
         //quiv = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.globalAmontOfQuiver, 0);
-        
+        /*
         if(isExcite){
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlphaExcit, fadeSlurpToo);
         }
         else{
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, gManager.slurpAlpha, fadeSlurpToo);
         }
+         */
         
         if (timePassed > gManager.durOfImgTrans-1){
             state = 3;
             isSetupState = true;
             startTimeOfState = ofGetElapsedTimeMillis();
+            falseImgPos = transformToo;
         }
         
         
@@ -295,15 +302,15 @@ void morph::update(){
         // fade in image (AUTOMATIC)
         if(isSetupState){
             isSetupState = false;
-            falseImgPos = transformToo;
+            gManager.createSnapShot();
         }
         
         int timePass = ofGetElapsedTimeMillis() - startTimeOfState;
         
         
         float scaleVal = ofMap(timePass, 0,500, 0, 1);
-        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
-        
+        //gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        gManager.scaleIntoImageValue(scaleVal);
         alpha = int( ofMap(timePass, 0,500,0,255));
         alphaText = int( ofMap(timePass, 0,500,0 ,255));
         
@@ -314,12 +321,12 @@ void morph::update(){
             alpha = 255;
             alphaText = 255;
             alphaPainting =0;
-            gManager.colorOfBlob = gManager.colorOfHighlight;
+            //gManager.colorOfBlob = gManager.colorOfHighlight;
         }
     }
     else if( state == 4){
         //looking at the solid image (AUTOMATIC)
-        
+        gManager.colorOfBlob = gManager.colorOfHighlight;
         // if it is a painting item initiate the fade in
         if(isSetupState){
             isSetupState = false;
@@ -329,7 +336,9 @@ void morph::update(){
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         if((items.at(transformToo).isPainting)){
             alphaPainting = int(ofClamp(ofMap(timePassed, 0, 1000, 0, 255),0,255));
-            
+        }
+        if(alphaPainting >= 255){
+            isPaintingSquiggleTime = true;
         }
         alpha = 255;
     }
@@ -339,25 +348,31 @@ void morph::update(){
         if(isSetupState){
             isSetupState = false;
             alpha = 255;
+            isPaintingSquiggleTime=false;
+            gManager.createSnapShot();
             
         }
         
         int timePassed = ofGetElapsedTimeMillis() - startTimeOfState;
         
         float scaleVal = ofMap(timePassed, 0,500, 1,0);
-        gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
+        //gManager.colorOfBlob = gManager.colorExcit->getLerped(gManager.colorOfHighlight, scaleVal);
         
+        gManager.scaleIntoExcited(1-scaleVal);
         alpha = int( ofMap(timePassed, 0,500,255,0));
         alphaText = int( ofMap(timePassed, 0,500,255,0));
         alphaPainting = int(ofMap(timePassed,0,500,255,0));
         
-        if(timePassed > 499){
+        if(timePassed > 500){
+            isTransIntoExcite = false;
+            isTransOutOfExcite = false;
             state =6;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
             alpha = 0;
             alphaText = 0;
             alphaPainting =0;
+            isExcite = true;
 
         }
     }
@@ -383,6 +398,7 @@ void morph::update(){
        // quantityOfNoise = ofMap(timePassed2, 0, gManager.durOfImgTrans, 0, gManager.globalAmountOfNoise);
         //quiv = gManager.globalAmontOfQuiver;
         
+        /*
         // reIntro the slurp
         if(isExcite){
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans, fadeSlurpToo, gManager.slurpAlphaExcit.get());
@@ -390,6 +406,7 @@ void morph::update(){
         else{
             gManager.globalSlurpAlpha = ofMap(timePassed, 0, gManager.durOfImgTrans,  fadeSlurpToo, gManager.slurpAlpha.get());
         }
+         */
         
         if(timePassed2 > gManager.durOfImgTrans-1){
             state =1;
@@ -399,9 +416,19 @@ void morph::update(){
         }
     }
     
-    //if(state != 4){
-        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,quantityOfNoise, quiv);
-    //}
+    if(state != 4){
+        pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver);
+    }else{
+        //bool isP =items.at(transformToo).isPainting;
+        //ofLog()<< ofToString(isPaintingSquiggleTime);
+        if(isPaintingSquiggleTime == true){
+            pMerge.mergePolyline(midTrans, items.at(transformToo).paintingPoly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver);
+        }
+        else{
+             pMerge.mergePolyline(midTrans, items.at(transformToo).poly, interpolateCoeff,gManager.globalAmountOfNoise, gManager.globalAmontOfQuiver,false);
+        }
+      
+    }
     
     if(isSensor){
     
@@ -414,41 +441,24 @@ void morph::update(){
             isTriggered = true;
             if(!isExcite){
                 isTransIntoExcite = true;
+                gManager.createSnapShot();
             }
+            isExcite = true;
             isTransOutOfExcite = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
         }
         // transform back into the blob if the person moves out of the threshold and is moving fast
-        
-        
-        
+    
         else if((ardTalk.averagedOut < gManager.sensorThresh) & isTriggered & (ardTalk.averagedOutDiff > gManager.motionDifference )){
             state = 5;
             isTriggered = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
-        
             
-            // clear out draw trailing
-            // might not be necessary anymore
-            /*
-            drawTrailing.begin();
-                ofClear(0,0,0,255);
-                ofSetColor(0);
-                ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
-            drawTrailing.end();
-            */
-        }
-        
-        // go into excited mode
-        else if((ardTalk.averagedOut > gManager.excitedThresh.get()) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh.get())){
-            isTransIntoExcite = true;
-            isTransOutOfExcite = false;
-            startTimeOfExciteFade =  ofGetElapsedTimeMillis();
 
         }
-       
+        // also transorm into excited if it is less than excited
         else if(ardTalk.averagedOut < gManager.excitedThresh ){
             if(isTriggered){
                 //triggerNext();
@@ -458,28 +468,42 @@ void morph::update(){
                 isSetupState = true;
                 
                 /*
-                drawTrailing.begin();
-                    ofClear(0,0,0,255);
-                    ofSetColor(0);
-                    ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
-                drawTrailing.end();
+                 drawTrailing.begin();
+                 ofClear(0,0,0,255);
+                 ofSetColor(0);
+                 ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
+                 drawTrailing.end();
                  */
             }
-            if(!isTransOutOfExcite & isExcite){
-                isTransOutOfExcite = true;
-                isTransIntoExcite = false;
-                startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+            else{
+                if(!isTransOutOfExcite & isExcite){
+                    isTransOutOfExcite = true;
+                    gManager.createSnapShot();
+                    isTransIntoExcite = false;
+                    startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+                }
             }
         }
-    
+        
+        // go into excited mode if the sensor is between the two thresholds and isn't any states already
+        else if((ardTalk.averagedOut > gManager.excitedThresh.get()) & !isExcite & !isTransIntoExcite & !isTriggered & (ardTalk.averagedOut < gManager.sensorThresh.get())){
+            isTransIntoExcite = true;
+            gManager.createSnapShot();
+            
+            isTransOutOfExcite = false;
+            startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+
+        }
+       
+        
     }
     
-    if(isTransIntoExcite){
+    if(isTransIntoExcite & ((state  < 2) | (state  > 6))){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransIntoExcite, 0, 1, true, easingQuart, easingType);
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransIntoExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        gManager.scaleExciteValues(true, mappedVal,((state  < 2) | (state  > 6)));
-        
+        //gManager.scaleExciteValues(true, mappedVal,((state  < 2) | (state  > 6)));
+        gManager.scaleIntoExcited(mappedVal);
         
         if(timeElapsed >= gManager.durOfTransIntoExcite){
             isTransIntoExcite = false;
@@ -490,12 +514,12 @@ void morph::update(){
     }
     
     
-    else if (isTransOutOfExcite){
+    else if (isTransOutOfExcite  & ((state  < 2) | (state  > 6))){
         float timeElapsed = ofGetElapsedTimeMillis() - startTimeOfExciteFade;
         //float mappedVal = ofxTween::map(timeElapsed, 0., durOfTransOutExcite, 0, 1, true, easingQuart, easingType);
-        
         float mappedVal =  ofxeasing::map_clamp(timeElapsed+ 0.f, 0.f, gManager.durOfTransOutExcite+ 0.f, 0.f, 1.f, &ofxeasing::quart::easeIn);
-        gManager.scaleExciteValues(false, mappedVal,((state  < 2) | (state  > 6)));
+        //gManager.scaleExciteValues(false, mappedVal,((state  < 2) | (state  > 6)));
+        gManager.scaleIntoNormal(mappedVal);
         
         if(timeElapsed >= gManager.durOfTransOutExcite){
             isTransOutOfExcite = false;
@@ -505,6 +529,8 @@ void morph::update(){
         leftOverFadeTime = timeElapsed;
         
     }
+    
+    /*
     else if(isExcite & !isTriggered){
         
         gManager.initGlobalMovements(true, ((state  < 2) | (state  > 6)));
@@ -514,9 +540,12 @@ void morph::update(){
     else if(!isTriggered){
         
         gManager.initGlobalMovements(false, ((state  < 2) | (state  > 6)));
-        
-        
-    }
+
+    }*/
+    
+    
+    //gManager.initGlobalMovements(isExcite, isTriggered);
+    
     
 
     
@@ -675,12 +704,12 @@ void morph::drawMorph(int x,int y){
                     
                     ofEnableAlphaBlending();
                     ofFill();
-                    ofSetColor(0,0,0);
+                    //ofSetColor(0,0,0);
                     ofRectangle box = gManager.body.getStringBoundingBox(allTheText, 0, 0);
                     ofDrawEllipse(0,0,20,20);
                    // body.drawStringAsShapes(allTheText + " ©", 0,-1*box.getHeight());
-                    gManager.body.drawStringAsShapes(allTheText, 0,500);
-                    gManager.body.drawString(allTheText, 0,0);
+                    gManager.body.drawStringAsShapes(allTheText, 0,-1*box.getHeight());
+                    gManager.body.drawString(allTheText, 0,-1*box.getHeight());
                 }
                 ofPopMatrix();
             

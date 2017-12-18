@@ -83,6 +83,28 @@ void guiManager::setup(string name){
     guiUniversalExcited.add(color2Excit.set("back col",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
     guiUniversalExcited.add(color3Excit.set("hightlight col",ofColor(200,100,140),ofColor(0,0),ofColor(255,255)));
     
+    
+    
+    
+    guiUniversalImage.setup("image display settings");
+    
+    // maybe add fade in painting time and fade in image time....
+
+    guiUniversalImage.add(amountOfNoiseImage.set("noise",10,0,30));
+    guiUniversalImage.add(amountOfQuiverImage.set("quiver",10,1,50));
+    
+    guiUniversalImage.add(blurOneOffsetImage.set("blur1 offset",.5,0,3));
+    guiUniversalImage.add(blurOnePassesImage.set("blur1 Passes",1,0,4));
+    
+    
+    guiUniversalImage.add(BtMotionBlurImage.set("BtMotionBlur",1,0,1));
+    guiUniversalImage.add(TpMotionBlurImage.set("TpMotionBlur",0,0,1));
+    guiUniversalImage.add(blurTwoOffsetImage.set("blur2 offset",.5,0,3));
+    guiUniversalImage.add(blurTwoPassesImage.set("blur2 Passes",1,0,4));
+    //ofParameter<ofColor> colorImage;
+    guiUniversalImage.add(colorImage.set("color squig",ofColor(100,100,140),ofColor(0,0),ofColor(255,255)));
+    
+    
     // inside specific
     //ofxPanel guiSensorThresholding;!!!!!!!!!!!!!!!!
     guiSensorThresholding.setup("theshold sensors");
@@ -154,10 +176,13 @@ void guiManager::setup(string name){
             if(relvantSlice.at(0) == curatorName){
                 string guiName = relvantSlice.at(1);
                 if(guiName == "overall"){
-                    isOverallOverride = true;
+                    isImageOverride = true;
                 }
                 else if (guiName == "excited"){
                     isExcitedOverride = true;
+                }
+                else if (guiName == "image"){
+                    isImageOverride = true;
                 }
                 else if (guiName == "thresholds"){
                     isThresholdOverride = true;
@@ -188,6 +213,13 @@ void guiManager::setup(string name){
     }
     else {
         guiUniversalExcited.loadFromFile("settings/excited.xml");
+    }
+    
+    if (isImageOverride){
+        guiUniversalImage.loadFromFile("settings/" + curatorName + "_image.xml");
+    }
+    else {
+        guiUniversalImage.loadFromFile("settings/image.xml");
     }
     
     isInside = ofContains(inside, curatorName);
@@ -276,56 +308,176 @@ void guiManager::draw(){
         guiUniversalExcited.draw();
     }
     else if (3 == guiState){
-        guiSensorThresholding.draw();
+        guiUniversalImage.draw();
     }
     else if (4 == guiState){
+        guiSensorThresholding.draw();
+    }
+    else if (5 == guiState){
         guiOrientation.draw();
     }
     
 }
 
-void guiManager::scaleExciteValues(bool isScalingToExcited, float mappedVal, bool isInTrigMode){
+
+
+
+void guiManager::createSnapShot(){
+    // the variables needed to take a snapshot
+    snapshotGlobalPercentTrans = globalPercentTrans;
+    snapshotGlobalAmountOfNoise = globalAmountOfNoise;
+    snapshotGlobalAmontOfQuiver =globalAmontOfQuiver;
     
-    int down = 0;
-    int up =1;
+    snapshotGlobalDurationOfTrans = globalDurationOfTrans;
+    snapshotColorOfBlob = colorOfBlob;
+    snapshotColorOfBackground = colorOfBackground;
+    snapshotColorOfHighlight = colorOfHighlight;
     
-    if(!isScalingToExcited){
-        down = 1;
-        up = 0;
-    }
+    snapshotGlobalSlurpAlpha = globalSlurpAlpha;
+    snapshotGlobalSlurpNoise = globalSlurpNoise;
+    snapshotGlobalSlurpQuiver = globalSlurpQuiver;
     
-    globalPercentTrans = ofMap(mappedVal,down,up,percentTrans,percentTransExcit);
-    globalAmountOfNoise = ofMap(mappedVal,down ,up ,amountOfNoise,amountOfNoiseExcit);
-    globalAmontOfQuiver = ofMap(mappedVal,down,up,amontOfQuiver,amontOfQuiverExcit);;
+    snapshotGlobalBlurOneOffset = globalBlurOneOffset;
+    snapshotGlobalBlurOnePasses = globalBlurOnePasses;
     
-    globalDurationOfTrans = ofMap(mappedVal,down,up,durationOfTrans,durationOfTransExcit);
-   
-    // do something here
+    snapshotGlobalFilterThresh = globalFilterThresh;
     
-    colorOfBackground = color2.get().getLerped(color2Excit.get(), abs(down - mappedVal));
-    colorOfHighlight = color3.get().getLerped(color3Excit.get(), abs(down - mappedVal));
+    snapshotGlobalBtMotionBlur = globalBtMotionBlur;
+    snapshotGlobalTpMotionBlur = globalTpMotionBlur;
     
-    if(isInTrigMode){
-        colorOfBlob = color.get().getLerped(colorExcit.get(), abs(down - mappedVal));
-        globalSlurpAlpha = ofMap(mappedVal,down,up,slurpAlpha,slurpAlphaExcit);
-    }
+    snapshotGlobalBlurTwoOffset = globalBlurTwoOffset;
+    snapshotGlobalBlurTwoPasses = globalBlurTwoPasses;
     
-    globalSlurpNoise = ofMap(mappedVal,down,up,slurpNoise,slurpNoiseExcit);
-    globalSlurpQuiver = ofMap(mappedVal,down,up,slurpQuiver,slurpQuiverExcit);
-    globalFilterThresh = ofMap(mappedVal,down,up,filterThresh,filterThreshExcit);
-    
-    globalBtMotionBlur = ofMap(mappedVal,down,up,BtMotionBlur,BtMotionBlurExcit);
-    globalTpMotionBlur = ofMap(mappedVal,down,up,TpMotionBlur,TpMotionBlurExcit);
-    
-    globalBlurOneOffset = ofMap(mappedVal,down,up,blurOneOffset,blurOneOffsetExcit);
-    globalBlurOnePasses = ofMap(mappedVal,down,up,blurOnePasses,blurOnePassesExcit);
-    globalBlurTwoOffset = ofMap(mappedVal,down,up,blurTwoOffset,blurTwoOffsetExcit);
-    globalBlurTwoPasses = ofMap(mappedVal,down,up,blurTwoPasses,blurTwoPassesExcit);
+    snapshotGlobalfinalPassBlur = globalfinalPassBlur;
 
 }
 
 
+
+void guiManager::scaleIntoExcited(float mappedVal){
+    
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseExcit);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiverExcit);;
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
+    
+    // do something here
+    
+    colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
+    colorOfHighlight = snapshotColorOfHighlight.getLerped(color3Excit.get(), mappedVal);
+    colorOfBlob = snapshotColorOfBlob.getLerped(colorExcit.get(), mappedVal);
+    
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit);
+    
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit);
+    
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurExcit);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurExcit);
+    
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetExcit);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesExcit);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetExcit);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesExcit);
+    
+}
+
+void guiManager::scaleIntoNormal(float mappedVal){
+    
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTrans);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoise);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiver);;
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTrans);
+    
+    // do something here
+    
+    colorOfBackground = snapshotColorOfBackground.getLerped(color2.get(),mappedVal);
+    colorOfHighlight = snapshotColorOfHighlight.getLerped(color3.get(), mappedVal);
+    colorOfBlob = snapshotColorOfBlob.getLerped(color.get(), mappedVal);
+    
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlpha);
+    
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoise);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiver);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThresh);
+    
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlur);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlur);
+    
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffset);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePasses);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffset);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPasses);
+}
+
+void guiManager::scaleIntoImageValue(float mappedVal){
+    
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseImage);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amountOfQuiverImage);;
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
+    
+    // do something here
+    
+    colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
+    colorOfHighlight = snapshotColorOfHighlight.getLerped(colorImage.get(), mappedVal);
+    colorOfBlob = snapshotColorOfBlob.getLerped(colorImage.get(), mappedVal);
+    
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit);
+    
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit);
+    
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurImage);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurImage);
+    
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetImage);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesImage);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetImage);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesImage);
+}
+
+/*
+void scaleIntoImageValue(float mappedVal);
+void scaleIntoExcited(float mappedVal);
+void scaleIntoNormal(float mappedVal);
+*/
+//scale whatever into image mode (most recently used values)
+// tell it that it is setup
+
+
+
+
+
+//scale image (whatever used) back into excited
+
+
+
 void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
+    
+    
+    if(!isInTrigMode){
+
+        globalAmountOfNoise = amountOfNoiseImage;
+        globalAmontOfQuiver = amountOfQuiverImage;
+        
+        colorOfHighlight = colorImage;
+        
+        globalBtMotionBlur = BtMotionBlurImage;
+        globalTpMotionBlur = TpMotionBlurImage;
+        
+        globalBlurOneOffset = blurOneOffsetImage;
+        globalBlurOnePasses = blurOnePassesImage;
+        globalBlurTwoOffset = blurTwoOffsetImage;
+        globalBlurTwoPasses = blurTwoPassesImage;
+        
+    }
+    else{
     
     if(isExcite){
         globalPercentTrans = percentTransExcit;
@@ -382,6 +534,7 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
         globalBlurTwoOffset = blurTwoOffset;
         globalBlurTwoPasses = blurTwoPasses;
     }
+    }
 }
 
 
@@ -389,6 +542,15 @@ void guiManager::initGlobalMovements(bool isExcite, bool isInTrigMode){
 void guiManager::saveSettings(){
     
     ofLog()<< "Saving settings!";
+    
+    
+    if (isImageOverride){
+        guiUniversalImage.saveToFile("settings/" + curatorName + "_image.xml");
+    }
+    else {
+        guiUniversalImage.saveToFile("settings/image.xml");
+    }
+    
     
     if(isOverallOverride){
         guiUniversal.saveToFile("settings/" + curatorName + "_overall.xml");
@@ -441,17 +603,21 @@ void guiManager::saveSettings(){
 
 void guiManager::overRide(){
     
-    if(1 == guiState){
+    if (1 == guiState){
         guiUniversal.saveToFile("settings/" + curatorName + "_overall.xml");
     }
     else if (2 == guiState){
         guiUniversalExcited.saveToFile("settings/" + curatorName + "_excited.xml");
     }
     else if (3 == guiState){
-        guiSensorThresholding.saveToFile("settings/" + curatorName + "_thresholds.xml");
+        guiUniversalImage.saveToFile("settings/" + curatorName + "_image.xml");
     }
     else if (4 == guiState){
+        guiSensorThresholding.saveToFile("settings/" + curatorName + "_thresholds.xml");
+    }
+    else if (5 == guiState){
         guiOrientation.saveToFile("settings/" + curatorName + "_orientation.xml");
     }
+    
 }
 

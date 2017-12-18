@@ -1,8 +1,8 @@
 <excited_Blob>
-	<dur_trans_to_excite>1139</dur_trans_to_excite>
-	<dur_trans_out_of_excite>1486</dur_trans_out_of_excite>
+	<dur_trans_to_excite>743</dur_trans_to_excite>
+	<dur_trans_out_of_excite>2377</dur_trans_out_of_excite>
 	<amount_trans>1</amount_trans>
-	<noise>3.75</noise>
+	<noise>2.85</noise>
 	<quiver>3.94</quiver>
 	<speed_in>446</speed_in>
 	<slurp_alpha>179</slurp_alpha>
@@ -15,7 +15,7 @@
 	<TpMotionBlur>0</TpMotionBlur>
 	<blur2_offset>0.3</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
-	<color>255, 79, 58, 255</color>
+	<color>153, 79, 58, 255</color>
 	<back_col>55, 31, 61, 255</back_col>
 	<hightlight_col>201, 201, 205, 255</hightlight_col>
 <excited_Blob/>

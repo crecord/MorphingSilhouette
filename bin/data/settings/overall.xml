@@ -1,7 +1,7 @@
 <Universal_Bolb>
-	<amount_trans>1</amount_trans>
-	<noise>3.15</noise>
-	<quiver>24.765</quiver>
+	<amount_trans>0.875</amount_trans>
+	<noise>2.7</noise>
+	<quiver>4.185</quiver>
 	<speed>743</speed>
 	<slurp_alpha>47</slurp_alpha>
 	<slurp_noise>0.5</slurp_noise>
@@ -17,6 +17,6 @@
 	<color_Blob>255, 96, 46, 255</color_Blob>
 	<color_Back>46, 23, 39, 255</color_Back>
 	<color_High>255, 214, 225, 255</color_High>
-	<text_color>0, 0, 0, 255</text_color>
+	<text_color>180, 157, 162, 255</text_color>
 <Universal_Bolb/>
 </Universal_Bolb>

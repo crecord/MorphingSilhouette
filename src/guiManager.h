@@ -20,7 +20,12 @@ public:
     
     void setup(string name);
     void draw();
-    void scaleValues(bool isGettingExcited, float mappedValue);
+    
+    void createSnapShot();  
+    void scaleIntoImageValue(float mappedVal);
+    void scaleIntoExcited(float mappedVal);
+    void scaleIntoNormal(float mappedVal);
+    
     void scaleExciteValues(bool isScalingToExcited, float mappedVal, bool isInTrigMode);
     void initGlobalMovements(bool isExcite, bool isInTrigMode);
     void saveSettings();
@@ -56,6 +61,34 @@ public:
     int globalBlurTwoPasses;
     
     float globalfinalPassBlur;
+    
+    
+    // the variables needed to take a snapshot
+    float snapshotGlobalPercentTrans;
+    float snapshotGlobalAmountOfNoise;
+    float snapshotGlobalAmontOfQuiver;
+    
+    int snapshotGlobalDurationOfTrans;
+    ofColor snapshotColorOfBlob;
+    ofColor snapshotColorOfBackground;
+    ofColor snapshotColorOfHighlight;
+    
+    int snapshotGlobalSlurpAlpha;
+    float snapshotGlobalSlurpNoise;
+    float snapshotGlobalSlurpQuiver;
+    
+    float snapshotGlobalBlurOneOffset;
+    int snapshotGlobalBlurOnePasses;
+    
+    float snapshotGlobalFilterThresh;
+    
+    float snapshotGlobalBtMotionBlur;
+    float snapshotGlobalTpMotionBlur;
+    
+    float snapshotGlobalBlurTwoOffset;
+    int snapshotGlobalBlurTwoPasses;
+    
+    float snapshotGlobalfinalPassBlur;
     
     
     // make them all into gui things
@@ -145,12 +178,28 @@ public:
     ofParameter<float> blurTwoOffsetExcit;
     ofParameter<int> blurTwoPassesExcit;
     
+    
+
+    ofParameter<ofColor> colorImage;
+    ofParameter<float> amountOfNoiseImage;
+    ofParameter<float> amountOfQuiverImage;
+    ofParameter<float> blurOneOffsetImage;
+    ofParameter<int> blurOnePassesImage;
+    ofParameter<float> filterThreshImage;
+    
+    ofParameter<float> BtMotionBlurImage;
+    ofParameter<float> TpMotionBlurImage;
+    
+    ofParameter<float> blurTwoOffsetImage;
+    ofParameter<int> blurTwoPassesImage;
+    
     ofTrueTypeFont body;
     
 private:
     
     ofxPanel guiUniversal;
     ofxPanel guiUniversalExcited;
+    ofxPanel guiUniversalImage;
     
     // inside specific
     ofxPanel guiSensorThresholding;
@@ -162,6 +211,7 @@ private:
     bool isExcitedOverride;
     bool isThresholdOverride;
     bool isOrientOverride;
+    bool isImageOverride;
     
     string curatorName;
     bool isInside;

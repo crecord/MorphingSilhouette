@@ -68,7 +68,7 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
     
     // 49 to 52
-    if((key >= 49) & (key <= 52)){
+    if((key >= 49) & (key <= 53)){
         blob1.gManager.guiState = ofToInt(ofToString(char(key)));
         blob1.bHide = false;
     }
@@ -94,6 +94,21 @@ void ofApp::keyReleased(int key){
     else if (key == 'm'){
         
           fakeVal += 5;
+        
+    }
+    else if (key == 'l'){
+        
+        fakeVal = 0;
+        
+    }
+    else if (key == 'k'){
+        
+        fakeVal = 150;
+        
+    }
+    else if (key == 'j'){
+        
+        fakeVal = 50;
         
     }
     else if (key == 'b'){

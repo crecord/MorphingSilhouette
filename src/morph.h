@@ -6,7 +6,7 @@
 //
 //
 #include "ofMain.h"
-#include "ofxPolylineMerger.h"
+#include "polylineMerger.h"
 #include "ofxOpenCv.h"
 #include "ofxEasing.h"
 #include "ofxCsv.h"
@@ -155,5 +155,8 @@ private:
     int fboHeight;
     int fboXpos;
     int fboYPos;
+    
+    
+    bool isPaintingSquiggleTime;
     
 };
