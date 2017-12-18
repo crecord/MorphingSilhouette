@@ -21,13 +21,12 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-   // if(slowCount > 1000){
-    
-    blob1.ardTalk.update(fakeVal, true);
+   if(slowCount > 1000){
+    if(!blob1.isSensor){
+        blob1.ardTalk.update(fakeVal, true);
+    }
     blob1.update();
-   // }
-    
-
+    }
     if(slowCount < 5000){
         slowCount++;
         //ofLog()<<slowCount;
@@ -42,17 +41,21 @@ void ofApp::draw(){
     //ofBackground(255);
     
     
+
+   // blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+
     //blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
+
     
 
-    //if(slowCount > 2000){
+    if(slowCount > 2000){
         blob1.drawMorph(ofGetWidth()/2,ofGetHeight()/2);
-   // }
-    /*
+    }
+
     else{
         blob1.resetValues();
     }
-     */
+
      
     
     

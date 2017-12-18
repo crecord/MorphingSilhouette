@@ -21,11 +21,13 @@ Project{
             'src/item.h',
             'src/morph.cpp',
             'src/morph.h',
+            'src/guiManager.h',
+            'src/guiManager.cpp',
+            'src/polylineMerger.h',
+            'src/polylineMerger.cpp',
         ]
-
         of.addons: [
             'ofxOpenCv',
-            'ofxPolylineMerger',
             'ofxGui',
             'ofxCsv',
             'ofxEasing',

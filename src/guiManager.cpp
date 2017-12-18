@@ -40,7 +40,7 @@ void guiManager::setup(string name){
     guiUniversal.add(filterThresh.set("filter thresh",.2,0,1));
     
     
-    guiUniversal.add(BtMotionBlur.set("BtMotionBlur",1,0,1));
+    guiUniversal.add(BtMotionBlur.set("BtMotionBlur",1,0,2.5));
     guiUniversal.add(TpMotionBlur.set("TpMotionBlur",0,0,1));
     guiUniversal.add(blurTwoOffset.set("blur2 offset",.5,0,3));
     guiUniversal.add(blurTwoPasses.set("blur2 Passes",1,0,4));
@@ -74,7 +74,7 @@ void guiManager::setup(string name){
     guiUniversalExcited.add(filterThreshExcit.set("filter thresh",0.2,0,1));
     
     
-    guiUniversalExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,0,1));
+    guiUniversalExcited.add(BtMotionBlurExcit.set("BtMotionBlur",1,0,2.5));
     guiUniversalExcited.add(TpMotionBlurExcit.set("TpMotionBlur",0,0,1));
     guiUniversalExcited.add(blurTwoOffsetExcit.set("blur2 offset",.5,0,3));
     guiUniversalExcited.add(blurTwoPassesExcit.set("blur2 Passes",1,0,4));
@@ -99,7 +99,7 @@ void guiManager::setup(string name){
     guiUniversalImage.add(blurOnePassesImage.set("blur1 Passes",1,0,4));
     
     
-    guiUniversalImage.add(BtMotionBlurImage.set("BtMotionBlur",1,0,1));
+    guiUniversalImage.add(BtMotionBlurImage.set("BtMotionBlur",1,0,2.5));
     guiUniversalImage.add(TpMotionBlurImage.set("TpMotionBlur",0,0,1));
     guiUniversalImage.add(blurTwoOffsetImage.set("blur2 offset",.5,0,3));
     guiUniversalImage.add(blurTwoPassesImage.set("blur2 Passes",1,0,4));
@@ -360,12 +360,14 @@ void guiManager::createSnapShot(){
 
 void guiManager::scaleIntoExcited(float mappedVal){
     
-    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
-    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseExcit);
-    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiverExcit);
-    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityExcit);
+    mappedVal = ofClamp(mappedVal, 0, 1);
     
-    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit, true);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseExcit, true);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiverExcit, true);
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityExcit, true);
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit, true);
     
     // do something here
     
@@ -373,30 +375,33 @@ void guiManager::scaleIntoExcited(float mappedVal){
     colorOfHighlight = snapshotColorOfHighlight.getLerped(color3Excit.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(colorExcit.get(), mappedVal);
     
-    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit);
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit, true);
     
-    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit);
-    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit);
-    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit);
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit, true);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit, true);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit, true);
     
-    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurExcit);
-    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurExcit);
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurExcit, true);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurExcit, true);
     
-    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetExcit);
-    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesExcit);
-    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetExcit);
-    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesExcit);
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetExcit, true);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesExcit, true);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetExcit, true);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesExcit, true);
     
 }
 
 void guiManager::scaleIntoNormal(float mappedVal){
     
-    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTrans);
-    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoise);
-    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiver);;
-    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,density);
     
-    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTrans);
+    mappedVal = ofClamp(mappedVal, 0, 1);
+    
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTrans, true);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoise, true);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amontOfQuiver, true);
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,density, true);
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTrans,true);
     
     // do something here
     
@@ -404,29 +409,31 @@ void guiManager::scaleIntoNormal(float mappedVal){
     colorOfHighlight = snapshotColorOfHighlight.getLerped(color3.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(color.get(), mappedVal);
     
-    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlpha);
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlpha,true);
     
-    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoise);
-    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiver);
-    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThresh);
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoise,true);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiver,true);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThresh,true);
     
-    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlur);
-    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlur);
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlur,true);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlur,true);
     
-    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffset);
-    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePasses);
-    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffset);
-    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPasses);
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffset,true);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePasses,true);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffset,true);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPasses,true);
 }
 
 void guiManager::scaleIntoImageValue(float mappedVal){
     
-    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit);
-    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseImage);
-    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amountOfQuiverImage);;
-    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityImage);
+    mappedVal = ofClamp(mappedVal, 0, 1);
     
-    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit);
+    globalPercentTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalPercentTrans,percentTransExcit,true);
+    globalAmountOfNoise = ofMap(mappedVal,0. ,1.f ,snapshotGlobalAmountOfNoise,amountOfNoiseImage,true);
+    globalAmontOfQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalAmontOfQuiver,amountOfQuiverImage,true);
+    globalDensity = ofMap(mappedVal,0.,1.f,snapshotGlobalDensity,densityImage,true);
+    
+    globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit,true);
     
     // do something here
     
@@ -434,19 +441,19 @@ void guiManager::scaleIntoImageValue(float mappedVal){
     colorOfHighlight = snapshotColorOfHighlight.getLerped(colorImage.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(colorImage.get(), mappedVal);
     
-    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit);
+    globalSlurpAlpha = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpAlpha,slurpAlphaExcit,true);
     
-    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit);
-    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit);
-    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit);
+    globalSlurpNoise = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpNoise,slurpNoiseExcit,true);
+    globalSlurpQuiver = ofMap(mappedVal,0.,1.f,snapshotGlobalSlurpQuiver,slurpQuiverExcit,true);
+    globalFilterThresh = ofMap(mappedVal,0.,1.f,snapshotGlobalFilterThresh,filterThreshExcit,true);
     
-    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurImage);
-    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurImage);
+    globalBtMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalBtMotionBlur,BtMotionBlurImage,true);
+    globalTpMotionBlur = ofMap(mappedVal,0.,1.f,snapshotGlobalTpMotionBlur,TpMotionBlurImage,true);
     
-    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetImage);
-    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesImage);
-    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetImage);
-    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesImage);
+    globalBlurOneOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOneOffset,blurOneOffsetImage,true);
+    globalBlurOnePasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurOnePasses,blurOnePassesImage,true);
+    globalBlurTwoOffset = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoOffset,blurTwoOffsetImage,true);
+    globalBlurTwoPasses = ofMap(mappedVal,0.,1.f,snapshotGlobalBlurTwoPasses,blurTwoPassesImage,true);
 }
 
 /*

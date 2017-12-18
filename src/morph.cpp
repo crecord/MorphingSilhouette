@@ -371,6 +371,7 @@ void morph::update(){
         alphaPainting = int(ofMap(timePassed,0,500,255,0));
         
         if(timePassed > 500){
+            gManager.createSnapShot();
             isTransIntoExcite = false;
             isTransOutOfExcite = false;
             state =6;
