@@ -370,8 +370,8 @@ void guiManager::scaleIntoExcited(float mappedVal){
     globalDurationOfTrans = ofMap(mappedVal,0.,1.f,snapshotGlobalDurationOfTrans,durationOfTransExcit, true);
     
     // do something here
-    
-    colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
+
+   // colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
     colorOfHighlight = snapshotColorOfHighlight.getLerped(color3Excit.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(colorExcit.get(), mappedVal);
     
@@ -405,7 +405,7 @@ void guiManager::scaleIntoNormal(float mappedVal){
     
     // do something here
     
-    colorOfBackground = snapshotColorOfBackground.getLerped(color2.get(),mappedVal);
+   // colorOfBackground = snapshotColorOfBackground.getLerped(color2.get(),mappedVal);
     colorOfHighlight = snapshotColorOfHighlight.getLerped(color3.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(color.get(), mappedVal);
     
@@ -437,7 +437,7 @@ void guiManager::scaleIntoImageValue(float mappedVal){
     
     // do something here
     
-    colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
+  //  colorOfBackground = snapshotColorOfBackground.getLerped(color2Excit.get(),mappedVal);
     colorOfHighlight = snapshotColorOfHighlight.getLerped(colorImage.get(), mappedVal);
     colorOfBlob = snapshotColorOfBlob.getLerped(colorImage.get(), mappedVal);
     

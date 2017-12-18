@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <Universal_Bolb>
 	<amount_trans>1</amount_trans>
 	<noise>0.15</noise>
@@ -18,6 +19,6 @@
 	<color_Back>23, 9, 14, 255</color_Back>
 	<color_High>107, 17, 19, 255</color_High>
 	<text_color>150, 137, 145, 255</text_color>
-	<Universal_Bolb/>
-<density>0.05</density>
+	<Universal_Bolb />
+	<density>0.05</density>
 </Universal_Bolb>

@@ -725,7 +725,7 @@ void morph::drawMorph(int x,int y){
                     ofFill();
                     //ofSetColor(0,0,0);
                     ofRectangle box = gManager.body.getStringBoundingBox(allTheText, 0, 0);
-                    ofDrawEllipse(0,0,20,20);
+                    //ofDrawEllipse(0,0,20,20);
                    // body.drawStringAsShapes(allTheText + " ©", 0,-1*box.getHeight());
                     gManager.body.drawStringAsShapes(allTheText, 0,-1*box.getHeight());
                     gManager.body.drawString(allTheText, 0,-1*box.getHeight());

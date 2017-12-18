@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <Orientation>
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
@@ -14,7 +15,7 @@
 	<text_scale>20</text_scale>
 	<text_flip_vertical>0</text_flip_vertical>
 	<text_flip_horizontal>0</text_flip_horizontal>
-	<is_image_anchor>1</is_image_anchor>
-	<text_Pos_if_no_anchor>50, 384</text_Pos_if_no_anchor>
-<Orientation/>
+	<is_image_anchor>0</is_image_anchor>
+	<text_Pos_if_no_anchor>78.3673, 1008.37</text_Pos_if_no_anchor>
+	<Orientation />
 </Orientation>
