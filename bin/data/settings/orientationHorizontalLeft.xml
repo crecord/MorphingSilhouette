@@ -2,7 +2,7 @@
 <Orientation>
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
-	<Left_Mask>36</Left_Mask>
+	<Left_Mask>0</Left_Mask>
 	<Right_Mask>0</Right_Mask>
 	<scale>0.975</scale>
 	<rotate>0</rotate>
