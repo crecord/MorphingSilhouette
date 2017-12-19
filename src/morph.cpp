@@ -34,13 +34,14 @@ void morph::setup( int x, int y){
     shade.load("shaders/silhouette/shader");
     threshShade.load("shaders/threshShade/threshShade");
     
-    
     //string pathToImages, string pathToCsv, ofImage img, ofPolyline polys
     for(int i = 0; i < dir.size(); i++){
         item temp;
         ofImage imgTemp;
         imgTemp.load(dir.getPath(i));
         ofPolyline ply = pngToPolyline(imgTemp);
+        
+
         temp.setup(pathToImages, dir.getPath(i), csvDir.getPath(i), imgTemp, ply);
         if(temp.isPainting){
             temp.paintingPoly = pngToPolyline(temp.imgForPainting);

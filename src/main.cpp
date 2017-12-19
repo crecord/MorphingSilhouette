@@ -15,6 +15,8 @@ int main( ){
     settings.windowMode = OF_GAME_MODE;
 
 
+    
+    
     ofCreateWindow(settings);
 
     // this kicks off the running of my app
