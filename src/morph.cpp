@@ -712,7 +712,7 @@ void morph::drawMorph(int x,int y){
             
             int num =int(gManager.textScale.get() * 20);
                 //body.setGlobalDpi(300);
-                //ofScale(gManager.textScale* flipx, gManager.textScale* flipy);
+                ofScale( flipx, flipy);
             //" ©"
             
             
