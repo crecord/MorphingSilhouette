@@ -12,9 +12,10 @@
 	<under_img_Margin>42</under_img_Margin>
 	<under_title>48</under_title>
 	<Orientation />
-	<text_scale>1.05</text_scale>
+	<text_scale>1</text_scale>
 	<text_flip_vertical>0</text_flip_vertical>
 	<text_flip_horizontal>0</text_flip_horizontal>
 	<is_image_anchor>0</is_image_anchor>
 	<text_Pos_if_no_anchor>783.674, 947.755</text_Pos_if_no_anchor>
+	<Rotate_Text>0</Rotate_Text>
 </Orientation>
