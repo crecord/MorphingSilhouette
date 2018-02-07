@@ -128,6 +128,7 @@ void ofApp::keyReleased(int key){
 }
 
 void ofApp::exit(){
+    blob1.saveAnalytics(); 
     blob1.gManager.saveSettings();
 }
 

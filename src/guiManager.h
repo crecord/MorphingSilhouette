@@ -223,7 +223,7 @@ private:
     bool isVertical;
     bool isLeftScreen;
    
-    vector<string> allNames = { "Benz","Bridgett", "Fraley","Legacy","Michals","Needles","Samuels","Sebak", "Smith", "Rogers", "Gurman", "Pell", "German" };
+    vector<string> allNames = { "Benz","Bridgett", "Fraley","Legacy","Michals","Needles","Samuels","Sebak", "Smith", "Rogers", "Gurman", "Pell", "German", "Melissa" };
     vector<string> inside = { "Fraley", "Rogers", "Gurman", "Pell", "German" };
     vector<string> vertical = { "Michals", "Smith", "Gurman" };
     vector<string> left = { "Sebak", "Samuels", "Pell" };
