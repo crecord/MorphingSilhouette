@@ -81,10 +81,18 @@ void morph::setup( int x, int y){
     
     //body.load("font/franklinGothic.otf", 20);
     
-    fboWidth = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
-    fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+    if(!gManager.isVertical){
+        fboWidth = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
+        fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+    }
+    else{
+        fboWidth = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+        fboHeight = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
+
+    }
     fboXpos = (gManager.blobOffset->x + ofGetWidth()/2) - fboWidth/2;
     fboYPos = (gManager.blobOffset->y + ofGetHeight()/2) - fboHeight/2;
+    
     
     
     alphaPainting =0;
@@ -162,8 +170,8 @@ void morph::setup( int x, int y){
     lastTransformed = 100;
     
     
-    if(!analytics.load(curatorName + "_analytics.csv")){
-        analytics.createFile(curatorName + "_analytics.csv");
+    if(!analytics.load("analytics/" + curatorName + "_analytics.csv")){
+        analytics.createFile("analytics/" + curatorName + "_analytics.csv");
        
         ofxCsvRow rw0;
         rw0.setString(0, "total time excited");
@@ -259,12 +267,19 @@ void morph::update(){
             
             // deciding which one to visibly transform into.
             // don't repeat the last one that appeared
-            int transformTooControlled = transformToo;
+            int transformTooControlled;
             if( interpolateCoeff < .6){
                 transformTooControlled = transformFrom;
                 if (transformTooControlled == lastTransformed){
-                    lastTransformed = transformToo;
+                    transformTooControlled = transformToo;
                 }
+            }
+            else{
+                transformTooControlled = transformToo;
+                if (transformTooControlled == lastTransformed){
+                    transformTooControlled = transformFrom;
+                }
+
             }
             
             

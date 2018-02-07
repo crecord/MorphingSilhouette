@@ -199,6 +199,7 @@ public:
     ofParameter<int> blurTwoPassesImage;
     
     ofTrueTypeFont body;
+    bool isVertical;
     
 private:
     
@@ -220,7 +221,7 @@ private:
     
     string curatorName;
     bool isInside;
-    bool isVertical;
+    
     bool isLeftScreen;
    
     vector<string> allNames = { "Benz","Bridgett", "Fraley","Legacy","Michals","Needles","Samuels","Sebak", "Smith", "Rogers", "Gurman", "Pell", "German", "Melissa" };
