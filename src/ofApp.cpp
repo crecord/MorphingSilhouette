@@ -21,16 +21,21 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    
+    if(slowCount < 5000){
+        slowCount++;
+    }
+    
    if(slowCount > 1000){
     if(!blob1.isSensor){
         blob1.ardTalk.update(fakeVal, true);
     }
     blob1.update();
     }
-    if(slowCount < 5000){
-        slowCount++;
-        //ofLog()<<slowCount;
-    }
+   else{
+    ofBackground(23, 9, 14);
+   }
+    
 
     
     
