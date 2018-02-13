@@ -1,19 +1,20 @@
+<?xml version="1.0"?>
 <Orientation>
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
 	<Left_Mask>0</Left_Mask>
 	<Right_Mask>0</Right_Mask>
 	<scale>1</scale>
-	<rotate>0</rotate>
-	<offset>0, 0</offset>
-	<flip_vertical>0</flip_vertical>
-	<flip_horizontal>0</flip_horizontal>
+	<rotate>3</rotate>
+	<offset>-362.449, -5.51019</offset>
+	<flip_vertical>1</flip_vertical>
+	<flip_horizontal>1</flip_horizontal>
 	<under_img_Margin>0</under_img_Margin>
 	<under_title>0</under_title>
-	<Rotate_Text>0</Rotate_Text>
-	<text_scale>20</text_scale>
-	<text_flip_vertical>0</text_flip_vertical>
-	<text_flip_horizontal>0</text_flip_horizontal>
-	<is_image_anchor>1</is_image_anchor>
-	<text_Pos_if_no_anchor>50, 384</text_Pos_if_no_anchor>
+	<Rotate_Text>3</Rotate_Text>
+	<text_scale>26</text_scale>
+	<text_flip_vertical>1</text_flip_vertical>
+	<text_flip_horizontal>1</text_flip_horizontal>
+	<is_image_anchor>0</is_image_anchor>
+	<text_Pos_if_no_anchor>1175.51, 986.327</text_Pos_if_no_anchor>
 </Orientation>
