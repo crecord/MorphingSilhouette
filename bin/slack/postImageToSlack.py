@@ -10,7 +10,7 @@ slack_token = "xoxp-9409267266-14198195367-312957131810-565e6b216f531d19e4e6a1d5
 
 compName = os.environ["COMP_NAME"]
 sc = SlackClient(slack_token)
-myFile = open("/home/studio/email.jpg","rb")
+myFile = open("/home/studio/Documents/email.jpg","rb")
 
 sc.api_call(
   "files.upload",
