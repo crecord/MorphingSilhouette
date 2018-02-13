@@ -25,9 +25,12 @@ public:
     void drawGui(int x,int y);
     void drawMorph(int x,int y);
     void triggerNext();
-    void saveGuiSettings();
+    void saveAnalytics();
     bool bHide;
     void resetValues();
+    
+
+    
     guiManager gManager;
     handleSerial ardTalk;
     int falseImgPos;
@@ -35,6 +38,13 @@ public:
     bool isSensor;
     
 private:
+    
+    void startTimingAnalytics(bool isImage);
+    void endTimingAnalytics(bool isImage);
+    
+    int startTimeMarker;
+    
+    
     
     ofPolyline pngToPolyline(ofImage img);
     ofVec2f getSz(ofImage img);
@@ -65,6 +75,7 @@ private:
     ofDirectory dir;
     ofDirectory csvDir;
 
+    ofxCsv analytics;
     
     vector<item> items;
     
