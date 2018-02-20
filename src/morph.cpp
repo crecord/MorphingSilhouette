@@ -81,10 +81,18 @@ void morph::setup( int x, int y){
     
     //body.load("font/franklinGothic.otf", 20);
     
-    fboWidth = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
-    fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+    if(!gManager.isVertical){
+        fboWidth = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
+        fboHeight = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+    }
+    else{
+        fboWidth = ((largestBlobDimensions.y /1.5)+50 ) *gManager.renderScale;
+        fboHeight = ((largestBlobDimensions.x /1.5)+50) *gManager.renderScale;
+
+    }
     fboXpos = (gManager.blobOffset->x + ofGetWidth()/2) - fboWidth/2;
     fboYPos = (gManager.blobOffset->y + ofGetHeight()/2) - fboHeight/2;
+    
     
     
     alphaPainting =0;
@@ -161,6 +169,37 @@ void morph::setup( int x, int y){
     isPaintingSquiggleTime = false;
     lastTransformed = 100;
     
+    
+    if(!analytics.load("analytics/" + curatorName + "_analytics.csv")){
+        analytics.createFile("analytics/" + curatorName + "_analytics.csv");
+       
+        ofxCsvRow rw0;
+        rw0.setString(0, "total time excited");
+        analytics.addRow(rw0);
+        
+        ofxCsvRow rw1;
+        rw1.setString(0, "total time image");
+        analytics.addRow(rw1);
+        
+        
+        // not getting added for some reason
+        ofxCsvRow rw2;
+        rw2.setString(0, "total number of excited");
+        analytics.addRow(rw2);
+        
+        ofxCsvRow rw3;
+        rw3.setString(0, "total number of image");
+        analytics.addRow(rw3);
+        
+        ofxCsvRow rw4;
+        rw4.setString(0, "average time excited");
+        analytics.addRow(rw4);
+        
+        ofxCsvRow rw5;
+        rw5.setString(0, "average time image");
+        analytics.addRow(rw5);
+    }
+    
 }
 
 void morph::resetValues(){
@@ -228,12 +267,19 @@ void morph::update(){
             
             // deciding which one to visibly transform into.
             // don't repeat the last one that appeared
-            int transformTooControlled = transformToo;
+            int transformTooControlled;
             if( interpolateCoeff < .6){
                 transformTooControlled = transformFrom;
                 if (transformTooControlled == lastTransformed){
-                    lastTransformed = transformToo;
+                    transformTooControlled = transformToo;
                 }
+            }
+            else{
+                transformTooControlled = transformToo;
+                if (transformTooControlled == lastTransformed){
+                    transformTooControlled = transformFrom;
+                }
+
             }
             
             
@@ -452,10 +498,27 @@ void morph::update(){
                 isTransIntoExcite = true;
                 gManager.createSnapShot();
             }
+    
+            
+            if(isTransIntoExcite | isExcite){
+                endTimingAnalytics(false);
+            }
+            
             isExcite = true;
             isTransOutOfExcite = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
+            
+            
+            // begin image
+            startTimingAnalytics(true);
+            
+        
+            
+    
+            
+            
+            
         }
         // transform back into the blob if the person moves out of the threshold and is moving fast
     
@@ -464,10 +527,13 @@ void morph::update(){
             isTriggered = false;
             startTimeOfState = ofGetElapsedTimeMillis();
             isSetupState = true;
+            endTimingAnalytics(true);
+            if(isExcite | isTransIntoExcite | isTransOutOfExcite){
+                startTimingAnalytics(false);
+            }
             
-
         }
-        // also transorm into excited if it is less than excited
+        // also transorm out of the image mode if it is less than excited
         else if(ardTalk.averagedOut < gManager.excitedThresh ){
             if(isTriggered){
                 //triggerNext();
@@ -476,13 +542,11 @@ void morph::update(){
                 startTimeOfState = ofGetElapsedTimeMillis();
                 isSetupState = true;
                 
-                /*
-                 drawTrailing.begin();
-                 ofClear(0,0,0,255);
-                 ofSetColor(0);
-                 ofDrawRectangle(0, 0, drawTrailing.getWidth(), drawTrailing.getHeight());
-                 drawTrailing.end();
-                 */
+                endTimingAnalytics(true);
+                if(isExcite | isTransIntoExcite | isTransOutOfExcite){
+                    startTimingAnalytics(false);
+                }
+                
             }
             else{
                 if(!isTransOutOfExcite & isExcite){
@@ -490,6 +554,9 @@ void morph::update(){
                     gManager.createSnapShot();
                     isTransIntoExcite = false;
                     startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+                    
+                  
+                    
                 }
             }
         }
@@ -501,6 +568,8 @@ void morph::update(){
             
             isTransOutOfExcite = false;
             startTimeOfExciteFade =  ofGetElapsedTimeMillis();
+            startTimingAnalytics(false);
+            
         }
     
     
@@ -515,6 +584,7 @@ void morph::update(){
             isTransIntoExcite = false;
             isExcite = true;
             leftOverFadeTime =0;
+            
         }
         leftOverFadeTime = timeElapsed;
     }
@@ -531,6 +601,8 @@ void morph::update(){
             isTransOutOfExcite = false;
             isExcite = false;
             leftOverFadeTime =0;
+            
+            endTimingAnalytics(false);
         }
         leftOverFadeTime = timeElapsed;
         
@@ -581,8 +653,8 @@ void morph::populateVector(){
     }
 }
 
-void morph::saveGuiSettings(){
-    
+void morph::saveAnalytics(){
+    analytics.save();
 }
 void morph::drawGui(int x,int y){
     
@@ -988,4 +1060,76 @@ ofVec2f morph::getSz(ofImage img){
     return ofVec2f(wid, height);
     
 }
+
+void morph::startTimingAnalytics(bool isImage){
+    startTimeMarker = ofGetElapsedTimeMillis();
+    
+    
+    
+}
+
+
+void morph::endTimingAnalytics(bool isImage){
+    float dur =  ofGetElapsedTimeMillis() - startTimeMarker;
+    dur = dur/1000.0f;
+    
+    // add the raw data
+    ofxCsvRow rw;
+    // timstamp ended
+    rw.setString(0, ofGetTimestampString());
+    // state
+    if (isImage){
+        rw.setString(1, "Image");
+    }
+    else{
+        rw.setString(1, "excited");
+    }
+    
+    rw.setFloat(2, dur);
+    analytics.addRow(rw);
+    
+    // add onto the overall analytics
+    if (isImage){
+        ofxCsvRow timeImage = analytics.getRow(1);
+        float totalTimeImage = timeImage.getFloat(1);
+        totalTimeImage += dur;
+        timeImage.setFloat(1, totalTimeImage);
+        analytics.setRow(1, timeImage);
+        
+        ofxCsvRow totalInteractions = analytics.getRow(3);
+        int numInteract = totalInteractions.getInt(1);
+        numInteract += 1;
+        totalInteractions.setInt(1, numInteract);
+        analytics.setRow(3, totalInteractions);
+        
+        float newAverage = totalTimeImage/numInteract;
+        ofxCsvRow averageImage = analytics.getRow(5);
+        averageImage.setFloat(1,newAverage);
+        analytics.setRow(5, averageImage);
+    }
+    else {
+
+        
+        ofxCsvRow timeExcited = analytics.getRow(0);
+        float totalTimeExcited = timeExcited.getFloat(1);
+        totalTimeExcited += dur;
+        timeExcited.setFloat(1, totalTimeExcited);
+        analytics.setRow(0, timeExcited);
+        
+        ofxCsvRow totalInteractions = analytics.getRow(2);
+        int numInteract = totalInteractions.getInt(1);
+        numInteract += 1;
+        totalInteractions.setInt(1, numInteract);
+        analytics.setRow(2, totalInteractions);
+        
+        float newAverage = totalTimeExcited/numInteract;
+        ofxCsvRow averageExcite = analytics.getRow(4);
+        averageExcite.setFloat(1,newAverage);
+        analytics.setRow(4, averageExcite);
+        
+    }
+    
+    
+}
+
 

@@ -4,12 +4,12 @@
 	<noise>0.15</noise>
 	<quiver>3.695</quiver>
 	<speed>743</speed>
-	<slurp_alpha>19</slurp_alpha>
-	<slurp_noise>2</slurp_noise>
+	<slurp_alpha>5</slurp_alpha>
+	<slurp_noise>1.5</slurp_noise>
 	<slurp_quiver>0.165</slurp_quiver>
-	<blur1_offset>0.975</blur1_offset>
+	<blur1_offset>1.5</blur1_offset>
 	<blur1_Passes>1</blur1_Passes>
-	<filter_thresh>0.87</filter_thresh>
+	<filter_thresh>0.85</filter_thresh>
 	<BtMotionBlur>0.65</BtMotionBlur>
 	<TpMotionBlur>-0.2</TpMotionBlur>
 	<blur2_offset>0.255</blur2_offset>
