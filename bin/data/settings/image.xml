@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <image_display_settings>
 	<noise>6.15</noise>
 	<quiver>1.63</quiver>
@@ -9,5 +10,5 @@
 	<blur2_offset>0.99</blur2_offset>
 	<blur2_Passes>1</blur2_Passes>
 	<color_squig>78, 48, 57, 255</color_squig>
-	<image_display_settings/>
+	<image_display_settings />
 </image_display_settings>
