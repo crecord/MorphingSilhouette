@@ -3,5 +3,4 @@
 	<Excite_Threshold>30</Excite_Threshold>
 	<sensor_threshold>100</sensor_threshold>
 	<motion_difference_threshold>10</motion_difference_threshold>
-	<theshold_sensors />
 </theshold_sensors>
