@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <image_display_settings>
-	<noise>6.15</noise>
-	<quiver>1.63</quiver>
+	<noise>6.6375</noise>
+	<quiver>1.81</quiver>
 	<density>0.0945</density>
 	<blur1_offset>0</blur1_offset>
 	<blur1_Passes>1</blur1_Passes>

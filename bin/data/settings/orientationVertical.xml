@@ -4,17 +4,17 @@
 	<Lower_Mask>0</Lower_Mask>
 	<Left_Mask>0</Left_Mask>
 	<Right_Mask>0</Right_Mask>
-	<scale>1.125</scale>
+	<scale>1</scale>
 	<rotate>3</rotate>
-	<offset>411.429, 22.0408</offset>
+	<offset>-362.449, -22.0408</offset>
 	<flip_vertical>0</flip_vertical>
-	<flip_horizontal>0</flip_horizontal>
+	<flip_horizontal>1</flip_horizontal>
 	<under_img_Margin>0</under_img_Margin>
 	<under_title>0</under_title>
 	<Rotate_Text>3</Rotate_Text>
-	<text_scale>25</text_scale>
-	<text_flip_vertical>0</text_flip_vertical>
-	<text_flip_horizontal>0</text_flip_horizontal>
+	<text_scale>20</text_scale>
+	<text_flip_vertical>1</text_flip_vertical>
+	<text_flip_horizontal>1</text_flip_horizontal>
 	<is_image_anchor>0</is_image_anchor>
-	<text_Pos_if_no_anchor>744.49, 110.204</text_Pos_if_no_anchor>
+	<text_Pos_if_no_anchor>1038.37, 936.735</text_Pos_if_no_anchor>
 </Orientation>

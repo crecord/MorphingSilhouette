@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <theshold_sensors>
+<<<<<<< HEAD
+	<Excite_Threshold>30</Excite_Threshold>
+	<sensor_threshold>100</sensor_threshold>
+	<motion_difference_threshold>10</motion_difference_threshold>
+	<theshold_sensors />
+=======
 	<Excite_Threshold>14</Excite_Threshold>
 	<sensor_threshold>63</sensor_threshold>
 	<motion_difference_threshold>20</motion_difference_threshold>
+>>>>>>> 260dbca5c8798df3ad2bb3b1c44adad7570b0161
 </theshold_sensors>

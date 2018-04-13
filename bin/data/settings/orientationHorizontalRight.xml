@@ -4,9 +4,9 @@
 	<Lower_Mask>0</Lower_Mask>
 	<Left_Mask>0</Left_Mask>
 	<Right_Mask>0</Right_Mask>
-	<scale>1.005</scale>
+	<scale>1.11</scale>
 	<rotate>0</rotate>
-	<offset>244.898, -104.694</offset>
+	<offset>254.694, -55.1021</offset>
 	<flip_vertical>0</flip_vertical>
 	<flip_horizontal>0</flip_horizontal>
 	<under_img_Margin>0</under_img_Margin>
@@ -16,6 +16,6 @@
 	<text_flip_vertical>0</text_flip_vertical>
 	<text_flip_horizontal>0</text_flip_horizontal>
 	<is_image_anchor>0</is_image_anchor>
-	<text_Pos_if_no_anchor>744.49, 986.327</text_Pos_if_no_anchor>
+	<text_Pos_if_no_anchor>744.49, 1008.37</text_Pos_if_no_anchor>
 	<Orientation />
 </Orientation>

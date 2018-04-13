@@ -4,9 +4,12 @@
 0 4 * * * /usr/bin/killall MorphingSilhouette
 0 7 * * * DISPLAY=:0 /usr/bin/scrot /home/studio/email.jpg
 0 7 * * * sleep 5 && python /home/studio/mailer.py
-5 7 * * * COMP_NAME='Legacy' python /home/studio/Documents/of_v20170714_linux64gcc5_release/apps/myApps/MorphingSilhouette/bin/slack/postImageToSlack.py
+
+5 7 * * * COMP_NAME='Gurman' python /home/studio/Documents/of_v20170714_linux64gcc5_release/apps/myApps/MorphingSilhouette/bin/slack/postImageToSlack.py
+5 * * * * DISPLAY=:0 /usr/bin/wmctrl -a "shape"
 
 * * * * * sleep 120 && DISPLAY=:0 run-one '/home/studio/Documents/of_v20170714_linux64gcc5_release/apps/myApps/MorphingSilhouette/bin/MorphingSilhouette'
+
 
 
 
