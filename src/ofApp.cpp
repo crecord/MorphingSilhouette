@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     //ofSetFullscreen(true);
-    
+    ofSetWindowTitle("morph shape");
     //blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
     blob1.setup(ofGetWidth()/2 ,ofGetWidth()/2);
     
@@ -21,16 +21,21 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    
+    if(slowCount < 5000){
+        slowCount++;
+    }
+    
    if(slowCount > 1000){
     if(!blob1.isSensor){
         blob1.ardTalk.update(fakeVal, true);
     }
     blob1.update();
     }
-    if(slowCount < 5000){
-        slowCount++;
-        //ofLog()<<slowCount;
-    }
+   else{
+    ofBackground(23, 9, 14);
+   }
+    
 
     
     
@@ -128,6 +133,7 @@ void ofApp::keyReleased(int key){
 }
 
 void ofApp::exit(){
+    blob1.saveAnalytics(); 
     blob1.gManager.saveSettings();
 }
 
