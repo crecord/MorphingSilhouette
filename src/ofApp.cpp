@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     //ofSetFullscreen(true);
-    
+    ofSetWindowTitle("morph shape");
     //blob1.setup("shapeTest",ofGetWidth()/2 ,ofGetWidth()/2);
     blob1.setup(ofGetWidth()/2 ,ofGetWidth()/2);
     

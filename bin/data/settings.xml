@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<<<<<<< HEAD
 <panel>
 	<amount_trans>0.81</amount_trans>
 	<noise>1.35</noise>
@@ -19,10 +20,14 @@
 	<text_color>0, 0, 0, 255</text_color>
 	<under_img_Margin>10</under_img_Margin>
 	<under_title>21</under_title>
+=======
+<Orientation>
+>>>>>>> 260dbca5c8798df3ad2bb3b1c44adad7570b0161
 	<Upper_Mask>0</Upper_Mask>
 	<Lower_Mask>0</Lower_Mask>
 	<Left_Mask>0</Left_Mask>
 	<Right_Mask>0</Right_Mask>
+<<<<<<< HEAD
 	<scale>1.815</scale>
 	<rotate>0</rotate>
 	<offset>-29.3878, -16.5306</offset>
@@ -31,3 +36,19 @@
 	<sensor_threshold>115</sensor_threshold>
 	<motion_difference_threshold>10</motion_difference_threshold>
 </panel>
+=======
+	<scale>1.125</scale>
+	<rotate>3</rotate>
+	<offset>411.429, 22.0408</offset>
+	<flip_vertical>0</flip_vertical>
+	<flip_horizontal>0</flip_horizontal>
+	<under_img_Margin>0</under_img_Margin>
+	<under_title>0</under_title>
+	<Rotate_Text>3</Rotate_Text>
+	<text_scale>25</text_scale>
+	<text_flip_vertical>0</text_flip_vertical>
+	<text_flip_horizontal>0</text_flip_horizontal>
+	<is_image_anchor>0</is_image_anchor>
+	<text_Pos_if_no_anchor>744.49, 110.204</text_Pos_if_no_anchor>
+</Orientation>
+>>>>>>> 260dbca5c8798df3ad2bb3b1c44adad7570b0161
