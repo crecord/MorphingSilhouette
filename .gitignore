@@ -1,2 +1,5 @@
 CuratorName.csv
+
 bin/data/settings/*
+
+!bin/data/settings/emptyFile.sh
